@@ -1,0 +1,447 @@
+/*
+ * demo program for the ev3dev C++ binding
+ *
+ * Copyright (c) 2014 - Franz Detro
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#include "ev3dev.h"
+
+#include <iostream>
+#include <thread>
+
+using namespace std;
+using namespace ev3dev;
+
+void sensor_action(sensor &s)
+{
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** " << s.as_string(s.type()) << " (" << s.mode() << ") actions ***" << endl
+         << endl
+         << "(s)how modes"  << endl
+         << "(c)hange mode" << endl
+         << "(v)alue"       << endl
+         << endl
+         << "(b)ack"        << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 's':
+      {
+        cout << "available modes are ";
+        const mode_set &m = s.modes();
+        for (mode_set::const_iterator it = m.begin(); it!=m.end(); ++it)
+        {
+          cout << *it << " ";
+        }
+        cout << endl;
+      }
+      break;
+    case 'c':
+      {
+        string mode;
+        cout << endl << "new mode: "; cin >> mode; cout << endl;
+        s.set_mode(mode);
+      }
+      break;
+    case 'v':
+      cout << endl << "value is " << s.value() << endl;
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void sensor_menu()
+{
+  msensor arrSensors[4] = {
+    msensor(0, 1),
+    msensor(0, 2),
+    msensor(0, 3),
+    msensor(0, 4)
+  };
+  
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** sensor menu ***" << endl
+         << endl;
+    
+    for (unsigned i=0; i<4; ++i)
+    {
+      msensor &s = arrSensors[i];
+      if (s.connected())
+      {
+        cout << "(" << i+1 << ") " << s.as_string(s.type()) << " (type " << s.type()
+             << ", port " << s.port() << ", mode " << s.mode() << ")" << endl;
+      }
+    }
+    cout << endl;
+    cout << "(b)ack"  << endl;
+    cout << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+      sensor_action(arrSensors[c-'1']);
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void led_action(const char *name, led &l)
+{
+  int interval = 500;
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** " << name << " actions ***" << endl
+         << endl
+         << "(0) off"    << endl
+         << "(1) on"     << endl
+         << "(f)lash"    << endl
+         << "(i)nterval" << endl
+         << "(t)rigger"  << endl
+         << endl
+         << "(b)ack"     << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case '0':
+      l.off();
+      break;
+    case '1':
+      l.on();
+      break;
+    case 'f':
+      l.flash(0);
+      break;
+    case 'i':
+      cout << "interval: "; cin >> interval; cout << endl;
+      l.set_on_delay(interval); l.set_off_delay(interval);
+      break;
+    case 't':
+      {
+        cout << "available triggers are " << endl;
+        mode_type t = l.trigger();
+        mode_set  s = l.triggers();
+        for (mode_set::const_iterator it = s.begin(); it!=s.end(); ++it)
+        {
+          if (*it == t)
+            cout << "[" << *it << "] ";
+          else
+            cout << *it << " ";
+        }
+        cout << endl << endl << "choice: ";
+       
+        cin >> t;
+        if (!t.empty())
+          l.set_trigger(t);
+      }
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void led_menu()
+{
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** led menu ***" << endl
+         << endl
+         << "(1) green:left"  << endl
+         << "(2) green:right" << endl
+         << "(3) red:left"    << endl
+         << "(4) red:right"   << endl
+         << endl
+         << "(b)ack"          << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case '1':
+      led_action("green:left", led::green_left);
+      break;
+    case '2':
+      led_action("green:right", led::green_right);
+      break;
+    case '3':
+      led_action("red:left", led::red_left);
+      break;
+    case '4':
+      led_action("red:right", led::red_right);
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void button_menu()
+{
+  char c = 0;
+  do
+  {
+    cout << endl
+    << "*** button menu ***" << endl
+    << endl
+    << "(1) back"  << endl
+    << "(2) left"  << endl
+    << "(3) right" << endl
+    << "(4) up"    << endl
+    << "(5) down"  << endl
+    << "(6) enter" << endl
+    << endl
+    << "(b)ack"    << endl
+    << endl
+    << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case '1':
+      cout << endl << "back button is " << (button::back.pressed() ? "down" : "up") << endl;
+      break;
+    case '2':
+      cout << endl << "left button is " << (button::left.pressed() ? "down" : "up") << endl;
+      break;
+    case '3':
+      cout << endl << "right button is " << (button::right.pressed() ? "down" : "up") << endl;
+      break;
+    case '4':
+      cout << endl << "up button is " << (button::up.pressed() ? "down" : "up") << endl;
+      break;
+    case '5':
+      cout << endl << "down button is " << (button::down.pressed() ? "down" : "up") << endl;
+      break;
+    case '6':
+      cout << endl << "enter button is " << (button::enter.pressed() ? "down" : "up") << endl;
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void sound_menu()
+{
+  unsigned frequency = 440; // 440 Hz
+  unsigned duration = 1000; // 1 sec
+  char c = 0;
+  do
+  {
+    cout << endl
+    << "*** sound menu ***" << endl
+    << endl
+    << "b(e)ep"          << endl
+    << "(t)one"          << endl
+    << "tone (d)uration" << endl
+    << "(p)lay"          << endl
+    << "(s)peak"         << endl
+    << "(v)olume"        << endl
+    << "(b)ack"          << endl
+    << endl
+    << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 'e':
+      sound::beep();
+      break;
+    case 't':
+      cout << "frequency: "; cin >> frequency; cout << endl;
+      sound::tone(frequency, duration);
+      break;
+    case 'd':
+      cout << "duration: "; cin >> duration; cout << endl;
+      sound::tone(frequency, duration);
+      break;
+    case 'p':
+      {
+        std::string fname;
+        cout << "soundfile: "; cin >> fname; cout << endl;
+        sound::play(fname, true);
+      }
+      break;
+    case 's':
+      {
+        std::string text;
+        cout << "text: "; getline(cin, text); getline(cin, text); cout << endl;
+        sound::speak(text, true);
+      }
+      break;
+    case 'v':
+      {
+        cout << endl << "current volume is " << sound::volume()
+             << endl << "new volume: ";
+
+        unsigned volume = 0;
+        cin >> volume; cout << endl;
+        if (volume)
+          sound::set_volume(volume);
+      }
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void battery_menu()
+{
+  char c = 0;
+  do
+  {
+    cout << endl
+    << "*** battery menu ***" << endl
+    << endl
+    << "(v)oltage" << endl
+    << "(c)urrent" << endl
+    << endl
+    << "(b)ack"  << endl
+    << endl
+    << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 'v':
+      cout << endl << "voltage is " << battery::voltage() << " Volt" << endl << endl;
+      break;
+    case 'c':
+      cout << endl << "current is " << battery::current() << " mA" << endl << endl;
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void lcd_menu()
+{
+  lcd l;
+  
+  if (!l.available())
+  {
+    cout << endl
+         << "###error: lcd not available ###" << endl;
+    return;
+  }
+  
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** lcd menu ***" << endl
+         << endl
+         << "(i)nfo" << endl
+         << "(f)ill" << endl
+         << "(c)lear" << endl
+         << endl
+         << "(b)ack"  << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 'i':
+      cout << endl
+           << "Resolution is " << l.resolution_x() << " x " << l.resolution_y()
+           << ", " << l.bits_per_pixel() << " bit(s) per pixel" << endl
+           << "Frame buffer size is " << l.frame_buffer_size() << " byte, "
+           << "line length is " << l.line_length() << " byte" << endl;
+    case 'f':
+      l.fill(0xFF);
+      break;
+    case 'c':
+      l.fill(0);
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void main_menu()
+{
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** main menu ***" << endl
+         << endl
+         << "(s)ensors" << endl
+         << "(l)eds" << endl
+         << "(b)uttons" << endl
+         << "s(o)und" << endl
+         << "b(a)ttery" << endl
+         << "l(c)d" << endl
+         << "(q)uit" << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 's':
+      sensor_menu();
+      break;
+    case 'l':
+      led_menu();
+      break;
+    case 'b':
+      button_menu();
+      break;
+    case 'o':
+      sound_menu();
+      break;
+    case 'a':
+      battery_menu();
+      break;
+    case 'c':
+      lcd_menu();
+      break;
+    }
+  }
+  while (c != 'q');
+}
+
+int main()
+{
+  main_menu();
+  
+  return 0;
+}
