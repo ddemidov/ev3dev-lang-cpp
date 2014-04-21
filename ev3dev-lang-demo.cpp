@@ -116,6 +116,129 @@ void sensor_menu()
   while (c != 'b');
 }
 
+void motor_action(motor &m)
+{
+  char c = 0;
+  int new_value = 0;
+  std::string new_mode;
+  bool running = false;
+  
+  do
+  {
+    cout << endl
+         << "*** " << m.type() << " motor (" << char(m.port()+'A') << ") actions ***" << endl
+         << endl
+         << "(i)nfo" << endl
+         << "(r)un mode          [" << m.run_mode()          << "]" << endl
+         << "br(a)ke mode        [" << m.brake_mode()        << "]" << endl
+         << "(h)old mode         [" << m.hold_mode()         << "]" << endl
+         << "r(e)gulation mode   [" << m.regulation_mode()   << "]" << endl
+         << "p(o)larity mode     [" << m.polarity_mode()     << "]" << endl
+         << "ramp (u)p           (" << m.ramp_up()           << ")" << endl
+         << "ramp (d)own         (" << m.ramp_down()         << ")" << endl
+         << "(s)peed setpoint    (" << m.speed_setpoint()    << ")" << endl
+         << "(p)osition setpoint (" << m.position_setpoint() << ")" << endl
+         << "(t)ime setpoint     (" << m.time_setpoint()     << ")" << endl;
+    running = m.running();
+    if (running)
+      cout << "STOP(!)" << endl;
+    else
+      cout << "GO(!)" << endl;
+    cout << endl << "(b)ack" << endl
+         << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case 'i':
+      cout << endl
+           << "  state    is " << m.state() << endl
+           << "  power    is " << m.power() << endl
+           << "  speed    is " << m.speed() << endl
+           << "  position is " << m.position() << endl;
+      break;
+    case 'r':
+      cout << "new mode: "; cin >> new_mode; m.set_run_mode(new_mode); cout << endl;
+      break;
+    case 'a':
+      cout << "new mode: "; cin >> new_mode; m.set_brake_mode(new_mode); cout << endl;
+      break;
+    case 'h':
+      cout << "new mode: "; cin >> new_mode; m.set_hold_mode(new_mode); cout << endl;
+      break;
+    case 'e':
+      cout << "new mode: "; cin >> new_mode; m.set_regulation_mode(new_mode); cout << endl;
+      break;
+    case 'o':
+      cout << "new mode: "; cin >> new_mode; m.set_polarity_mode(new_mode); cout << endl;
+      break;
+    case 'u':
+      cout << "new value: "; cin >> new_value; m.set_ramp_up(new_value); cout << endl;
+      break;
+    case 'd':
+      cout << "new value: "; cin >> new_value; m.set_ramp_down(new_value); cout << endl;
+      break;
+    case 's':
+      cout << "new value: "; cin >> new_value; m.set_speed_setpoint(new_value); cout << endl;
+      break;
+    case 'p':
+      cout << "new value: "; cin >> new_value; m.set_position_setpoint(new_value); cout << endl;
+      break;
+    case 't':
+      cout << "new value: "; cin >> new_value; m.set_time_setpoint(new_value); cout << endl;
+      break;
+    case '!':
+      m.run(!running);
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
+void motor_menu()
+{
+  motor arrMotors[4] = {
+    motor(std::string(), 1),
+    motor(std::string(), 2),
+    motor(std::string(), 3),
+    motor(std::string(), 4)
+  };
+  
+  char c = 0;
+  do
+  {
+    cout << endl
+         << "*** motor menu ***" << endl
+         << endl;
+    
+    for (unsigned i=0; i<4; ++i)
+    {
+      motor &m = arrMotors[i];
+      if (m.connected())
+      {
+        cout << "(" << i+1 << ") " << m.type() << " motor on port " << char('A'+m.port()) << endl;
+      }
+    }
+    cout << endl;
+    cout << "(b)ack"  << endl;
+    cout << endl
+         << "Choice: ";
+    cin >> c;
+    
+    switch (c)
+    {
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+      motor_action(arrMotors[c-'1']);
+      break;
+    }
+  }
+  while (c != 'b');
+}
+
 void led_action(const char *name, led &l)
 {
   int interval = 500;
@@ -404,6 +527,7 @@ void main_menu()
          << "*** main menu ***" << endl
          << endl
          << "(s)ensors" << endl
+         << "(m)otors" << endl
          << "(l)eds" << endl
          << "(b)uttons" << endl
          << "s(o)und" << endl
@@ -418,6 +542,9 @@ void main_menu()
     {
     case 's':
       sensor_menu();
+      break;
+    case 'm':
+      motor_menu();
       break;
     case 'l':
       led_menu();

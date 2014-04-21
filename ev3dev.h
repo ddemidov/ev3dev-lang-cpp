@@ -33,13 +33,27 @@ namespace ev3dev {
 
 //-----------------------------------------------------------------------------
   
-typedef std::string         path_type;
 typedef std::string         mode_type;
 typedef std::set<mode_type> mode_set;
-  
+
 //-----------------------------------------------------------------------------
 
-class sensor
+class device
+{
+protected:
+  int         get_attr_int   (const std::string &name) const;
+  void        set_attr_int   (const std::string &name,
+                              int value);
+  std::string get_attr_string(const std::string &name) const;
+  void        set_attr_string(const std::string &name,
+                              const std::string &value);
+protected:
+  std::string _path;
+};
+
+//-----------------------------------------------------------------------------
+
+class sensor : protected device
 {
 public:
   sensor();
@@ -144,7 +158,106 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class led
+class motor : protected device
+{
+public:
+  typedef std::string motor_type;
+  
+  motor(const motor_type&, unsigned port_ = 0);
+  
+  static motor_type motor_large;
+  static motor_type motor_medium;
+  
+  static mode_type mode_off;
+  static mode_type mode_on;
+    
+  static mode_type run_mode_forever;
+  static mode_type run_mode_time;
+  static mode_type run_mode_position;
+    
+  static mode_type polarity_mode_positive;
+  static mode_type polarity_mode_negative;
+    
+  static mode_type position_mode_absolute;
+  static mode_type position_mode_relative;
+  
+  inline bool     connected()  const { return (_port != 0); }
+	inline unsigned port()       const { return _port; }
+
+  motor_type type() const;
+  
+  void run(bool bRun=true);
+  void reset();
+
+  bool      running() const;
+  mode_type state()   const;
+  
+  int power()    const;
+  int speed()    const;
+  int position() const;
+  
+  int pulses_per_second() const;
+  
+  mode_type run_mode() const;
+  void set_run_mode(const mode_type&);
+  
+  mode_type brake_mode() const;
+  void set_brake_mode(const mode_type&);
+  
+  mode_type hold_mode() const;
+  void set_hold_mode(const mode_type&);
+
+  mode_type regulation_mode() const;
+  void set_regulation_mode(const mode_type&);
+
+  mode_type position_mode() const;
+  void set_position_mode(const mode_type&);
+
+  mode_type polarity_mode() const;
+  void set_polarity_mode(const mode_type&);
+  
+  int speed_setpoint() const;
+  void set_speed_setpoint(int);
+  
+  int  time_setpoint() const;
+  void set_time_setpoint(int);
+
+  int  position_setpoint() const;
+  void set_position_setpoint(int);
+
+  int  ramp_up() const;
+  void set_ramp_up(int);
+  
+  int ramp_down() const;
+  void set_ramp_down(int);
+  
+protected:
+  bool init(const motor_type&, unsigned port_ = 0);
+  
+protected:
+  unsigned   _port;
+  motor_type _type;
+};
+
+//-----------------------------------------------------------------------------
+
+class medium_motor : public motor
+{
+public:
+  medium_motor(unsigned port_ = 0);
+};
+
+//-----------------------------------------------------------------------------
+
+class large_motor : public motor
+{
+public:
+  large_motor(unsigned port_ = 0);
+};
+
+//-----------------------------------------------------------------------------
+
+class led : protected device
 {
 public:
   led(const std::string &name);

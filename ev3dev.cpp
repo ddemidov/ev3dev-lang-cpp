@@ -77,7 +77,7 @@ void device::set_attr_int(const std::string &name, int value)
 
 std::string device::get_attr_string(const std::string &name) const
 {
-  std::string result = 0;
+  std::string result;
   
   std::ifstream is((_path+name).c_str());
   if (is.is_open())
@@ -341,11 +341,302 @@ gyro_sensor      ::gyro_sensor      (unsigned port_) : msensor(ev3_gyro,       p
 infrared_sensor  ::infrared_sensor  (unsigned port_) : msensor(ev3_infrared,   port_) { }
 
 //-----------------------------------------------------------------------------
+  
+motor::motor_type motor::motor_large ("large");
+motor::motor_type motor::motor_medium("medium");
+
+mode_type motor::mode_off("off");
+mode_type motor::mode_on("on");
+
+mode_type motor::run_mode_forever ("forever");
+mode_type motor::run_mode_time    ("time");
+mode_type motor::run_mode_position("position");
+  
+mode_type motor::polarity_mode_positive("positive");
+mode_type motor::polarity_mode_negative("negative");
+  
+mode_type motor::position_mode_absolute("absolute");
+mode_type motor::position_mode_relative("relative");
+
+//-----------------------------------------------------------------------------
+
+motor::motor(const motor_type &t, unsigned p) :
+  _port(0)
+{
+  init(t, p);
+}
+
+//-----------------------------------------------------------------------------
+
+bool motor::init(const motor_type &type_, unsigned port_)
+{
+  if (type_.empty() && (port_ == 0))
+    return false;
+  
+  using namespace std;
+  
+  string strClassDir(SYS_ROOT "/class/tacho-motor/");
+  
+  struct dirent *dp;
+  DIR *dfd;
+  
+  if ((dfd = opendir(strClassDir.c_str())) != NULL)
+  {
+    while ((dp = readdir(dfd)) != NULL)
+    {
+      if (strncmp(dp->d_name, "out", 3)==0)
+      {
+        _port = dp->d_name[3]-'A'+1;
+        if ((_port < 1) || (_port > 4))
+          continue;
+        
+        if (port_ && (_port != port_))
+          continue;
+        
+        string strDir = strClassDir + dp->d_name;
+        ifstream is((strDir+"/type").c_str());
+        if (is.is_open())
+        {
+          is >> _type;
+          if (is.bad() || (!type_.empty() && _type != type_))
+            continue;
+          is.close();
+          
+          _path = strDir + '/';
+          
+          return true;
+        }
+      }
+    }
+    closedir(dfd);
+  }
+  
+  _port = 0;
+  _type.clear();
+  
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
+motor::motor_type motor::type() const
+{
+  return get_attr_string("type");
+}
+  
+//-----------------------------------------------------------------------------
+  
+void motor::run(bool bRun)
+{
+  set_attr_int("run", bRun);
+}
+  
+//-----------------------------------------------------------------------------
+  
+void motor::reset()
+{
+  set_attr_int("reset", 1);
+}
+  
+//-----------------------------------------------------------------------------
+  
+bool motor::running() const
+{
+  return get_attr_int("run")!=0;
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::state() const
+{
+  return get_attr_string("state");
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::power() const
+{
+  return get_attr_int("power");
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed() const
+{
+  return get_attr_int("speed");
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::position() const
+{
+  return get_attr_int("position");
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::pulses_per_second() const
+{
+  return get_attr_int("pulses_per_second");
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::run_mode() const
+{
+  return get_attr_string("run_mode");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_run_mode(const mode_type &value)
+{
+  set_attr_string("run_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::brake_mode() const
+{
+  return get_attr_string("brake_mode");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_brake_mode(const mode_type &value)
+{
+  set_attr_string("brake_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::hold_mode() const
+{
+  return get_attr_string("hold_mode");
+}
+  
+//-----------------------------------------------------------------------------
+
+void motor::set_hold_mode(const mode_type &value)
+{
+  set_attr_string("hold_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::regulation_mode() const
+{
+  return get_attr_string("regulation_mode");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_regulation_mode(const mode_type &value)
+{
+  set_attr_string("regulation_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::position_mode() const
+{
+  return get_attr_string("position_mode");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_position_mode(const mode_type &value)
+{
+  set_attr_string("position_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_type motor::polarity_mode() const
+{
+  return get_attr_string("polarity_mode");
+}
+//-----------------------------------------------------------------------------
+
+void motor::set_polarity_mode(const mode_type &value)
+{
+  set_attr_string("polarity_mode", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed_setpoint() const
+{
+  return get_attr_int("speed_setpoint");
+}
+//-----------------------------------------------------------------------------
+
+void motor::set_speed_setpoint(int value)
+{
+  set_attr_int("speed_setpoint", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int  motor::time_setpoint() const
+{
+  return get_attr_int("time_setpoint");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_time_setpoint(int value)
+{
+  set_attr_int("time_setpoint", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int  motor::position_setpoint() const
+{
+  return get_attr_int("position_setpoint");
+}
+  
+//-----------------------------------------------------------------------------
+
+void motor::set_position_setpoint(int value)
+{
+  set_attr_int("position_setpoint", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int  motor::ramp_up() const
+{
+  return get_attr_int("ramp_up");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_ramp_up(int value)
+{
+  set_attr_int("ramp_up", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::ramp_down() const
+{
+  return get_attr_int("ramp_down");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_ramp_down(int value)
+{
+  set_attr_int("ramp_down", value);
+}
+
+//-----------------------------------------------------------------------------
 
 led::led(const std::string &name)
 {
-  path_type p(SYS_ROOT "/class/leds/ev3:" + name);
-
+  std::string p(SYS_ROOT "/class/leds/ev3:" + name);
   
   DIR *dfd;
   if ((dfd = opendir(p.c_str())) != NULL)
