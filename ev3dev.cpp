@@ -49,6 +49,58 @@ namespace ev3dev {
 
 //-----------------------------------------------------------------------------
 
+int device::get_attr_int(const std::string &name) const
+{
+  int result = 0;
+  
+  std::ifstream is((_path+name).c_str());
+  if (is.is_open())
+  {
+    is >> result;
+  }
+  
+  return result;
+}
+
+//-----------------------------------------------------------------------------
+
+void device::set_attr_int(const std::string &name, int value)
+{
+  std::ofstream os((_path+name).c_str());
+  if (os.is_open())
+  {
+    os << value;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+std::string device::get_attr_string(const std::string &name) const
+{
+  std::string result = 0;
+  
+  std::ifstream is((_path+name).c_str());
+  if (is.is_open())
+  {
+    is >> result;
+  }
+  
+  return result;
+}
+
+//-----------------------------------------------------------------------------
+
+void device::set_attr_string(const std::string &name, const std::string &value)
+{
+  std::ofstream os((_path+name).c_str());
+  if (os.is_open())
+  {
+    os << value;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
 sensor::sensor() :
   _port(0),
   _type(0),
@@ -162,18 +214,10 @@ msensor::msensor(unsigned type_, unsigned port_)
 
 int msensor::value(unsigned index) const
 {
-  char svalue[8] = "/value0";
+  char svalue[8] = "value0";
   svalue[7] += index;
-    
-  int result = 0;
-    
-  std::ifstream is((_path+svalue).c_str());
-  if (is.is_open())
-  {
-    is >> result;
-  }
   
-  return result;
+  return get_attr_int(svalue);
 }
 
 //-----------------------------------------------------------------------------
@@ -182,13 +226,8 @@ void msensor::set_mode(const mode_type &mode_)
 {
   if (mode_ != _mode)
   {
-    std::ofstream os((_path+"/mode").c_str());
-    if (os.is_open())
-    {
-      os << mode_;
-    
-      _mode.clear();
-    }
+    set_attr_string("mode", mode_);
+    _mode.clear();
   }
 }
 
@@ -238,7 +277,7 @@ bool msensor::init(unsigned type_, unsigned port_)
           _port    = port;
           _type    = type;
           _nvalues = nvalues;
-          _path    = strDir;
+          _path    = strDir + '/';
           
           read_modes();
           
@@ -311,7 +350,7 @@ led::led(const std::string &name)
   DIR *dfd;
   if ((dfd = opendir(p.c_str())) != NULL)
   {
-    _path = p;
+    _path = p + '/';
     closedir(dfd);
   }
 }
@@ -320,40 +359,21 @@ led::led(const std::string &name)
 
 int led::level() const
 {
-  std::ifstream is((_path+"/brightness").c_str());
-  
-  int result = 0;
-  
-  if (is.is_open())
-  {
-    is >> result;
-  }
-  
-  return result;
+  return get_attr_int("brightness");
 }
 
 //-----------------------------------------------------------------------------
 
 void led::on()
 {
-  std::ofstream os((_path+"/brightness").c_str());
-  
-  if (os.is_open())
-  {
-    os << 1;
-  }
+  set_attr_int("brightness", 1);
 }
 
 //-----------------------------------------------------------------------------
 
 void led::off()
 {
-  std::ofstream os((_path+"/brightness").c_str());
-  
-  if (os.is_open())
-  {
-    os << 0;
-  }
+  set_attr_int("brightness", 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -373,22 +393,14 @@ void led::flash(unsigned interval_ms)
 
 void led::set_on_delay(unsigned ms)
 {
-  std::ofstream os((_path+"/delay_on").c_str());
-  if (os.is_open())
-  {
-    os << ms;
-  }
+  set_attr_int("delay_on", ms);
 }
 
 //-----------------------------------------------------------------------------
 
 void led::set_off_delay(unsigned ms)
 {
-  std::ofstream os((_path+"/delay_off").c_str());
-  if (os.is_open())
-  {
-    os << ms;
-  }
+  set_attr_int("delay_off", ms);
 }
 
 //-----------------------------------------------------------------------------
@@ -474,11 +486,7 @@ mode_set led::triggers() const
 
 void led::set_trigger(const mode_type &trigger_)
 {
-  std::ofstream os((_path+"/trigger").c_str());
-  if (os.is_open())
-  {
-    os << trigger_;
-  }
+  set_attr_string("trigger", trigger_);
 }
 
 //-----------------------------------------------------------------------------
@@ -501,7 +509,7 @@ void led::all_off  () { red_off(); green_off(); }
   
 button::button(const std::string &name)
 {
-  _path = path_type(SYS_BUTTON + name);
+  _path = std::string(SYS_BUTTON + name);
 }
   
 //-----------------------------------------------------------------------------

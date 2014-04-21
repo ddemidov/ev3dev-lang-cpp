@@ -82,7 +82,6 @@ protected:
   unsigned _type;
   unsigned _nvalues;
   
-  path_type _path;
   mode_set  _modes;
   mode_type _mode;
 };
@@ -172,14 +171,11 @@ public:
   static void green_off();
   static void all_on   ();
   static void all_off  ();
-  
-protected:
-  path_type _path;
 };
 
 //-----------------------------------------------------------------------------
 
-class button
+class button : protected device
 {
 public:
   button(const std::string &name);
@@ -192,9 +188,6 @@ public:
   static button up;
   static button down;
   static button enter;
-  
-protected:
-  path_type _path;
 };
 
 //-----------------------------------------------------------------------------
