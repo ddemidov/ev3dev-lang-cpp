@@ -29,7 +29,7 @@ using namespace ev3dev;
 
 
 template <class S>
-void test(const char *name)
+void test_sensor(const char *name)
 {
   S s;
   if (s.connected())
@@ -43,14 +43,45 @@ void test(const char *name)
     cout << "No " << name << " sensor found" << endl;
 }
 
+template <class M>
+void test_motor(const char *name)
+{
+  M m;
+  if (m.connected())
+  {
+    cout << endl
+         << "Found " << name << " motor on port " << char(m.port()+'A'-1) << endl
+         << endl;
+    
+    cout << "  Current state is " << m.state() << endl
+         << "    power: " << m.power() << "   speed: " << m.speed() << endl << endl
+         << "  Current run mode is " << m.run_mode() << endl
+         << "    brake mode: " << m.brake_mode() << "   hold mode: " << m.hold_mode() << endl
+         << "    regulation mode: " << m.regulation_mode() << "   polarity mode: " << m.polarity_mode()
+         << endl << endl
+         << "  Speed setpoint is " << m.speed_setpoint() << endl;
+    if (m.run_mode()==m.run_mode_time)
+      cout << "  Time setpoint is " << m.time_setpoint() << endl;
+    if (m.run_mode()==m.run_mode_position)
+      cout << "  Position setpoint is " << m.position_setpoint() << endl;
+    cout << "    ramp up: " << m.ramp_up()  << "   ramp down: " << m.ramp_down() << endl<< endl;
+  }
+  else
+    cout << "No " << name << " motor found" << endl;
+}
+
+
 int main()
 {
 
-  test<touch_sensor>("touch");
-  test<color_sensor>("color");
-  test<ultrasonic_sensor>("ultrasonic");
-  test<gyro_sensor>("gyro");
-  test<infrared_sensor>("infrared");
+  test_sensor<touch_sensor>("touch");
+  test_sensor<color_sensor>("color");
+  test_sensor<ultrasonic_sensor>("ultrasonic");
+  test_sensor<gyro_sensor>("gyro");
+  test_sensor<infrared_sensor>("infrared");
+  
+  test_motor<medium_motor>("medium");
+  test_motor<medium_motor>("large");
   
   cout << "Level of left green led is " << led::green_left.level() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;

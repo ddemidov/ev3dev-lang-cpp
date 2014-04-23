@@ -342,8 +342,8 @@ infrared_sensor  ::infrared_sensor  (unsigned port_) : msensor(ev3_infrared,   p
 
 //-----------------------------------------------------------------------------
   
-motor::motor_type motor::motor_large ("large");
-motor::motor_type motor::motor_medium("medium");
+motor::motor_type motor::motor_large ("tacho");
+motor::motor_type motor::motor_medium("minitacho");
 
 mode_type motor::mode_off("off");
 mode_type motor::mode_on("on");
@@ -630,6 +630,19 @@ int motor::ramp_down() const
 void motor::set_ramp_down(int value)
 {
   set_attr_int("ramp_down", value);
+}
+
+//-----------------------------------------------------------------------------
+
+medium_motor::medium_motor(unsigned port_) : motor(motor_medium, port_)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+large_motor::large_motor(unsigned port_) : motor(motor_large, port_)
+{
+  
 }
 
 //-----------------------------------------------------------------------------
