@@ -187,6 +187,7 @@ public:
   motor_type type() const;
   
   void run(bool bRun=true);
+  void stop();
   void reset();
 
   bool      running() const;

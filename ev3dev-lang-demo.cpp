@@ -126,7 +126,7 @@ void motor_action(motor &m)
   do
   {
     cout << endl
-         << "*** " << m.type() << " motor (" << char(m.port()+'A') << ") actions ***" << endl
+         << "*** " << m.type() << " motor (" << char(m.port()+'A'-1) << ") actions ***" << endl
          << endl
          << "(i)nfo" << endl
          << "(r)un mode          [" << m.run_mode()          << "]" << endl
