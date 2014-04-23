@@ -134,6 +134,7 @@ void motor_action(motor &m)
          << "(h)old mode         [" << m.hold_mode()         << "]" << endl
          << "r(e)gulation mode   [" << m.regulation_mode()   << "]" << endl
          << "p(o)larity mode     [" << m.polarity_mode()     << "]" << endl
+         << "position (m)ode     [" << m.position_mode()     << "]" << endl
          << "ramp (u)p           (" << m.ramp_up()           << ")" << endl
          << "ramp (d)own         (" << m.ramp_down()         << ")" << endl
          << "(s)peed setpoint    (" << m.speed_setpoint()    << ")" << endl
@@ -172,6 +173,9 @@ void motor_action(motor &m)
       break;
     case 'o':
       cout << "new mode: "; cin >> new_mode; m.set_polarity_mode(new_mode); cout << endl;
+      break;
+    case 'm':
+      cout << "new mode: "; cin >> new_mode; m.set_position_mode(new_mode); cout << endl;
       break;
     case 'u':
       cout << "new value: "; cin >> new_value; m.set_ramp_up(new_value); cout << endl;
