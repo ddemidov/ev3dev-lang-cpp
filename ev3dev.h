@@ -130,6 +130,10 @@ class color_sensor : public msensor
 {
 public:
   color_sensor(unsigned port_ = 0);
+  
+  static const mode_type mode_reflect;
+  static const mode_type mode_ambient;
+  static const mode_type mode_color;
 };
 
 //-----------------------------------------------------------------------------
@@ -138,6 +142,12 @@ class ultrasonic_sensor : public msensor
 {
 public:
   ultrasonic_sensor(unsigned port_ = 0);
+
+  static const mode_type mode_dist_cm;
+  static const mode_type mode_dist_in;
+  static const mode_type mode_listen;
+  static const mode_type mode_single_cm;
+  static const mode_type mode_single_in;
 };
 
 //-----------------------------------------------------------------------------
@@ -146,6 +156,10 @@ class gyro_sensor : public msensor
 {
 public:
   gyro_sensor(unsigned port_ = 0);
+  
+  static const mode_type mode_angle;
+  static const mode_type mode_speed;
+  static const mode_type mode_angle_and_speed;
 };
 
 //-----------------------------------------------------------------------------
@@ -154,6 +168,10 @@ class infrared_sensor : public msensor
 {
 public:
   infrared_sensor(unsigned port_ = 0);
+
+  static const mode_type mode_proximity;
+  static const mode_type mode_ir_seeker;
+  static const mode_type mode_ir_remote;
 };
 
 //-----------------------------------------------------------------------------
@@ -165,21 +183,21 @@ public:
   
   motor(const motor_type&, unsigned port_ = 0);
   
-  static motor_type motor_large;
-  static motor_type motor_medium;
+  static const motor_type motor_large;
+  static const motor_type motor_medium;
   
-  static mode_type mode_off;
-  static mode_type mode_on;
+  static const mode_type mode_off;
+  static const mode_type mode_on;
     
-  static mode_type run_mode_forever;
-  static mode_type run_mode_time;
-  static mode_type run_mode_position;
+  static const mode_type run_mode_forever;
+  static const mode_type run_mode_time;
+  static const mode_type run_mode_position;
     
-  static mode_type polarity_mode_positive;
-  static mode_type polarity_mode_negative;
+  static const mode_type polarity_mode_positive;
+  static const mode_type polarity_mode_negative;
     
-  static mode_type position_mode_absolute;
-  static mode_type position_mode_relative;
+  static const mode_type position_mode_absolute;
+  static const mode_type position_mode_relative;
   
   inline bool     connected()  const { return (_port != 0); }
 	inline unsigned port()       const { return _port; }

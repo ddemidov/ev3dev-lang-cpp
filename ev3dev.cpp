@@ -334,29 +334,74 @@ void msensor::read_modes()
 
 //-----------------------------------------------------------------------------
 
-touch_sensor     ::touch_sensor     (unsigned port_) : msensor(ev3_touch,      port_) { }
-color_sensor     ::color_sensor     (unsigned port_) : msensor(ev3_color,      port_) { }
-ultrasonic_sensor::ultrasonic_sensor(unsigned port_) : msensor(ev3_ultrasonic, port_) { }
-gyro_sensor      ::gyro_sensor      (unsigned port_) : msensor(ev3_gyro,       port_) { }
-infrared_sensor  ::infrared_sensor  (unsigned port_) : msensor(ev3_infrared,   port_) { }
+touch_sensor::touch_sensor(unsigned port_) :
+  msensor(ev3_touch, port_)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+const mode_type color_sensor::mode_reflect("COL-REFLECT");
+const mode_type color_sensor::mode_ambient("COL-AMBIENT");
+const mode_type color_sensor::mode_color  ("COL-COLOR");
+
+color_sensor::color_sensor(unsigned port_) :
+  msensor(ev3_color, port_)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+const mode_type ultrasonic_sensor::mode_dist_cm  ("US-DIST-CM");
+const mode_type ultrasonic_sensor::mode_dist_in  ("US-DIST-IN");
+const mode_type ultrasonic_sensor::mode_listen   ("US-LISTEN");
+const mode_type ultrasonic_sensor::mode_single_cm("US-SI-CM");
+const mode_type ultrasonic_sensor::mode_single_in("US-SI-IN");
+
+ultrasonic_sensor::ultrasonic_sensor(unsigned port_) :
+  msensor(ev3_ultrasonic, port_)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+const mode_type gyro_sensor::mode_angle("GYRO-ANG");
+const mode_type gyro_sensor::mode_speed("GYRO-RATE");
+const mode_type gyro_sensor::mode_angle_and_speed("GYRO-G&A");
+
+gyro_sensor::gyro_sensor(unsigned port_) :
+  msensor(ev3_gyro, port_)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+const mode_type infrared_sensor::mode_proximity("IR-PROX");
+const mode_type infrared_sensor::mode_ir_seeker("IR-SEEK");
+const mode_type infrared_sensor::mode_ir_remote("IR-REMOTE");
+
+infrared_sensor::infrared_sensor(unsigned port_) :
+  msensor(ev3_infrared, port_)
+{
+}
 
 //-----------------------------------------------------------------------------
   
-motor::motor_type motor::motor_large ("tacho");
-motor::motor_type motor::motor_medium("minitacho");
+const motor::motor_type motor::motor_large ("tacho");
+const motor::motor_type motor::motor_medium("minitacho");
 
-mode_type motor::mode_off("off");
-mode_type motor::mode_on("on");
+const mode_type motor::mode_off("off");
+const mode_type motor::mode_on("on");
 
-mode_type motor::run_mode_forever ("forever");
-mode_type motor::run_mode_time    ("time");
-mode_type motor::run_mode_position("position");
+const mode_type motor::run_mode_forever ("forever");
+const mode_type motor::run_mode_time    ("time");
+const mode_type motor::run_mode_position("position");
   
-mode_type motor::polarity_mode_positive("positive");
-mode_type motor::polarity_mode_negative("negative");
+const mode_type motor::polarity_mode_positive("positive");
+const mode_type motor::polarity_mode_negative("negative");
   
-mode_type motor::position_mode_absolute("absolute");
-mode_type motor::position_mode_relative("relative");
+const mode_type motor::position_mode_absolute("absolute");
+const mode_type motor::position_mode_relative("relative");
 
 //-----------------------------------------------------------------------------
 
