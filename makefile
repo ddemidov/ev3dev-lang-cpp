@@ -13,9 +13,12 @@ ev3dev-lang-test: $(OBJ) ev3dev-lang-test.o
 ev3dev-lang-demo: $(OBJ) ev3dev-lang-demo.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
+remote_control-test: $(OBJ) remote_control-test.o
+	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
+
 .PHONY: all clean
 
 clean:
 	rm -f *.o *~ ev3dev-lang-test ev3dev-lang-demo
 
-all:  ev3dev-lang-test ev3dev-lang-demo
+all:  ev3dev-lang-test ev3dev-lang-demo remote_control-test

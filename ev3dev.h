@@ -26,6 +26,7 @@
 
 #include <set>
 #include <string>
+#include <functional>
 
 //-----------------------------------------------------------------------------
 
@@ -378,6 +379,46 @@ private:
   uint32_t _xres;
   uint32_t _yres;
   uint32_t _bpp;
+};
+
+//-----------------------------------------------------------------------------
+
+class remote_control
+{
+public:
+  remote_control(unsigned channel = 1);
+  remote_control(infrared_sensor&, unsigned channel = 1);
+  virtual ~remote_control();
+  
+  inline bool   connected() const { return _sensor->connected(); }
+  inline unsigned channel() const { return _channel+1; }
+
+  bool process();
+
+  std::function<void (bool)> on_red_up;
+  std::function<void (bool)> on_red_down;
+  std::function<void (bool)> on_blue_up;
+  std::function<void (bool)> on_blue_down;
+  std::function<void (bool)> on_beacon;
+  
+protected:
+  virtual void on_value_changed(int value);
+  
+  enum
+  {
+    red_up    = (1 << 0),
+    red_down  = (1 << 1),
+    blue_up   = (1 << 2),
+    blue_down = (1 << 3),
+    beacon    = (1 << 4),
+  };
+  
+protected:
+  infrared_sensor *_sensor;
+  bool             _owns_sensor;
+  unsigned         _channel;
+  int              _value;
+  int              _state;
 };
 
 //-----------------------------------------------------------------------------
