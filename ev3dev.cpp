@@ -296,11 +296,20 @@ bool msensor::init(unsigned type_, unsigned port_)
 void msensor::read_modes()
 {
   using namespace std;
-  
+
+  ifstream is((_path+"/modes").c_str());
+  if (is.is_open())
+  {
+    _mode = get_attr_string("mode");
+  }
+  else
+  {
+    _mode.clear();
+    is.open((_path+"/mode").c_str());
+  }
+
   _modes.clear();
-  _mode.clear();
   
-  ifstream is((_path+"/mode").c_str());
   if (is.is_open())
   {
     string s;
