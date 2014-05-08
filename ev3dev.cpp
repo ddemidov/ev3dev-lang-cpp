@@ -536,6 +536,13 @@ int motor::position() const
 
 //-----------------------------------------------------------------------------
 
+void motor::set_position(int pos)
+{
+  set_attr_int("position", pos);
+}
+
+//-----------------------------------------------------------------------------
+
 int motor::pulses_per_second() const
 {
   return get_attr_int("pulses_per_second");

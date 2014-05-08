@@ -218,6 +218,8 @@ public:
   
   int pulses_per_second() const;
   
+  void set_position(int);
+  
   mode_type run_mode() const;
   void set_run_mode(const mode_type&);
   
