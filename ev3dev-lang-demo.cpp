@@ -221,7 +221,7 @@ void motor_menu()
       motor &m = arrMotors[i];
       if (m.connected())
       {
-        cout << "(" << i+1 << ") " << m.type() << " motor on port " << char('A'+m.port()) << endl;
+        cout << "(" << i+1 << ") " << m.type() << " motor on port " << char('A'+m.port()-1) << endl;
       }
     }
     cout << endl;
