@@ -630,56 +630,56 @@ void motor::set_pulses_per_second_setpoint(int value)
 
 int  motor::time_setpoint() const
 {
-  return get_attr_int("time_setpoint");
+  return get_attr_int("time_sp");
 }
 
 //-----------------------------------------------------------------------------
 
 void motor::set_time_setpoint(int value)
 {
-  set_attr_int("time_setpoint", value);
+  set_attr_int("time_sp", value);
 }
 
 //-----------------------------------------------------------------------------
 
 int  motor::position_setpoint() const
 {
-  return get_attr_int("position_setpoint");
+  return get_attr_int("position_sp");
 }
   
 //-----------------------------------------------------------------------------
 
 void motor::set_position_setpoint(int value)
 {
-  set_attr_int("position_setpoint", value);
+  set_attr_int("position_sp", value);
 }
 
 //-----------------------------------------------------------------------------
 
 int  motor::ramp_up() const
 {
-  return get_attr_int("ramp_up");
+  return get_attr_int("ramp_up_sp");
 }
 
 //-----------------------------------------------------------------------------
 
 void motor::set_ramp_up(int value)
 {
-  set_attr_int("ramp_up", value);
+  set_attr_int("ramp_up_sp", value);
 }
 
 //-----------------------------------------------------------------------------
 
 int motor::ramp_down() const
 {
-  return get_attr_int("ramp_down");
+  return get_attr_int("ramp_down_sp");
 }
 
 //-----------------------------------------------------------------------------
 
 void motor::set_ramp_down(int value)
 {
-  set_attr_int("ramp_down", value);
+  set_attr_int("ramp_down_sp", value);
 }
 
 //-----------------------------------------------------------------------------
