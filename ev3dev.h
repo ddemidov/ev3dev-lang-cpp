@@ -193,10 +193,11 @@ public:
   static const mode_type run_mode_forever;
   static const mode_type run_mode_time;
   static const mode_type run_mode_position;
-    
-  static const mode_type polarity_mode_positive;
-  static const mode_type polarity_mode_negative;
-    
+
+  static const mode_type stop_mode_coast;
+  static const mode_type stop_mode_brake;
+  static const mode_type stop_mode_hold;
+  
   static const mode_type position_mode_absolute;
   static const mode_type position_mode_relative;
   
@@ -212,35 +213,30 @@ public:
   bool      running() const;
   mode_type state()   const;
   
-  int power()    const;
-  int speed()    const;
-  int position() const;
-  
+  int duty_cycle()        const;
   int pulses_per_second() const;
+  int position()          const;
   
   void set_position(int);
   
   mode_type run_mode() const;
   void set_run_mode(const mode_type&);
   
-  mode_type brake_mode() const;
-  void set_brake_mode(const mode_type&);
+  mode_type stop_mode() const;
+  void set_stop_mode(const mode_type&);
   
-  mode_type hold_mode() const;
-  void set_hold_mode(const mode_type&);
-
   mode_type regulation_mode() const;
   void set_regulation_mode(const mode_type&);
 
   mode_type position_mode() const;
   void set_position_mode(const mode_type&);
 
-  mode_type polarity_mode() const;
-  void set_polarity_mode(const mode_type&);
+  int  duty_cycle_setpoint() const;
+  void set_duty_cycle_setpoint(int);
   
-  int speed_setpoint() const;
-  void set_speed_setpoint(int);
-  
+  int  pulses_per_second_setpoint() const;
+  void set_pulses_per_second_setpoint(int);
+
   int  time_setpoint() const;
   void set_time_setpoint(int);
 
@@ -250,7 +246,7 @@ public:
   int  ramp_up() const;
   void set_ramp_up(int);
   
-  int ramp_down() const;
+  int  ramp_down() const;
   void set_ramp_down(int);
   
 protected:

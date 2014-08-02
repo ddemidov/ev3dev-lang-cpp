@@ -406,9 +406,10 @@ const mode_type motor::run_mode_forever ("forever");
 const mode_type motor::run_mode_time    ("time");
 const mode_type motor::run_mode_position("position");
   
-const mode_type motor::polarity_mode_positive("positive");
-const mode_type motor::polarity_mode_negative("negative");
-  
+const mode_type motor::stop_mode_coast("coast");
+const mode_type motor::stop_mode_brake("brake");
+const mode_type motor::stop_mode_hold ("hold");
+
 const mode_type motor::position_mode_absolute("absolute");
 const mode_type motor::position_mode_relative("relative");
 
@@ -515,16 +516,16 @@ mode_type motor::state() const
 
 //-----------------------------------------------------------------------------
 
-int motor::power() const
+int motor::duty_cycle() const
 {
-  return get_attr_int("power");
+  return get_attr_int("duty_cycle");
 }
 
 //-----------------------------------------------------------------------------
 
-int motor::speed() const
+int motor::pulses_per_second() const
 {
-  return get_attr_int("speed");
+  return get_attr_int("pulses_per_second");
 }
 
 //-----------------------------------------------------------------------------
@@ -543,13 +544,6 @@ void motor::set_position(int pos)
 
 //-----------------------------------------------------------------------------
 
-int motor::pulses_per_second() const
-{
-  return get_attr_int("pulses_per_second");
-}
-
-//-----------------------------------------------------------------------------
-
 mode_type motor::run_mode() const
 {
   return get_attr_string("run_mode");
@@ -564,30 +558,16 @@ void motor::set_run_mode(const mode_type &value)
 
 //-----------------------------------------------------------------------------
 
-mode_type motor::brake_mode() const
+mode_type motor::stop_mode() const
 {
-  return get_attr_string("brake_mode");
+  return get_attr_string("stop_mode");
 }
 
 //-----------------------------------------------------------------------------
 
-void motor::set_brake_mode(const mode_type &value)
+void motor::set_stop_mode(const mode_type &value)
 {
-  set_attr_string("brake_mode", value);
-}
-
-//-----------------------------------------------------------------------------
-
-mode_type motor::hold_mode() const
-{
-  return get_attr_string("hold_mode");
-}
-  
-//-----------------------------------------------------------------------------
-
-void motor::set_hold_mode(const mode_type &value)
-{
-  set_attr_string("hold_mode", value);
+  set_attr_string("stop_mode", value);
 }
 
 //-----------------------------------------------------------------------------
@@ -620,28 +600,30 @@ void motor::set_position_mode(const mode_type &value)
 
 //-----------------------------------------------------------------------------
 
-mode_type motor::polarity_mode() const
+int motor::duty_cycle_setpoint() const
 {
-  return get_attr_string("polarity_mode");
-}
-//-----------------------------------------------------------------------------
-
-void motor::set_polarity_mode(const mode_type &value)
-{
-  set_attr_string("polarity_mode", value);
+  return get_attr_int("duty_cycle_sp");
 }
 
 //-----------------------------------------------------------------------------
 
-int motor::speed_setpoint() const
+void motor::set_duty_cycle_setpoint(int value)
 {
-  return get_attr_int("speed_setpoint");
+  set_attr_int("duty_cycle_sp", value);
 }
+
 //-----------------------------------------------------------------------------
 
-void motor::set_speed_setpoint(int value)
+int motor::pulses_per_second_setpoint() const
 {
-  set_attr_int("speed_setpoint", value);
+  return get_attr_int("pulses_per_second_sp");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_pulses_per_second_setpoint(int value)
+{
+  set_attr_int("pulses_per_second_sp", value);
 }
 
 //-----------------------------------------------------------------------------
