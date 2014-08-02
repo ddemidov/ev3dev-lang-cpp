@@ -54,12 +54,17 @@ void test_motor(const char *name)
          << endl;
     
     cout << "  Current state is " << m.state() << endl
-         << "    power: " << m.power() << "   speed: " << m.speed() << endl << endl
+         << "    duty_cycle: " << m.duty_cycle() << endl
+         << "    pulses_per_second: " << m.pulses_per_second() << endl << endl
          << "  Current run mode is " << m.run_mode() << endl
-         << "    brake mode: " << m.brake_mode() << "   hold mode: " << m.hold_mode() << endl
-         << "    regulation mode: " << m.regulation_mode() << "   polarity mode: " << m.polarity_mode()
-         << endl << endl
-         << "  Speed setpoint is " << m.speed_setpoint() << endl;
+         << "    stop mode: " << m.stop_mode() << endl
+         << "    regulation mode: " << m.regulation_mode() << endl << endl;
+    
+    if (m.regulation_mode()==m.mode_on)
+      cout << "  pulses_per_second setpoint is " << m.pulses_per_second_setpoint() << endl;
+    else
+      cout << "  duty_cycle setpoint is " << m.duty_cycle_setpoint() << endl;
+    
     if (m.run_mode()==m.run_mode_time)
       cout << "  Time setpoint is " << m.time_setpoint() << endl;
     if (m.run_mode()==m.run_mode_position)

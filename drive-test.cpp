@@ -104,9 +104,9 @@ void control::drive(int speed, int time)
     _motor_right.set_run_mode(motor::run_mode_forever);
   }
   
-  _motor_left.set_speed_setpoint(-speed);
+  _motor_left.set_duty_cycle_setpoint(-speed);
   
-  _motor_right.set_speed_setpoint(-speed);
+  _motor_right.set_duty_cycle_setpoint(-speed);
   
   _state = state_driving;
   
@@ -134,15 +134,15 @@ void control::turn(int direction)
   //_motor_left.set_position_mode(motor::position_mode_relative);
   _motor_left.set_position(0);
   _motor_left .set_position_setpoint(direction);
-  _motor_left.set_regulation_mode(motor::mode_on);
-  _motor_left.set_speed_setpoint(50);
+  //_motor_left.set_regulation_mode(motor::mode_on);
+  _motor_left.set_duty_cycle_setpoint(50);
 
   _motor_right.set_run_mode(motor::run_mode_position);
   //_motor_right.set_position_mode(motor::position_mode_relative);
   _motor_right.set_position(0);
   _motor_right.set_position_setpoint(-direction);
-  _motor_right.set_regulation_mode(motor::mode_on);
-  _motor_right.set_speed_setpoint(50);
+  //_motor_right.set_regulation_mode(motor::mode_on);
+  _motor_right.set_duty_cycle_setpoint(50);
   
   _state = state_turning;
 
