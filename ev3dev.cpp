@@ -439,34 +439,33 @@ bool motor::init(const motor_type &type_, unsigned port_)
   {
     while ((dp = readdir(dfd)) != NULL)
     {
-      if (strncmp(dp->d_name, "out", 3)==0)
+      if (strncmp(dp->d_name, "tacho-motor", 11)==0)
       {
-        _port = dp->d_name[3]-'A'+1;
+        _path = strClassDir + dp->d_name + '/';
+        
+        std::string strPort = get_attr_string("port_name");
+        if (strPort.length()<4)
+          continue;
+        
+        _port = strPort[3]-'A'+1;
         if ((_port < 1) || (_port > 4))
           continue;
         
         if (port_ && (_port != port_))
           continue;
         
-        string strDir = strClassDir + dp->d_name;
-        ifstream is((strDir+"/type").c_str());
-        if (is.is_open())
-        {
-          is >> _type;
-          if (is.bad() || (!type_.empty() && _type != type_))
-            continue;
-          is.close();
-          
-          _path = strDir + '/';
-          
-          return true;
-        }
+        _type = get_attr_string("type");
+        if (!type_.empty() && _type != type_)
+          continue;
+        
+        return true;
       }
     }
     closedir(dfd);
   }
   
   _port = 0;
+  _path.clear();
   _type.clear();
   
   return false;

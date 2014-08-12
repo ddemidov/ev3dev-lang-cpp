@@ -136,7 +136,7 @@ void motor_action(motor &m)
     if (m.regulation_mode()==m.mode_on)
       cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_setpoint() << ")" << endl;
     else
-      cout << "duty_cycle (s)etpoint (" << m.duty_cycle() << ")" << endl;
+      cout << "duty_cycle (s)etpoint (" << m.duty_cycle_setpoint() << ")" << endl;
 
     if (m.run_mode()==m.run_mode_position)
     {
