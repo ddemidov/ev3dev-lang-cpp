@@ -4,7 +4,6 @@
  *
  * Copyright (c) 2014 - Franz Detro
  *
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -18,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Modification:
+ *  Add new button for ev3dev Release 02.00.00 (ev3dev-jessie-2014-07-12) - Christophe Chaudelet
+ *
  */
 
 #include "ev3dev.h"
@@ -26,6 +29,10 @@
 #include <fstream>
 #include <dirent.h>
 #include <string.h>
+
+#include <cstdio>
+#include <fstream>
+#include <iostream>
 
 #include <sys/mman.h>
 #include <sys/ioctl.h>
@@ -878,36 +885,36 @@ void led::all_on   () { red_on();  green_on();  }
 void led::all_off  () { red_off(); green_off(); }
 
 //-----------------------------------------------------------------------------
-  
-button::button(const std::string &name)
+
+button::button(const std::string &name, int bit)
 {
-  _path = std::string(SYS_BUTTON + name);
+	bit_ = bit;
+	fd_ = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
+
+	//printf("ok ioctl  %s   bit=%d\n", (name).c_str(), bit);
 }
   
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const
 {
-  std::ifstream is(_path.c_str());
-  
-  int result = 0;
-  
-  if (is.is_open())
-  {
-    is >> result;
-  }
-  
-  return (result != 0);
+	if (ioctl(fd_, EVIOCGKEY(sizeof(buf_)), buf_) < 0)
+	{
+		printf("error ioctl\n");
+		// handle error
+	}
+	// bit in bytes is 1 when released and 0 when pressed
+	return (buf_[bit_ / BITS_PER_LONG] & 1 << (bit_ % BITS_PER_LONG));
 }
 
 //-----------------------------------------------------------------------------
 
-button button::back ("back");
-button button::left ("left");
-button button::right("right");
-button button::up   ("up");
-button button::down ("down");
-button button::enter("enter");
+button button::back ("back", KEY_ESC);
+button button::left ("left", KEY_LEFT);
+button button::right("right", KEY_RIGHT);
+button button::up   ("up", KEY_UP);
+button button::down ("down", KEY_DOWN);
+button button::enter("enter", KEY_ENTER);
 
 //-----------------------------------------------------------------------------
 

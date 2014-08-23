@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Modification:
+ *  Add new button management for ev3dev Release 02.00.00 (ev3dev-jessie-2014-07-12) - Christophe Chaudelet
+ *
  */
 
 #pragma once
@@ -27,6 +31,13 @@
 #include <set>
 #include <string>
 #include <functional>
+
+#include <linux/input.h>
+
+
+
+#define BITS_PER_LONG (sizeof(long) * 8)
+
 
 //-----------------------------------------------------------------------------
 
@@ -310,10 +321,10 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class button : protected device
+class button //: protected device
 {
 public:
-  button(const std::string &name);
+  button(const std::string &name, int bit);
   
   bool pressed() const;
   
@@ -323,6 +334,11 @@ public:
   static button up;
   static button down;
   static button enter;
+
+private:
+  int bit_;
+  int fd_;
+  unsigned long buf_[(KEY_CNT + BITS_PER_LONG - 1) / BITS_PER_LONG];
 };
 
 //-----------------------------------------------------------------------------
