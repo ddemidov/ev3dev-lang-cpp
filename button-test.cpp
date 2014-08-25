@@ -21,7 +21,7 @@ main ()
       enter = button::enter.pressed ();
       escape = button::back.pressed ();
 
-      printf ("up:%s down:%d left:%d right:%d enter:%d esc:%d\n", up, down,
+      printf ("up:%d down:%d left:%d right:%d enter:%d esc:%d\n", up, down,
 	      left, right, enter, escape);
       usleep (100000);
     }

@@ -903,7 +903,6 @@ bool button::pressed() const
 	if (ioctl(_fd, EVIOCGKEY(_buf_size), _buf) < 0)
 	{
 		// handle error
-	    printf("ERR ioctl");
 	}
 	// bit in bytes is 1 when released and 0 when pressed
 	return !(_buf[_bit / _bits_per_long] & 1 << (_bit % _bits_per_long));
@@ -913,10 +912,10 @@ bool button::pressed() const
 
 button button::back (KEY_ESC);
 button button::left (KEY_LEFT);
-button button::right(KEY_RIGHT);
-button button::up   (KEY_UP);
+button button::right (KEY_RIGHT);
+button button::up (KEY_UP);
 button button::down (KEY_DOWN);
-button button::enter(KEY_ENTER);
+button button::enter (KEY_ENTER);
 
 //-----------------------------------------------------------------------------
 
