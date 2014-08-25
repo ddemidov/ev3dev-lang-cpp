@@ -37,6 +37,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #ifndef SYS_ROOT
 #define SYS_ROOT "/sys"
@@ -886,35 +887,36 @@ void led::all_off  () { red_off(); green_off(); }
 
 //-----------------------------------------------------------------------------
 
-button::button(const std::string &name, int bit)
+button::button(int bit)
 {
-	bit_ = bit;
-	fd_ = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
-
-	//printf("ok ioctl  %s   bit=%d\n", (name).c_str(), bit);
+	_bits_per_long = sizeof(long) * 8;
+	_buf_size=(KEY_CNT + _bits_per_long - 1) / _bits_per_long;
+	_buf=(unsigned long *)calloc(_buf_size, 1);
+	_bit = bit;
+	_fd = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
 }
   
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const
 {
-	if (ioctl(fd_, EVIOCGKEY(sizeof(buf_)), buf_) < 0)
+	if (ioctl(_fd, EVIOCGKEY(_buf_size), _buf) < 0)
 	{
-		printf("error ioctl\n");
 		// handle error
+	    printf("ERR ioctl");
 	}
 	// bit in bytes is 1 when released and 0 when pressed
-	return (buf_[bit_ / BITS_PER_LONG] & 1 << (bit_ % BITS_PER_LONG));
+	return !(_buf[_bit / _bits_per_long] & 1 << (_bit % _bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
 
-button button::back ("back", KEY_ESC);
-button button::left ("left", KEY_LEFT);
-button button::right("right", KEY_RIGHT);
-button button::up   ("up", KEY_UP);
-button button::down ("down", KEY_DOWN);
-button button::enter("enter", KEY_ENTER);
+button button::back (KEY_ESC);
+button button::left (KEY_LEFT);
+button button::right(KEY_RIGHT);
+button button::up   (KEY_UP);
+button button::down (KEY_DOWN);
+button button::enter(KEY_ENTER);
 
 //-----------------------------------------------------------------------------
 

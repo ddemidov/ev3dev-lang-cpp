@@ -35,10 +35,6 @@
 #include <linux/input.h>
 
 
-
-#define BITS_PER_LONG (sizeof(long) * 8)
-
-
 //-----------------------------------------------------------------------------
 
 namespace ev3dev {
@@ -321,10 +317,10 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class button //: protected device
+class button
 {
 public:
-  button(const std::string &name, int bit);
+  button(int bit);
   
   bool pressed() const;
   
@@ -336,9 +332,12 @@ public:
   static button enter;
 
 private:
-  int bit_;
-  int fd_;
-  unsigned long buf_[(KEY_CNT + BITS_PER_LONG - 1) / BITS_PER_LONG];
+  int _bit;
+  int _fd;
+  int _bits_per_long;
+  unsigned long *_buf;
+  unsigned long _buf_size;
+
 };
 
 //-----------------------------------------------------------------------------
