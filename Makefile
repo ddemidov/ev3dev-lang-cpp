@@ -1,14 +1,4 @@
 
-TOOLCHAIN=/install/arm-2013.11-33/bin
-
-CC=${TOOLCHAIN}/arm-none-linux-gnueabi-gcc
-CXX=${TOOLCHAIN}/arm-none-linux-gnueabi-g++
-AR=${TOOLCHAIN}/arm-none-linux-gnueabi-ar
-RANLIB=${TOOLCHAIN}/arm-none-linux-gnueabi-ranlib
-LD=${TOOLCHAIN}/arm-none-linux-gnueabi-ld
-
-
-
 CFLAGS=-O2 -march=armv5
 CCFLAGS=-std=c++11 -D_GLIBCXX_USE_NANOSLEEP
 DEPS=ev3dev.h
