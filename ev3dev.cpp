@@ -891,11 +891,11 @@ button::button(int bit)
 {
 	_bits_per_long = sizeof(long) * 8;
 	_buf_size=(KEY_CNT + _bits_per_long - 1) / _bits_per_long;
-	_buf=(unsigned long *)calloc(_buf_size, 1);
+	_buf = new unsigned long [_buf_size];
 	_bit = bit;
 	_fd = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
 }
-  
+
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const

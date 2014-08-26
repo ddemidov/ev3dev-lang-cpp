@@ -321,6 +321,10 @@ class button
 {
 public:
   button(int bit);
+  ~button()
+  {
+    delete _buf;
+  }
   
   bool pressed() const;
   
