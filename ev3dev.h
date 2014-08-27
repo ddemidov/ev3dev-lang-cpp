@@ -39,6 +39,22 @@ typedef std::set<mode_type> mode_set;
 
 //-----------------------------------------------------------------------------
 
+enum ePort {
+  INPUT_AUTO  = 0, //!< Automatic input selection
+  INPUT_1     = 1, //!< Sensor port 1
+  INPUT_2     = 2, //!< Sensor port 2
+  INPUT_3     = 3, //!< Sensor port 3
+  INPUT_4     = 4, //!< Sensor port 4
+  
+  OUTPUT_AUTO = 0, //!< Automatic output selection
+  OUTPUT_A    = 1, //!< Motor port A
+  OUTPUT_B    = 2, //!< Motor port B
+  OUTPUT_C    = 3, //!< Motor port C
+  OUTPUT_D    = 4, //!< Motor port D
+};
+
+//-----------------------------------------------------------------------------
+
 class device
 {
 protected:
@@ -59,10 +75,12 @@ class sensor : protected device
 public:
   sensor();
   
-  inline bool     connected()  const { return (_port != 0); }
-	inline unsigned port()       const { return _port; }
-	inline unsigned type()       const { return _type; }
-  inline unsigned num_values() const { return _nvalues; }
+  inline bool              connected()    const { return (_port != 0); }
+  inline unsigned          device_index() const { return _device_index; }
+  inline unsigned          port_id()      const { return _port; }
+  inline const std::string port_name()    const { return _port_name; }
+  inline unsigned          type()         const { return _type; }
+  inline unsigned          num_values()   const { return _nvalues; }
   
   virtual int value(unsigned index=0) const = 0;
   
@@ -93,12 +111,14 @@ protected:
   virtual void read_modes();
   
 protected:
+  unsigned _device_index;
   unsigned _port;
   unsigned _type;
   unsigned _nvalues;
   
-  mode_set  _modes;
-  mode_type _mode;
+  std::string _port_name;
+  mode_set    _modes;
+  mode_type   _mode;
 };
 
 //-----------------------------------------------------------------------------
@@ -106,7 +126,8 @@ protected:
 class msensor : public sensor
 {
 public:
-  msensor(unsigned type_, unsigned port_ = 0);
+  msensor(unsigned port_ = INPUT_AUTO);
+  msensor(unsigned type_, unsigned port_ = INPUT_AUTO);
   
   virtual int  value(unsigned index=0) const;
   virtual void set_mode(const mode_type&);
@@ -182,7 +203,8 @@ class motor : protected device
 public:
   typedef std::string motor_type;
   
-  motor(const motor_type&, unsigned port_ = 0);
+  motor(unsigned port_ = OUTPUT_AUTO);
+  motor(const motor_type&, unsigned port_ = OUTPUT_AUTO);
   
   static const motor_type motor_large;
   static const motor_type motor_medium;
@@ -201,30 +223,38 @@ public:
   static const mode_type position_mode_absolute;
   static const mode_type position_mode_relative;
   
-  inline bool     connected()  const { return (_port != 0); }
-	inline unsigned port()       const { return _port; }
+  inline bool              connected()    const { return (_port != 0); }
+  inline unsigned          device_index() const { return _device_index; }
+  inline unsigned          port_id()      const { return _port; }
+  inline const std::string port_name()    const { return _port_name; }
 
   motor_type type() const;
-  
+
   void run(bool bRun=true);
   void stop();
   void reset();
 
   bool      running() const;
   mode_type state()   const;
-  
+
   int duty_cycle()        const;
   int pulses_per_second() const;
   int position()          const;
-  
+
   void set_position(int);
-  
+
+  // Port Name|String|Read inconsistent with sensors, both ID and name?
+
+  // Run|Number|Read/Write ??? methods run(bool) running()
+
+  // Stop Modes|String Array|Read
+
   mode_type run_mode() const;
   void set_run_mode(const mode_type&);
-  
+
   mode_type stop_mode() const;
   void set_stop_mode(const mode_type&);
-  
+
   mode_type regulation_mode() const;
   void set_regulation_mode(const mode_type&);
 
@@ -233,7 +263,7 @@ public:
 
   int  duty_cycle_setpoint() const;
   void set_duty_cycle_setpoint(int);
-  
+
   int  pulses_per_second_setpoint() const;
   void set_pulses_per_second_setpoint(int);
 
@@ -245,16 +275,30 @@ public:
 
   int  ramp_up() const;
   void set_ramp_up(int);
-  
+
   int  ramp_down() const;
   void set_ramp_down(int);
+
+  int speed_regulation_p() const;
+  void set_speed_regulation_p(int);
+
+  int speed_regulation_i() const;
+  void set_speed_regulation_i(int);
+
+  int speed_regulation_d() const;
+  void set_speed_regulation_d(int);
+
+  int speed_regulation_k() const;
+  void set_speed_regulation_k(int);
   
 protected:
   bool init(const motor_type&, unsigned port_ = 0);
   
 protected:
-  unsigned   _port;
-  motor_type _type;
+  unsigned    _device_index;
+  unsigned    _port;
+  std::string _port_name;
+  motor_type  _type;
 };
 
 //-----------------------------------------------------------------------------

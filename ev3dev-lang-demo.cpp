@@ -94,7 +94,7 @@ void sensor_menu()
       if (s.connected())
       {
         cout << "(" << i+1 << ") " << s.as_string(s.type()) << " (type " << s.type()
-             << ", port " << s.port() << ", mode " << s.mode() << ")" << endl;
+             << ", port " << s.port_name() << ", mode " << s.mode() << ")" << endl;
       }
     }
     cout << endl;
@@ -126,7 +126,7 @@ void motor_action(motor &m)
   do
   {
     cout << endl
-         << "*** " << m.type() << " motor (" << char(m.port()+'A'-1) << ") actions ***" << endl
+         << "*** " << m.type() << " motor (" << m.port_name() << ") actions ***" << endl
          << endl
          << "(i)nfo" << endl
          << "(r)un mode          [" << m.run_mode()          << "]" << endl
@@ -249,7 +249,7 @@ void motor_menu()
       motor &m = arrMotors[i];
       if (m.connected())
       {
-        cout << "(" << i+1 << ") " << m.type() << " motor on port " << char('A'+m.port()-1) << endl;
+        cout << "(" << i+1 << ") " << m.type() << " motor on port " << m.port_name() << endl;
       }
     }
     cout << endl;

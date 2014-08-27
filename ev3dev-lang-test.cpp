@@ -36,7 +36,7 @@ void test_sensor(const char *name)
   {
     cout << endl
          << "Found " << name << " sensor with mode " << s.mode()
-         << " on port " << s.port() << endl
+         << " on port " << s.port_name() << endl
          << "  Current value is " << s.value() << endl << endl;
   }
   else
@@ -50,7 +50,7 @@ void test_motor(const char *name)
   if (m.connected())
   {
     cout << endl
-         << "Found " << name << " motor on port " << char(m.port()+'A'-1) << endl
+         << "Found " << name << " motor on port " << m.port_name() << endl
          << endl;
     
     cout << "  Current state is " << m.state() << endl

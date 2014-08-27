@@ -205,6 +205,13 @@ const std::string &sensor::as_string(unsigned type)
 
 //-----------------------------------------------------------------------------
 
+msensor::msensor(unsigned port_)
+{
+  init(0, port_);
+}
+
+//-----------------------------------------------------------------------------
+
 msensor::msensor(unsigned type_, unsigned port_)
 {
   init(type_, port_);
@@ -274,6 +281,14 @@ bool msensor::init(unsigned type_, unsigned port_)
           is >> nvalues;
           is.close();
           
+          _device_index = 0;
+          for (unsigned i=6; dp->d_name[i]!=0; ++i)
+          {
+            _device_index *= 10;
+            _device_index += dp->d_name[i]-'0';
+          }
+          
+          _port_name = "in0"; _port_name[2] += port;
           _port    = port;
           _type    = type;
           _nvalues = nvalues;
@@ -415,7 +430,17 @@ const mode_type motor::position_mode_relative("relative");
 
 //-----------------------------------------------------------------------------
 
+motor::motor(unsigned p) :
+  _device_index(0),
+  _port(0)
+{
+  init(std::string(), p);
+}
+
+//-----------------------------------------------------------------------------
+
 motor::motor(const motor_type &t, unsigned p) :
+  _device_index(0),
   _port(0)
 {
   init(t, p);
@@ -453,6 +478,15 @@ bool motor::init(const motor_type &type_, unsigned port_)
         
         if (port_ && (_port != port_))
           continue;
+        
+        _device_index = 0;
+        for (unsigned i=11; dp->d_name[i]!=0; ++i)
+        {
+          _device_index *= 10;
+          _device_index += dp->d_name[i]-'0';
+        }
+        
+        _port_name = strPort;
         
         _type = get_attr_string("type");
         if (!type_.empty() && _type != type_)
@@ -679,6 +713,62 @@ int motor::ramp_down() const
 void motor::set_ramp_down(int value)
 {
   set_attr_int("ramp_down_sp", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed_regulation_p() const
+{
+  return get_attr_int("speed_regulation_p");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_speed_regulation_p(int value)
+{
+  set_attr_int("speed_regulation_p", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed_regulation_i() const
+{
+  return get_attr_int("speed_regulation_i");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_speed_regulation_i(int value)
+{
+  set_attr_int("speed_regulation_i", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed_regulation_d() const
+{
+  return get_attr_int("speed_regulation_d");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_speed_regulation_d(int value)
+{
+  set_attr_int("speed_regulation_d", value);
+}
+
+//-----------------------------------------------------------------------------
+
+int motor::speed_regulation_k() const
+{
+  return get_attr_int("speed_regulation_k");
+}
+
+//-----------------------------------------------------------------------------
+
+void motor::set_speed_regulation_k(int value)
+{
+  set_attr_int("speed_regulation_k", value);
 }
 
 //-----------------------------------------------------------------------------
