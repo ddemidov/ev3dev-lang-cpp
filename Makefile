@@ -1,3 +1,4 @@
+
 CFLAGS=-O2 -march=armv5
 CCFLAGS=-std=c++11 -D_GLIBCXX_USE_NANOSLEEP
 DEPS=ev3dev.h
@@ -18,10 +19,13 @@ remote_control-test: $(OBJ) remote_control-test.o
 
 drive-test: $(OBJ) drive-test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS) -lpthread
+	
+button-test: $(OBJ) button-test.o
+	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
 .PHONY: all clean
 
 clean:
-	rm -f *.o *~ ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test
+	rm -f *.o *~ ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test button-test
 
-all:  ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test
+all:  ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test button-test
