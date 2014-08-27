@@ -45,6 +45,9 @@
 
 #ifndef NO_LINUX_HEADERS
 #include <linux/fb.h>
+#include <linux/input.h>
+#else
+#define KEY_CNT 8
 #endif
 
 #define SYS_BUTTON SYS_ROOT "/devices/platform/ev3dev/button"
@@ -881,23 +884,25 @@ button::button(int bit)
 
 bool button::pressed() const
 {
+ #ifndef NO_LINUX_HEADERS
 	if (ioctl(_fd, EVIOCGKEY(_buf_size), _buf) < 0)
 	{
 		// handle error
 	}
+ #endif
 	// bit in bytes is 1 when released and 0 when pressed
 	return !(_buf[_bit / _bits_per_long] & 1 << (_bit % _bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
-
+#ifndef NO_LINUX_HEADERS
 button button::back (KEY_ESC);
 button button::left (KEY_LEFT);
-button button::right (KEY_RIGHT);
-button button::up (KEY_UP);
+button button::right(KEY_RIGHT);
+button button::up   (KEY_UP);
 button button::down (KEY_DOWN);
-button button::enter (KEY_ENTER);
-
+button button::enter(KEY_ENTER);
+#endif
 //-----------------------------------------------------------------------------
 
 void sound::beep()

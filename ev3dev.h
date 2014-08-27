@@ -32,9 +32,6 @@
 #include <string>
 #include <functional>
 
-#include <linux/input.h>
-
-
 //-----------------------------------------------------------------------------
 
 namespace ev3dev {
