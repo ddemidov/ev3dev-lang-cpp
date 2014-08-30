@@ -108,7 +108,7 @@ public:
   static const std::string &as_string(unsigned type);
   
 protected:
-  bool init(unsigned type_, unsigned port_ = 0);
+  bool init(unsigned type_, unsigned port_ = 0) noexcept;
   void read_modes();
   
 protected:
@@ -276,7 +276,7 @@ public:
   void set_speed_regulation_k(int);
   
 protected:
-  bool init(const motor_type&, unsigned port_ = 0);
+  bool init(const motor_type&, unsigned port_ = 0) noexcept;
   
 protected:
   unsigned    _device_index;

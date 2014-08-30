@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <system_error>
 #include <dirent.h>
 #include <string.h>
 
@@ -51,52 +52,66 @@ namespace ev3dev {
 
 int device::get_attr_int(const std::string &name) const
 {
-  int result = 0;
+  using namespace std;
   
-  std::ifstream is((_path+name).c_str());
+  ifstream is((_path+name).c_str());
   if (is.is_open())
   {
+    int result = 0;
     is >> result;
+    return result;
   }
   
-  return result;
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
 //-----------------------------------------------------------------------------
 
 void device::set_attr_int(const std::string &name, int value)
 {
-  std::ofstream os((_path+name).c_str());
+  using namespace std;
+  
+  ofstream os((_path+name).c_str());
   if (os.is_open())
   {
     os << value;
+    return;
   }
+  
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
 //-----------------------------------------------------------------------------
 
 std::string device::get_attr_string(const std::string &name) const
 {
-  std::string result;
+  using namespace std;
   
-  std::ifstream is((_path+name).c_str());
+  ifstream is((_path+name).c_str());
   if (is.is_open())
   {
+    string result;
     is >> result;
+    return result;
   }
   
-  return result;
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
 //-----------------------------------------------------------------------------
 
 void device::set_attr_string(const std::string &name, const std::string &value)
 {
-  std::ofstream os((_path+name).c_str());
+  using namespace std;
+
+  ofstream os((_path+name).c_str());
   if (os.is_open())
   {
     os << value;
+    return;
   }
+  
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
 //-----------------------------------------------------------------------------
@@ -111,7 +126,7 @@ sensor::sensor(unsigned type_, unsigned port_) :
 
 //-----------------------------------------------------------------------------
 
-bool sensor::init(unsigned type_, unsigned port_)
+bool sensor::init(unsigned type_, unsigned port_) noexcept
 {
   if ((type_ == 0) && (port_ == 0))
     return false;
@@ -129,46 +144,50 @@ bool sensor::init(unsigned type_, unsigned port_)
     {
       if (strncmp(dp->d_name, "sensor", 6)==0)
       {
-        string strDir = strClassDir + dp->d_name;
-        ifstream is((strDir+"/type_id").c_str());
-        if (is.is_open())
+        try
         {
-          int type = 0;
-          is >> type;
-          if (is.bad() || (type_ && type != type_))
-            continue;
-          
-          is.close();
-          is.open((strDir+"/port_name").c_str());
-          char c;
-          int port = 0;
-          is >> c >> c >> port;
-          if (is.bad() || (port_ && (port != port_)))
-            continue;
-          
-          is.close();
-          is.open((strDir+"/num_values").c_str());
-          int nvalues = 0;
-          is >> nvalues;
-          is.close();
-          
-          _device_index = 0;
-          for (unsigned i=6; dp->d_name[i]!=0; ++i)
+          string strDir = strClassDir + dp->d_name;
+          ifstream is((strDir+"/type_id").c_str());
+          if (is.is_open())
           {
-            _device_index *= 10;
-            _device_index += dp->d_name[i]-'0';
+            int type = 0;
+            is >> type;
+            if (is.bad() || (type_ && type != type_))
+              continue;
+            
+            is.close();
+            is.open((strDir+"/port_name").c_str());
+            char c;
+            int port = 0;
+            is >> c >> c >> port;
+            if (is.bad() || (port_ && (port != port_)))
+              continue;
+            
+            is.close();
+            is.open((strDir+"/num_values").c_str());
+            int nvalues = 0;
+            is >> nvalues;
+            is.close();
+            
+            _device_index = 0;
+            for (unsigned i=6; dp->d_name[i]!=0; ++i)
+            {
+              _device_index *= 10;
+              _device_index += dp->d_name[i]-'0';
+            }
+            
+            _port_name = "in0"; _port_name[2] += port;
+            _port    = port;
+            _type    = type;
+            _nvalues = nvalues;
+            _path    = strDir + '/';
+            
+            read_modes();
+            
+            return true;
           }
-          
-          _port_name = "in0"; _port_name[2] += port;
-          _port    = port;
-          _type    = type;
-          _nvalues = nvalues;
-          _path    = strDir + '/';
-          
-          read_modes();
-          
-          return true;
         }
+        catch (...) { }
       }
     }
     closedir(dfd);
@@ -181,6 +200,9 @@ bool sensor::init(unsigned type_, unsigned port_)
 
 int sensor::value(unsigned index) const
 {
+  if (index >= _nvalues)
+    throw std::invalid_argument("index");
+    
   char svalue[8] = "value0";
   svalue[7] += index;
   
@@ -429,7 +451,7 @@ motor::motor(const motor_type &t, unsigned p) :
 
 //-----------------------------------------------------------------------------
 
-bool motor::init(const motor_type &type_, unsigned port_)
+bool motor::init(const motor_type &type_, unsigned port_) noexcept
 {
   if (type_.empty() && (port_ == 0))
     return false;
@@ -447,33 +469,37 @@ bool motor::init(const motor_type &type_, unsigned port_)
     {
       if (strncmp(dp->d_name, "tacho-motor", 11)==0)
       {
-        _path = strClassDir + dp->d_name + '/';
-        
-        std::string strPort = get_attr_string("port_name");
-        if (strPort.length()<4)
-          continue;
-        
-        _port = strPort[3]-'A'+1;
-        if ((_port < 1) || (_port > 4))
-          continue;
-        
-        if (port_ && (_port != port_))
-          continue;
-        
-        _device_index = 0;
-        for (unsigned i=11; dp->d_name[i]!=0; ++i)
+        try
         {
-          _device_index *= 10;
-          _device_index += dp->d_name[i]-'0';
+          _path = strClassDir + dp->d_name + '/';
+          
+          std::string strPort = get_attr_string("port_name");
+          if (strPort.length()<4)
+            continue;
+          
+          _port = strPort[3]-'A'+1;
+          if ((_port < 1) || (_port > 4))
+            continue;
+          
+          if (port_ && (_port != port_))
+            continue;
+          
+          _device_index = 0;
+          for (unsigned i=11; dp->d_name[i]!=0; ++i)
+          {
+            _device_index *= 10;
+            _device_index += dp->d_name[i]-'0';
+          }
+          
+          _port_name = strPort;
+          
+          _type = get_attr_string("type");
+          if (!type_.empty() && _type != type_)
+            continue;
+          
+          return true;
         }
-        
-        _port_name = strPort;
-        
-        _type = get_attr_string("type");
-        if (!type_.empty() && _type != type_)
-          continue;
-        
-        return true;
+        catch (...) { }
       }
     }
     closedir(dfd);
