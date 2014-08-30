@@ -74,11 +74,11 @@ void sensor_action(sensor &s)
 
 void sensor_menu()
 {
-  msensor arrSensors[4] = {
-    msensor(0, 1),
-    msensor(0, 2),
-    msensor(0, 3),
-    msensor(0, 4)
+  sensor arrSensors[4] = {
+    sensor(0, INPUT_1),
+    sensor(0, INPUT_2),
+    sensor(0, INPUT_3),
+    sensor(0, INPUT_4)
   };
   
   char c = 0;
@@ -90,7 +90,7 @@ void sensor_menu()
     
     for (unsigned i=0; i<4; ++i)
     {
-      msensor &s = arrSensors[i];
+      sensor &s = arrSensors[i];
       if (s.connected())
       {
         cout << "(" << i+1 << ") " << s.as_string(s.type()) << " (type " << s.type()

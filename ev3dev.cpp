@@ -101,11 +101,90 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor() :
+sensor::sensor(unsigned type_, unsigned port_) :
   _port(0),
   _type(0),
   _nvalues(0)
 {
+  init(type_, port_);
+}
+
+//-----------------------------------------------------------------------------
+
+bool sensor::init(unsigned type_, unsigned port_)
+{
+  if ((type_ == 0) && (port_ == 0))
+    return false;
+  
+  using namespace std;
+  
+  string strClassDir(SYS_ROOT "/class/msensor/");
+  
+  struct dirent *dp;
+  DIR *dfd;
+  
+  if ((dfd = opendir(strClassDir.c_str())) != NULL)
+  {
+    while ((dp = readdir(dfd)) != NULL)
+    {
+      if (strncmp(dp->d_name, "sensor", 6)==0)
+      {
+        string strDir = strClassDir + dp->d_name;
+        ifstream is((strDir+"/type_id").c_str());
+        if (is.is_open())
+        {
+          int type = 0;
+          is >> type;
+          if (is.bad() || (type_ && type != type_))
+            continue;
+          
+          is.close();
+          is.open((strDir+"/port_name").c_str());
+          char c;
+          int port = 0;
+          is >> c >> c >> port;
+          if (is.bad() || (port_ && (port != port_)))
+            continue;
+          
+          is.close();
+          is.open((strDir+"/num_values").c_str());
+          int nvalues = 0;
+          is >> nvalues;
+          is.close();
+          
+          _device_index = 0;
+          for (unsigned i=6; dp->d_name[i]!=0; ++i)
+          {
+            _device_index *= 10;
+            _device_index += dp->d_name[i]-'0';
+          }
+          
+          _port_name = "in0"; _port_name[2] += port;
+          _port    = port;
+          _type    = type;
+          _nvalues = nvalues;
+          _path    = strDir + '/';
+          
+          read_modes();
+          
+          return true;
+        }
+      }
+    }
+    closedir(dfd);
+  }
+  
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
+int sensor::value(unsigned index) const
+{
+  char svalue[8] = "value0";
+  svalue[7] += index;
+  
+  return get_attr_int(svalue);
 }
 
 //-----------------------------------------------------------------------------
@@ -132,6 +211,61 @@ const mode_type &sensor::mode() const
 
 void sensor::read_modes()
 {
+  using namespace std;
+  
+  ifstream is((_path+"/modes").c_str());
+  if (is.is_open())
+  {
+    _mode = get_attr_string("mode");
+  }
+  else
+  {
+    _mode.clear();
+    is.open((_path+"/mode").c_str());
+  }
+  
+  _modes.clear();
+  
+  if (is.is_open())
+  {
+    string s;
+    getline(is, s);
+    
+    size_t pos, last_pos = 0;
+    string m;
+    do {
+      pos = s.find(' ', last_pos);
+      
+      if (pos != string::npos)
+      {
+        m = s.substr(last_pos, pos-last_pos);
+        last_pos = pos+1;
+      }
+      else
+        m = s.substr(last_pos);
+      
+      if (!m.empty())
+      {
+        if (*m.begin()=='[')
+        {
+          _mode = m.substr(1, m.length()-2);
+          m = _mode;
+        }
+        _modes.insert(m);
+      }
+    } while (pos!=string::npos);
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void sensor::set_mode(const mode_type &mode_)
+{
+  if (mode_ != _mode)
+  {
+    set_attr_string("mode", mode_);
+    _mode.clear();
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -205,161 +339,8 @@ const std::string &sensor::as_string(unsigned type)
 
 //-----------------------------------------------------------------------------
 
-msensor::msensor(unsigned port_)
-{
-  init(0, port_);
-}
-
-//-----------------------------------------------------------------------------
-
-msensor::msensor(unsigned type_, unsigned port_)
-{
-  init(type_, port_);
-}
-
-//-----------------------------------------------------------------------------
-
-int msensor::value(unsigned index) const
-{
-  char svalue[8] = "value0";
-  svalue[7] += index;
-  
-  return get_attr_int(svalue);
-}
-
-//-----------------------------------------------------------------------------
-
-void msensor::set_mode(const mode_type &mode_)
-{
-  if (mode_ != _mode)
-  {
-    set_attr_string("mode", mode_);
-    _mode.clear();
-  }
-}
-
-//-----------------------------------------------------------------------------
-
-bool msensor::init(unsigned type_, unsigned port_)
-{
-  if ((type_ == 0) && (port_ == 0))
-    return false;
-  
-  using namespace std;
-  
-  string strClassDir(SYS_ROOT "/class/msensor/");
-  
-  struct dirent *dp;
-  DIR *dfd;
-  
-  if ((dfd = opendir(strClassDir.c_str())) != NULL)
-  {
-    while ((dp = readdir(dfd)) != NULL)
-    {
-      if (strncmp(dp->d_name, "sensor", 6)==0)
-      {
-        string strDir = strClassDir + dp->d_name;
-        ifstream is((strDir+"/type_id").c_str());
-        if (is.is_open())
-        {
-          int type = 0;
-          is >> type;
-          if (is.bad() || (type_ && type != type_))
-            continue;
-          
-          is.close();
-          is.open((strDir+"/port_name").c_str());
-          char c;
-          int port = 0;
-          is >> c >> c >> port;
-          if (is.bad() || (port_ && (port != port_)))
-            continue;
-          
-          is.close();
-          is.open((strDir+"/num_values").c_str());
-          int nvalues = 0;
-          is >> nvalues;
-          is.close();
-          
-          _device_index = 0;
-          for (unsigned i=6; dp->d_name[i]!=0; ++i)
-          {
-            _device_index *= 10;
-            _device_index += dp->d_name[i]-'0';
-          }
-          
-          _port_name = "in0"; _port_name[2] += port;
-          _port    = port;
-          _type    = type;
-          _nvalues = nvalues;
-          _path    = strDir + '/';
-          
-          read_modes();
-          
-          return true;
-        }
-      }
-    }
-    closedir(dfd);
-  }
-  
-  return false;
-}
-
-//-----------------------------------------------------------------------------
-
-void msensor::read_modes()
-{
-  using namespace std;
-
-  ifstream is((_path+"/modes").c_str());
-  if (is.is_open())
-  {
-    _mode = get_attr_string("mode");
-  }
-  else
-  {
-    _mode.clear();
-    is.open((_path+"/mode").c_str());
-  }
-
-  _modes.clear();
-  
-  if (is.is_open())
-  {
-    string s;
-    getline(is, s);
-    
-    size_t pos, last_pos = 0;
-    string m;
-    do {
-      pos = s.find(' ', last_pos);
-      
-      if (pos != string::npos)
-      {
-        m = s.substr(last_pos, pos-last_pos);
-        last_pos = pos+1;
-      }
-      else
-        m = s.substr(last_pos);
-      
-      if (!m.empty())
-      {
-        if (*m.begin()=='[')
-        {
-          _mode = m.substr(1, m.length()-2);
-          m = _mode;
-        }
-        _modes.insert(m);
-      }
-    } while (pos!=string::npos);
-  }
-}
-
-//-----------------------------------------------------------------------------
-
 touch_sensor::touch_sensor(unsigned port_) :
-  msensor(ev3_touch, port_)
+  sensor(ev3_touch, port_)
 {
 }
 
@@ -370,7 +351,7 @@ const mode_type color_sensor::mode_ambient("COL-AMBIENT");
 const mode_type color_sensor::mode_color  ("COL-COLOR");
 
 color_sensor::color_sensor(unsigned port_) :
-  msensor(ev3_color, port_)
+  sensor(ev3_color, port_)
 {
 }
 
@@ -383,7 +364,7 @@ const mode_type ultrasonic_sensor::mode_single_cm("US-SI-CM");
 const mode_type ultrasonic_sensor::mode_single_in("US-SI-IN");
 
 ultrasonic_sensor::ultrasonic_sensor(unsigned port_) :
-  msensor(ev3_ultrasonic, port_)
+  sensor(ev3_ultrasonic, port_)
 {
 }
 
@@ -394,7 +375,7 @@ const mode_type gyro_sensor::mode_speed("GYRO-RATE");
 const mode_type gyro_sensor::mode_angle_and_speed("GYRO-G&A");
 
 gyro_sensor::gyro_sensor(unsigned port_) :
-  msensor(ev3_gyro, port_)
+  sensor(ev3_gyro, port_)
 {
 }
 
@@ -405,7 +386,7 @@ const mode_type infrared_sensor::mode_ir_seeker("IR-SEEK");
 const mode_type infrared_sensor::mode_ir_remote("IR-REMOTE");
 
 infrared_sensor::infrared_sensor(unsigned port_) :
-  msensor(ev3_infrared, port_)
+  sensor(ev3_infrared, port_)
 {
 }
 

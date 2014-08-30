@@ -73,7 +73,7 @@ protected:
 class sensor : protected device
 {
 public:
-  sensor();
+  sensor(unsigned type_, unsigned port_ = INPUT_AUTO);
   
   inline bool              connected()    const { return (_port != 0); }
   inline unsigned          device_index() const { return _device_index; }
@@ -82,12 +82,12 @@ public:
   inline unsigned          type()         const { return _type; }
   inline unsigned          num_values()   const { return _nvalues; }
   
-  virtual int value(unsigned index=0) const = 0;
+  int value(unsigned index=0) const;
   
   const mode_set  &modes() const;
   const mode_type &mode()  const;
   
-  virtual void set_mode(const mode_type&) = 0;
+  void set_mode(const mode_type&);
   
   enum type
   {
@@ -108,7 +108,8 @@ public:
   static const std::string &as_string(unsigned type);
   
 protected:
-  virtual void read_modes();
+  bool init(unsigned type_, unsigned port_ = 0);
+  void read_modes();
   
 protected:
   unsigned _device_index;
@@ -123,24 +124,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-class msensor : public sensor
-{
-public:
-  msensor(unsigned port_ = INPUT_AUTO);
-  msensor(unsigned type_, unsigned port_ = INPUT_AUTO);
-  
-  virtual int  value(unsigned index=0) const;
-  virtual void set_mode(const mode_type&);
-  
-protected:
-  bool init(unsigned type_, unsigned port_ = 0);
-  
-  virtual void read_modes();
-};
-
-//-----------------------------------------------------------------------------
-
-class touch_sensor : public msensor
+class touch_sensor : public sensor
 {
 public:
   touch_sensor(unsigned port_ = 0);
@@ -148,7 +132,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class color_sensor : public msensor
+class color_sensor : public sensor
 {
 public:
   color_sensor(unsigned port_ = 0);
@@ -160,7 +144,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class ultrasonic_sensor : public msensor
+class ultrasonic_sensor : public sensor
 {
 public:
   ultrasonic_sensor(unsigned port_ = 0);
@@ -174,7 +158,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class gyro_sensor : public msensor
+class gyro_sensor : public sensor
 {
 public:
   gyro_sensor(unsigned port_ = 0);
@@ -186,7 +170,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class infrared_sensor : public msensor
+class infrared_sensor : public sensor
 {
 public:
   infrared_sensor(unsigned port_ = 0);
