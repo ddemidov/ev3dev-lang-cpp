@@ -148,11 +148,15 @@ void motor_action(motor &m)
     else if (m.run_mode()==m.run_mode_time)
       cout << "(t)ime setpoint     (" << m.time_setpoint()     << ")" << endl;
     
+    cout << endl
+         << "(0) reset position" << endl
+         << "(#) reset all" << endl
+         << "(!) ";
     running = m.running();
     if (running)
-      cout << "STOP(!)" << endl;
+      cout << "STOP" << endl;
     else
-      cout << "GO(!)" << endl;
+      cout << "RUN" << endl;
     cout << endl << "(b)ack" << endl
          << endl
          << "Choice: ";
@@ -219,6 +223,12 @@ void motor_action(motor &m)
       {
         cout << "time: "; cin >> new_value; m.set_time_setpoint(new_value); cout << endl;
       }
+      break;
+    case '0':
+      m.set_position(0);
+      break;
+    case '#':
+      m.reset();
       break;
     case '!':
       m.run(!running);
