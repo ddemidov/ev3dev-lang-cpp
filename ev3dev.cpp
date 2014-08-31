@@ -54,6 +54,9 @@ int device::get_attr_int(const std::string &name) const
 {
   using namespace std;
   
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+  
   ifstream is((_path+name).c_str());
   if (is.is_open())
   {
@@ -71,6 +74,9 @@ void device::set_attr_int(const std::string &name, int value)
 {
   using namespace std;
   
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+
   ofstream os((_path+name).c_str());
   if (os.is_open())
   {
@@ -87,6 +93,9 @@ std::string device::get_attr_string(const std::string &name) const
 {
   using namespace std;
   
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+
   ifstream is((_path+name).c_str());
   if (is.is_open())
   {
@@ -103,6 +112,9 @@ std::string device::get_attr_string(const std::string &name) const
 void device::set_attr_string(const std::string &name, const std::string &value)
 {
   using namespace std;
+
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
   ofstream os((_path+name).c_str());
   if (os.is_open())
