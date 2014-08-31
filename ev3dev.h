@@ -108,7 +108,7 @@ public:
   static const std::string &as_string(unsigned type);
   
 protected:
-  bool init(unsigned type_, unsigned port_ = 0) noexcept;
+  bool init(unsigned type_, unsigned port_) noexcept;
   void read_modes();
   
 protected:
@@ -127,7 +127,7 @@ protected:
 class touch_sensor : public sensor
 {
 public:
-  touch_sensor(unsigned port_ = 0);
+  touch_sensor(unsigned port_ = INPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ public:
 class color_sensor : public sensor
 {
 public:
-  color_sensor(unsigned port_ = 0);
+  color_sensor(unsigned port_ = INPUT_AUTO);
   
   static const mode_type mode_reflect;
   static const mode_type mode_ambient;
@@ -147,7 +147,7 @@ public:
 class ultrasonic_sensor : public sensor
 {
 public:
-  ultrasonic_sensor(unsigned port_ = 0);
+  ultrasonic_sensor(unsigned port_ = INPUT_AUTO);
 
   static const mode_type mode_dist_cm;
   static const mode_type mode_dist_in;
@@ -161,7 +161,7 @@ public:
 class gyro_sensor : public sensor
 {
 public:
-  gyro_sensor(unsigned port_ = 0);
+  gyro_sensor(unsigned port_ = INPUT_AUTO);
   
   static const mode_type mode_angle;
   static const mode_type mode_speed;
@@ -173,7 +173,7 @@ public:
 class infrared_sensor : public sensor
 {
 public:
-  infrared_sensor(unsigned port_ = 0);
+  infrared_sensor(unsigned port_ = INPUT_AUTO);
 
   static const mode_type mode_proximity;
   static const mode_type mode_ir_seeker;
@@ -276,7 +276,7 @@ public:
   void set_speed_regulation_k(int);
   
 protected:
-  bool init(const motor_type&, unsigned port_ = 0) noexcept;
+  bool init(const motor_type&, unsigned port_) noexcept;
   
 protected:
   unsigned    _device_index;
@@ -290,7 +290,7 @@ protected:
 class medium_motor : public motor
 {
 public:
-  medium_motor(unsigned port_ = 0);
+  medium_motor(unsigned port_ = OUTPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
@@ -298,7 +298,7 @@ public:
 class large_motor : public motor
 {
 public:
-  large_motor(unsigned port_ = 0);
+  large_motor(unsigned port_ = OUTPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
