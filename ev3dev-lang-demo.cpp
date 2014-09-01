@@ -75,10 +75,10 @@ void sensor_action(sensor &s)
 void sensor_menu()
 {
   sensor arrSensors[4] = {
-    sensor(0, INPUT_1),
-    sensor(0, INPUT_2),
-    sensor(0, INPUT_3),
-    sensor(0, INPUT_4)
+    sensor(INPUT_1),
+    sensor(INPUT_2),
+    sensor(INPUT_3),
+    sensor(INPUT_4)
   };
   
   char c = 0;
@@ -241,10 +241,10 @@ void motor_action(motor &m)
 void motor_menu()
 {
   motor arrMotors[4] = {
-    motor(std::string(), 1),
-    motor(std::string(), 2),
-    motor(std::string(), 3),
-    motor(std::string(), 4)
+    motor(OUTPUT_A),
+    motor(OUTPUT_B),
+    motor(OUTPUT_C),
+    motor(OUTPUT_D)
   };
   
   char c = 0;

@@ -73,7 +73,8 @@ protected:
 class sensor : protected device
 {
 public:
-  sensor(unsigned type_, unsigned port_ = INPUT_AUTO);
+  sensor(unsigned port_ = INPUT_AUTO);
+  sensor(unsigned port_, const std::set<unsigned> &types_);
   
   inline bool              connected()    const { return (_port != 0); }
   inline unsigned          device_index() const { return _device_index; }
@@ -108,14 +109,14 @@ public:
   static const std::string &as_string(unsigned type);
   
 protected:
-  bool init(unsigned type_, unsigned port_) noexcept;
+  bool init(unsigned port_, const std::set<unsigned> &types_) noexcept;
   void read_modes();
   
 protected:
-  unsigned _device_index;
-  unsigned _port;
-  unsigned _type;
-  unsigned _nvalues;
+  unsigned _device_index = 0;
+  unsigned _port = 0;
+  unsigned _type = 0;
+  unsigned _nvalues = 0;
   
   std::string _port_name;
   mode_set    _modes;
@@ -188,7 +189,7 @@ public:
   typedef std::string motor_type;
   
   motor(unsigned port_ = OUTPUT_AUTO);
-  motor(const motor_type&, unsigned port_ = OUTPUT_AUTO);
+  motor(unsigned port_, const motor_type&);
   
   static const motor_type motor_large;
   static const motor_type motor_medium;
@@ -276,11 +277,11 @@ public:
   void set_speed_regulation_k(int);
   
 protected:
-  bool init(const motor_type&, unsigned port_) noexcept;
+  bool init(unsigned port_, const motor_type&) noexcept;
   
 protected:
-  unsigned    _device_index;
-  unsigned    _port;
+  unsigned    _device_index = 0;
+  unsigned    _port = 0;
   std::string _port_name;
   motor_type  _type;
 };
@@ -440,11 +441,11 @@ protected:
   };
   
 protected:
-  infrared_sensor *_sensor;
-  bool             _owns_sensor;
-  unsigned         _channel;
-  int              _value;
-  int              _state;
+  infrared_sensor *_sensor = nullptr;
+  bool             _owns_sensor = false;
+  unsigned         _channel = 0;
+  int              _value = 0;
+  int              _state = 0;
 };
 
 //-----------------------------------------------------------------------------

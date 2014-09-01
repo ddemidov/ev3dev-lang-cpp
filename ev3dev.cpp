@@ -128,21 +128,22 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(unsigned type_, unsigned port_) :
-  _port(0),
-  _type(0),
-  _nvalues(0)
+sensor::sensor(unsigned port_)
 {
-  init(type_, port_);
+  init(port_, std::set<unsigned>());
 }
 
 //-----------------------------------------------------------------------------
 
-bool sensor::init(unsigned type_, unsigned port_) noexcept
+sensor::sensor(unsigned port_, const std::set<unsigned> &types_)
 {
-  if ((type_ == 0) && (port_ == 0))
-    return false;
-  
+  init(port_, types_);
+}
+
+//-----------------------------------------------------------------------------
+
+bool sensor::init(unsigned port_, const std::set<unsigned> &types_) noexcept
+{
   using namespace std;
   
   string strClassDir(SYS_ROOT "/class/msensor/");
@@ -164,7 +165,7 @@ bool sensor::init(unsigned type_, unsigned port_) noexcept
           {
             int type = 0;
             is >> type;
-            if (is.bad() || (type_ && type != type_))
+            if (is.bad() || (!types_.empty() && (types_.find(type)==types_.cend())))
               continue;
             
             is.close();
@@ -374,100 +375,93 @@ const std::string &sensor::as_string(unsigned type)
 //-----------------------------------------------------------------------------
 
 touch_sensor::touch_sensor(unsigned port_) :
-  sensor(ev3_touch, port_)
+  sensor(port_, { ev3_touch })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-const mode_type color_sensor::mode_reflect("COL-REFLECT");
-const mode_type color_sensor::mode_ambient("COL-AMBIENT");
-const mode_type color_sensor::mode_color  ("COL-COLOR");
+const mode_type color_sensor::mode_reflect { "COL-REFLECT" };
+const mode_type color_sensor::mode_ambient { "COL-AMBIENT" };
+const mode_type color_sensor::mode_color   { "COL-COLOR"   };
 
 color_sensor::color_sensor(unsigned port_) :
-  sensor(ev3_color, port_)
+  sensor(port_, { ev3_color })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-const mode_type ultrasonic_sensor::mode_dist_cm  ("US-DIST-CM");
-const mode_type ultrasonic_sensor::mode_dist_in  ("US-DIST-IN");
-const mode_type ultrasonic_sensor::mode_listen   ("US-LISTEN");
-const mode_type ultrasonic_sensor::mode_single_cm("US-SI-CM");
-const mode_type ultrasonic_sensor::mode_single_in("US-SI-IN");
+const mode_type ultrasonic_sensor::mode_dist_cm   { "US-DIST-CM" };
+const mode_type ultrasonic_sensor::mode_dist_in   { "US-DIST-IN" };
+const mode_type ultrasonic_sensor::mode_listen    { "US-LISTEN"  };
+const mode_type ultrasonic_sensor::mode_single_cm { "US-SI-CM"   };
+const mode_type ultrasonic_sensor::mode_single_in { "US-SI-IN"   };
 
 ultrasonic_sensor::ultrasonic_sensor(unsigned port_) :
-  sensor(ev3_ultrasonic, port_)
+  sensor(port_, { ev3_ultrasonic })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-const mode_type gyro_sensor::mode_angle("GYRO-ANG");
-const mode_type gyro_sensor::mode_speed("GYRO-RATE");
-const mode_type gyro_sensor::mode_angle_and_speed("GYRO-G&A");
+const mode_type gyro_sensor::mode_angle           { "GYRO-ANG"  };
+const mode_type gyro_sensor::mode_speed           { "GYRO-RATE" };
+const mode_type gyro_sensor::mode_angle_and_speed { "GYRO-G&A"  };
 
 gyro_sensor::gyro_sensor(unsigned port_) :
-  sensor(ev3_gyro, port_)
+  sensor(port_, { ev3_gyro })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-const mode_type infrared_sensor::mode_proximity("IR-PROX");
-const mode_type infrared_sensor::mode_ir_seeker("IR-SEEK");
-const mode_type infrared_sensor::mode_ir_remote("IR-REMOTE");
+const mode_type infrared_sensor::mode_proximity { "IR-PROX"   };
+const mode_type infrared_sensor::mode_ir_seeker { "IR-SEEK"   };
+const mode_type infrared_sensor::mode_ir_remote { "IR-REMOTE" };
 
 infrared_sensor::infrared_sensor(unsigned port_) :
-  sensor(ev3_infrared, port_)
+  sensor(port_, { ev3_infrared })
 {
 }
 
 //-----------------------------------------------------------------------------
   
-const motor::motor_type motor::motor_large ("tacho");
-const motor::motor_type motor::motor_medium("minitacho");
+const motor::motor_type motor::motor_large  { "tacho"     };
+const motor::motor_type motor::motor_medium { "minitacho" };
 
-const mode_type motor::mode_off("off");
-const mode_type motor::mode_on("on");
+const mode_type motor::mode_off { "off" };
+const mode_type motor::mode_on  { "on"  };
 
-const mode_type motor::run_mode_forever ("forever");
-const mode_type motor::run_mode_time    ("time");
-const mode_type motor::run_mode_position("position");
+const mode_type motor::run_mode_forever  { "forever"  };
+const mode_type motor::run_mode_time     { "time"     };
+const mode_type motor::run_mode_position { "position" };
   
-const mode_type motor::stop_mode_coast("coast");
-const mode_type motor::stop_mode_brake("brake");
-const mode_type motor::stop_mode_hold ("hold");
+const mode_type motor::stop_mode_coast { "coast" };
+const mode_type motor::stop_mode_brake { "brake" };
+const mode_type motor::stop_mode_hold  { "hold"  };
 
-const mode_type motor::position_mode_absolute("absolute");
-const mode_type motor::position_mode_relative("relative");
+const mode_type motor::position_mode_absolute { "absolute" };
+const mode_type motor::position_mode_relative { "relative" };
 
 //-----------------------------------------------------------------------------
 
-motor::motor(unsigned p) :
-  _device_index(0),
-  _port(0)
+motor::motor(unsigned p)
 {
-  init(std::string(), p);
+  init(p, std::string());
 }
 
 //-----------------------------------------------------------------------------
 
-motor::motor(const motor_type &t, unsigned p) :
-  _device_index(0),
-  _port(0)
+motor::motor(unsigned p, const motor_type &t)
 {
-  init(t, p);
+  init(p, t);
 }
 
 //-----------------------------------------------------------------------------
 
-bool motor::init(const motor_type &type_, unsigned port_) noexcept
+bool motor::init(unsigned port_, const motor_type &type_) noexcept
 {
-  if (type_.empty() && (port_ == 0))
-    return false;
-  
   using namespace std;
   
   string strClassDir(SYS_ROOT "/class/tacho-motor/");
@@ -792,15 +786,14 @@ void motor::set_speed_regulation_k(int value)
 
 //-----------------------------------------------------------------------------
 
-medium_motor::medium_motor(unsigned port_) : motor(motor_medium, port_)
+medium_motor::medium_motor(unsigned port_) : motor(port_, motor_medium)
 {
 }
 
 //-----------------------------------------------------------------------------
 
-large_motor::large_motor(unsigned port_) : motor(motor_large, port_)
+large_motor::large_motor(unsigned port_) : motor(port_, motor_large)
 {
-  
 }
 
 //-----------------------------------------------------------------------------
@@ -953,10 +946,10 @@ void led::set_trigger(const mode_type &trigger_)
 
 //-----------------------------------------------------------------------------
 
-led led::red_right  ("red:right");
-led led::red_left   ("red:left");
-led led::green_right("green:right");
-led led::green_left ("green:left");
+led led::red_right   { "red:right"   };
+led led::red_left    { "red:left"    };
+led led::green_right { "green:right" };
+led led::green_left  { "green:left"  };
 
 //-----------------------------------------------------------------------------
 
@@ -1183,10 +1176,7 @@ void lcd::deinit()
 
 remote_control::remote_control(unsigned channel) :
   _sensor(new infrared_sensor),
-  _owns_sensor(true),
-  _channel(0),
-  _value(0),
-  _state(0)
+  _owns_sensor(true)
 {
   if ((channel >= 1) && (channel <=4))
     _channel = channel-1;
@@ -1199,10 +1189,7 @@ remote_control::remote_control(unsigned channel) :
 
 remote_control::remote_control(infrared_sensor &ir, unsigned channel) :
   _sensor(&ir),
-  _owns_sensor(false),
-  _channel(0),
-  _value(0),
-  _state(0)
+  _owns_sensor(false)
 {
   if ((channel >= 1) && (channel <=4))
     _channel = channel-1;
