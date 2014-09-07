@@ -4,7 +4,6 @@
  *
  * Copyright (c) 2014 - Franz Detro
  *
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -18,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Modification:
+ *  Add new button for ev3dev Release 02.00.00 (ev3dev-jessie-2014-07-12) - Christophe Chaudelet
+ *
  */
 
 #include "ev3dev.h"
@@ -28,9 +31,14 @@
 #include <dirent.h>
 #include <string.h>
 
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #ifndef SYS_ROOT
 #define SYS_ROOT "/sys"
@@ -38,6 +46,9 @@
 
 #ifndef NO_LINUX_HEADERS
 #include <linux/fb.h>
+#include <linux/input.h>
+#else
+#define KEY_CNT 8
 #endif
 
 #define SYS_BUTTON SYS_ROOT "/devices/platform/ev3dev/button"
@@ -961,37 +972,39 @@ void led::all_on   () { red_on();  green_on();  }
 void led::all_off  () { red_off(); green_off(); }
 
 //-----------------------------------------------------------------------------
-  
-button::button(const std::string &name)
+
+button::button(int bit)
 {
-  _path = std::string(SYS_BUTTON + name);
+	_bits_per_long = sizeof(long) * 8;
+	_buf_size=(KEY_CNT + _bits_per_long - 1) / _bits_per_long;
+	_buf = new unsigned long [_buf_size];
+	_bit = bit;
+	_fd = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
 }
-  
+
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const
 {
-  std::ifstream is(_path.c_str());
-  
-  int result = 0;
-  
-  if (is.is_open())
-  {
-    is >> result;
-  }
-  
-  return (result != 0);
+ #ifndef NO_LINUX_HEADERS
+	if (ioctl(_fd, EVIOCGKEY(_buf_size), _buf) < 0)
+	{
+		// handle error
+	}
+ #endif
+	// bit in bytes is 1 when released and 0 when pressed
+	return !(_buf[_bit / _bits_per_long] & 1 << (_bit % _bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
-
-button button::back ("back");
-button button::left ("left");
-button button::right("right");
-button button::up   ("up");
-button button::down ("down");
-button button::enter("enter");
-
+#ifndef NO_LINUX_HEADERS
+button button::back (KEY_ESC);
+button button::left (KEY_LEFT);
+button button::right(KEY_RIGHT);
+button button::up   (KEY_UP);
+button button::down (KEY_DOWN);
+button button::enter(KEY_ENTER);
+#endif
 //-----------------------------------------------------------------------------
 
 void sound::beep()

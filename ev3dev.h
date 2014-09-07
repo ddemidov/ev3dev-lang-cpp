@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Modification:
+ *  Add new button management for ev3dev Release 02.00.00 (ev3dev-jessie-2014-07-12) - Christophe Chaudelet
+ *
  */
 
 #pragma once
@@ -335,10 +339,14 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class button : protected device
+class button
 {
 public:
-  button(const std::string &name);
+  button(int bit);
+  ~button()
+  {
+    delete _buf;
+  }
   
   bool pressed() const;
   
@@ -348,6 +356,14 @@ public:
   static button up;
   static button down;
   static button enter;
+
+private:
+  int _bit;
+  int _fd;
+  int _bits_per_long;
+  unsigned long *_buf;
+  unsigned long _buf_size;
+
 };
 
 //-----------------------------------------------------------------------------
