@@ -165,8 +165,11 @@ void control::stop()
 
 void control::reset()
 {
-  _motor_left .reset();
-  _motor_right.reset();
+  if (_motor_left.connected())
+    _motor_left .reset();
+  
+  if (_motor_right.connected())
+    _motor_right.reset();
   
   _state = state_idle;
 }
