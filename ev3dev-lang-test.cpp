@@ -86,7 +86,7 @@ int main()
   test_sensor<infrared_sensor>("infrared");
   
   test_motor<medium_motor>("medium");
-  test_motor<medium_motor>("large");
+  test_motor<large_motor>("large");
   
   cout << "Level of left green led is " << led::green_left.level() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;
