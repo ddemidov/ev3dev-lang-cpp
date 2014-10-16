@@ -139,21 +139,21 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(unsigned port_)
+sensor::sensor(port_type port_)
 {
   init(port_, std::set<unsigned>());
 }
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(unsigned port_, const std::set<unsigned> &types_)
+sensor::sensor(port_type port_, const std::set<unsigned> &types_)
 {
   init(port_, types_);
 }
 
 //-----------------------------------------------------------------------------
 
-bool sensor::init(unsigned port_, const std::set<unsigned> &types_) noexcept
+bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
 {
   using namespace std;
   
@@ -181,10 +181,9 @@ bool sensor::init(unsigned port_, const std::set<unsigned> &types_) noexcept
             
             is.close();
             is.open((strDir+"/port_name").c_str());
-            char c;
-            int port = 0;
-            is >> c >> c >> port;
-            if (is.bad() || (port_ && (port != port_)))
+            port_type port;
+            is >> port;
+            if (is.bad() || (!port_.empty() && (port != port_)))
               continue;
             
             is.close();
@@ -200,8 +199,7 @@ bool sensor::init(unsigned port_, const std::set<unsigned> &types_) noexcept
               _device_index += dp->d_name[i]-'0';
             }
             
-            _port_name = "in0"; _port_name[2] += port;
-            _port    = port;
+            _port_name = port;
             _type    = type;
             _nvalues = nvalues;
             _path    = strDir + '/';
@@ -385,7 +383,7 @@ const std::string &sensor::as_string(unsigned type)
 
 //-----------------------------------------------------------------------------
 
-touch_sensor::touch_sensor(unsigned port_) :
+touch_sensor::touch_sensor(port_type port_) :
   sensor(port_, { ev3_touch })
 {
 }
@@ -396,7 +394,7 @@ const mode_type color_sensor::mode_reflect { "COL-REFLECT" };
 const mode_type color_sensor::mode_ambient { "COL-AMBIENT" };
 const mode_type color_sensor::mode_color   { "COL-COLOR"   };
 
-color_sensor::color_sensor(unsigned port_) :
+color_sensor::color_sensor(port_type port_) :
   sensor(port_, { ev3_color })
 {
 }
@@ -409,7 +407,7 @@ const mode_type ultrasonic_sensor::mode_listen    { "US-LISTEN"  };
 const mode_type ultrasonic_sensor::mode_single_cm { "US-SI-CM"   };
 const mode_type ultrasonic_sensor::mode_single_in { "US-SI-IN"   };
 
-ultrasonic_sensor::ultrasonic_sensor(unsigned port_) :
+ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
   sensor(port_, { ev3_ultrasonic })
 {
 }
@@ -420,7 +418,7 @@ const mode_type gyro_sensor::mode_angle           { "GYRO-ANG"  };
 const mode_type gyro_sensor::mode_speed           { "GYRO-RATE" };
 const mode_type gyro_sensor::mode_angle_and_speed { "GYRO-G&A"  };
 
-gyro_sensor::gyro_sensor(unsigned port_) :
+gyro_sensor::gyro_sensor(port_type port_) :
   sensor(port_, { ev3_gyro })
 {
 }
@@ -431,7 +429,7 @@ const mode_type infrared_sensor::mode_proximity { "IR-PROX"   };
 const mode_type infrared_sensor::mode_ir_seeker { "IR-SEEK"   };
 const mode_type infrared_sensor::mode_ir_remote { "IR-REMOTE" };
 
-infrared_sensor::infrared_sensor(unsigned port_) :
+infrared_sensor::infrared_sensor(port_type port_) :
   sensor(port_, { ev3_infrared })
 {
 }
@@ -457,21 +455,21 @@ const mode_type motor::position_mode_relative { "relative" };
 
 //-----------------------------------------------------------------------------
 
-motor::motor(unsigned p)
+motor::motor(port_type p)
 {
   init(p, std::string());
 }
 
 //-----------------------------------------------------------------------------
 
-motor::motor(unsigned p, const motor_type &t)
+motor::motor(port_type p, const motor_type &t)
 {
   init(p, t);
 }
 
 //-----------------------------------------------------------------------------
 
-bool motor::init(unsigned port_, const motor_type &type_) noexcept
+bool motor::init(port_type port_, const motor_type &type_) noexcept
 {
   using namespace std;
   
@@ -490,15 +488,9 @@ bool motor::init(unsigned port_, const motor_type &type_) noexcept
         {
           _path = strClassDir + dp->d_name + '/';
           
-          std::string strPort = get_attr_string("port_name");
-          if (strPort.length()<4)
-            continue;
-          
-          _port = strPort[3]-'A'+1;
-          if ((_port < 1) || (_port > 4))
-            continue;
-          
-          if (port_ && (_port != port_))
+          std::string port = get_attr_string("port_name");
+
+          if (!port_.empty() && (port != port_))
             continue;
           
           _device_index = 0;
@@ -508,7 +500,7 @@ bool motor::init(unsigned port_, const motor_type &type_) noexcept
             _device_index += dp->d_name[i]-'0';
           }
           
-          _port_name = strPort;
+          _port_name = port;
           
           _type = get_attr_string("type");
           if (!type_.empty() && _type != type_)
@@ -797,13 +789,13 @@ void motor::set_speed_regulation_k(int value)
 
 //-----------------------------------------------------------------------------
 
-medium_motor::medium_motor(unsigned port_) : motor(port_, motor_medium)
+medium_motor::medium_motor(port_type port_) : motor(port_, motor_medium)
 {
 }
 
 //-----------------------------------------------------------------------------
 
-large_motor::large_motor(unsigned port_) : motor(port_, motor_large)
+large_motor::large_motor(port_type port_) : motor(port_, motor_large)
 {
 }
 

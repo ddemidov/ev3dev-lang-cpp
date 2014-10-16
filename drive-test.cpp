@@ -76,8 +76,8 @@ protected:
 };
 
 control::control() :
-  _motor_left(2),
-  _motor_right(3),
+  _motor_left(OUTPUT_B),
+  _motor_right(OUTPUT_C),
   _state(state_idle),
   _terminate(false)
 {
