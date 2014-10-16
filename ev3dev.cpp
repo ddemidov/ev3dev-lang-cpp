@@ -204,12 +204,22 @@ bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
             _nvalues = nvalues;
             _path    = strDir + '/';
             
+            // todo: re-read on mode change
+            _dp_scale = 1.f;
+            for (unsigned dp = get_attr_int("dp"); dp; --dp)
+            {
+              _dp_scale /= 10.f;
+            }
+            
             read_modes();
             
             return true;
           }
         }
-        catch (...) { }
+        catch (...)
+        {
+          _path.erase();
+        }
       }
     }
     closedir(dfd);
@@ -229,6 +239,13 @@ int sensor::value(unsigned index) const
   svalue[7] += index;
   
   return get_attr_int(svalue);
+}
+
+//-----------------------------------------------------------------------------
+  
+float sensor::float_value(unsigned index) const
+{
+  return value(index) * _dp_scale;
 }
 
 //-----------------------------------------------------------------------------

@@ -85,7 +85,8 @@ public:
   inline unsigned          type()         const { return _type; }
   inline unsigned          num_values()   const { return _nvalues; }
   
-  int value(unsigned index=0) const;
+  int   value(unsigned index=0) const;
+  float float_value(unsigned index=0) const;
   
   const mode_set  &modes() const;
   const mode_type &mode()  const;
@@ -118,6 +119,7 @@ protected:
   unsigned _device_index = 0;
   unsigned _type = 0;
   unsigned _nvalues = 0;
+  float    _dp_scale = 1.f;
   
   std::string _port_name;
   mode_set  _modes;
