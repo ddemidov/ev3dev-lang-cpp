@@ -113,7 +113,7 @@ public:
   
 protected:
   bool init(port_type port_, const std::set<unsigned> &types_) noexcept;
-  void read_modes();
+  void read_mode_values();
   
 protected:
   unsigned _device_index = 0;
@@ -121,7 +121,7 @@ protected:
   unsigned _nvalues = 0;
   float    _dp_scale = 1.f;
   
-  std::string _port_name;
+  port_type _port_name;
   mode_set  _modes;
   mode_type _mode;
 };

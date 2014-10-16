@@ -187,10 +187,6 @@ bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
               continue;
             
             is.close();
-            is.open((strDir+"/num_values").c_str());
-            int nvalues = 0;
-            is >> nvalues;
-            is.close();
             
             _device_index = 0;
             for (unsigned i=6; dp->d_name[i]!=0; ++i)
@@ -201,17 +197,9 @@ bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
             
             _port_name = port;
             _type    = type;
-            _nvalues = nvalues;
             _path    = strDir + '/';
             
-            // todo: re-read on mode change
-            _dp_scale = 1.f;
-            for (unsigned dp = get_attr_int("dp"); dp; --dp)
-            {
-              _dp_scale /= 10.f;
-            }
-            
-            read_modes();
+            read_mode_values();
             
             return true;
           }
@@ -252,9 +240,6 @@ float sensor::float_value(unsigned index) const
   
 const mode_set &sensor::modes() const
 {
-  if (_modes.empty())
-    const_cast<sensor*>(this)->read_modes();
-  
   return _modes;
 }
 
@@ -262,15 +247,12 @@ const mode_set &sensor::modes() const
   
 const mode_type &sensor::mode() const
 {
-  if (_mode.empty())
-    const_cast<sensor*>(this)->read_modes();
-  
   return _mode;
 }
 
 //-----------------------------------------------------------------------------
 
-void sensor::read_modes()
+void sensor::read_mode_values()
 {
   using namespace std;
   
@@ -316,6 +298,13 @@ void sensor::read_modes()
       }
     } while (pos!=string::npos);
   }
+  
+  _nvalues = get_attr_int("num_values");
+  _dp_scale = 1.f;
+  for (unsigned dp = get_attr_int("dp"); dp; --dp)
+  {
+    _dp_scale /= 10.f;
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -325,7 +314,7 @@ void sensor::set_mode(const mode_type &mode_)
   if (mode_ != _mode)
   {
     set_attr_string("mode", mode_);
-    _mode.clear();
+    const_cast<sensor*>(this)->read_mode_values();
   }
 }
 
