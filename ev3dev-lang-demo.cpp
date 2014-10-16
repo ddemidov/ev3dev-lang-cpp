@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <thread>
+#include <cstdio>
 
 using namespace std;
 using namespace ev3dev;
@@ -42,7 +43,7 @@ void sensor_action(sensor &s)
          << "(b)ack"        << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -101,7 +102,7 @@ void sensor_menu()
     cout << "(b)ack"  << endl;
     cout << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -160,7 +161,7 @@ void motor_action(motor &m)
     cout << endl << "(b)ack" << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -266,7 +267,7 @@ void motor_menu()
     cout << "(b)ack"  << endl;
     cout << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -299,7 +300,7 @@ void led_action(const char *name, led &l)
          << "(b)ack"     << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -356,7 +357,7 @@ void led_menu()
          << "(b)ack"          << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -395,7 +396,7 @@ void button_menu()
     << "(b)ack"    << endl
     << endl
     << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -441,7 +442,7 @@ void sound_menu()
     << "(b)ack"          << endl
     << endl
     << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -500,7 +501,7 @@ void battery_menu()
     << "(b)ack"  << endl
     << endl
     << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -539,7 +540,7 @@ void lcd_menu()
          << "(b)ack"  << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
@@ -578,7 +579,7 @@ void main_menu()
          << "(q)uit" << endl
          << endl
          << "Choice: ";
-    cin >> c;
+    c = getchar();
     
     switch (c)
     {
