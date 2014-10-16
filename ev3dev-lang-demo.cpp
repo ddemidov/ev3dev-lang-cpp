@@ -39,6 +39,7 @@ void sensor_action(sensor &s)
          << "(s)how modes"  << endl
          << "(c)hange mode" << endl
          << "(v)alue"       << endl
+         << "(m)onitor"     << endl
          << endl
          << "(b)ack"        << endl
          << endl
@@ -67,6 +68,27 @@ void sensor_action(sensor &s)
       break;
     case 'v':
       cout << endl << "value is " << s.value() << endl;
+      break;
+    case 'm':
+      {
+        bool bStop = false;
+        thread t([&] () {
+          bStop = (getchar()!=0);
+        });
+       
+        int value, lastValue = -99999;
+        while (!bStop)
+        {
+          value = s.value();
+          if (value != lastValue)
+          {
+            lastValue = value;
+            cout << lastValue << endl;
+          }
+          this_thread::sleep_for(chrono::milliseconds(100));
+        }
+        t.join();
+      }
       break;
     }
   }
@@ -384,18 +406,18 @@ void button_menu()
   do
   {
     cout << endl
-    << "*** button menu ***" << endl
-    << endl
-    << "(1) back"  << endl
-    << "(2) left"  << endl
-    << "(3) right" << endl
-    << "(4) up"    << endl
-    << "(5) down"  << endl
-    << "(6) enter" << endl
-    << endl
-    << "(b)ack"    << endl
-    << endl
-    << "Choice: ";
+         << "*** button menu ***" << endl
+         << endl
+         << "(1) back"  << endl
+         << "(2) left"  << endl
+         << "(3) right" << endl
+         << "(4) up"    << endl
+         << "(5) down"  << endl
+         << "(6) enter" << endl
+         << endl
+         << "(b)ack"    << endl
+         << endl
+         << "Choice: ";
     c = getchar();
     
     switch (c)
@@ -431,17 +453,17 @@ void sound_menu()
   do
   {
     cout << endl
-    << "*** sound menu ***" << endl
-    << endl
-    << "b(e)ep"          << endl
-    << "(t)one"          << endl
-    << "tone (d)uration" << endl
-    << "(p)lay"          << endl
-    << "(s)peak"         << endl
-    << "(v)olume"        << endl
-    << "(b)ack"          << endl
-    << endl
-    << "Choice: ";
+         << "*** sound menu ***" << endl
+         << endl
+         << "b(e)ep"          << endl
+         << "(t)one"          << endl
+         << "tone (d)uration" << endl
+         << "(p)lay"          << endl
+         << "(s)peak"         << endl
+         << "(v)olume"        << endl
+         << "(b)ack"          << endl
+         << endl
+         << "Choice: ";
     c = getchar();
     
     switch (c)
@@ -493,14 +515,14 @@ void battery_menu()
   do
   {
     cout << endl
-    << "*** battery menu ***" << endl
-    << endl
-    << "(v)oltage" << endl
-    << "(c)urrent" << endl
-    << endl
-    << "(b)ack"  << endl
-    << endl
-    << "Choice: ";
+         << "*** battery menu ***" << endl
+         << endl
+         << "(v)oltage" << endl
+         << "(c)urrent" << endl
+         << endl
+         << "(b)ack"  << endl
+         << endl
+         << "Choice: ";
     c = getchar();
     
     switch (c)

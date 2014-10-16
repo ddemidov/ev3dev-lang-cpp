@@ -12,7 +12,7 @@ ev3dev-lang-test: $(OBJ) ev3dev-lang-test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
 ev3dev-lang-demo: $(OBJ) ev3dev-lang-demo.o
-	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS) -lpthread
 
 remote_control-test: $(OBJ) remote_control-test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
