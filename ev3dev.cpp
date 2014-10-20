@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <map>
 #include <system_error>
 #include <dirent.h>
 #include <string.h>
@@ -139,21 +140,35 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 
 //-----------------------------------------------------------------------------
 
+const sensor::sensor_type sensor::ev3_touch       { "lego-ev3-touch" };
+const sensor::sensor_type sensor::ev3_color       { "ev3-uart-29" };
+const sensor::sensor_type sensor::ev3_ultrasonic  { "ev3-uart-30" };
+const sensor::sensor_type sensor::ev3_gyro        { "ev3-uart-32" };
+const sensor::sensor_type sensor::ev3_infrared    { "ev3-uart-33" };
+  
+const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
+const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
+const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
+const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-ultrasonic" };
+const sensor::sensor_type sensor::nxt_temperature { "tmp275" };
+  
+//-----------------------------------------------------------------------------
+
 sensor::sensor(port_type port_)
 {
-  init(port_, std::set<unsigned>());
+  init(port_, std::set<sensor_type>());
 }
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port_, const std::set<unsigned> &types_)
+sensor::sensor(port_type port_, const std::set<sensor_type> &types_)
 {
   init(port_, types_);
 }
 
 //-----------------------------------------------------------------------------
 
-bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
+bool sensor::init(port_type port_, const std::set<sensor_type> &types_) noexcept
 {
   using namespace std;
   
@@ -171,10 +186,10 @@ bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
         try
         {
           string strDir = strClassDir + dp->d_name;
-          ifstream is((strDir+"/type_id").c_str());
+          ifstream is((strDir+"/name").c_str());
           if (is.is_open())
           {
-            int type = 0;
+            sensor_type type = 0;
             is >> type;
             if (is.bad() || (!types_.empty() && (types_.find(type)==types_.cend())))
               continue;
@@ -214,6 +229,36 @@ bool sensor::init(port_type port_, const std::set<unsigned> &types_) noexcept
   }
   
   return false;
+}
+
+//-----------------------------------------------------------------------------
+
+const std::string &sensor::type_name() const
+{
+  if (_type.empty())
+  {
+    static const std::string s("<none>");
+    return s;
+  }
+  
+  static const std::map<sensor_type, const std::string> lookup_table {
+    { ev3_touch,       "EV3 touch" },
+    { ev3_color,       "EV3 color" },
+    { ev3_ultrasonic,  "EV3 ultrasonic" },
+    { ev3_gyro,        "EV3 gyro" },
+    { ev3_infrared,    "EV3 infrared" },
+    { nxt_touch,       "NXT touch" },
+    { nxt_light,       "NXT light" },
+    { nxt_sound,       "NXT sound" },
+    { nxt_ultrasonic,  "NXT ultrasonic" },
+    { nxt_temperature, "NXT temperature" }
+  };
+  
+  auto s = lookup_table.find(_type);
+  if (s != lookup_table.end())
+    return s->second;
+  
+  return _type;
 }
 
 //-----------------------------------------------------------------------------
@@ -316,75 +361,6 @@ void sensor::set_mode(const mode_type &mode_)
     set_attr_string("mode", mode_);
     const_cast<sensor*>(this)->read_mode_values();
   }
-}
-
-//-----------------------------------------------------------------------------
-
-const std::string &sensor::as_string(unsigned type)
-{
-  switch (type)
-  {
-  case nxt_touch:
-    {
-      static const std::string s("NXT touch");
-      return s;
-    }
-  case nxt_light:
-    {
-      static const std::string s("NXT light");
-      return s;
-    }
-  case nxt_sound:
-    {
-      static const std::string s("NXT sound");
-      return s;
-    }
-  case nxt_color:
-    {
-      static const std::string s("NXT color");
-      return s;
-    }
-  case nxt_ultrasonic:
-    {
-      static const std::string s("NXT ultrasonic");
-      return s;
-    }
-  case nxt_temperature:
-    {
-      static const std::string s("NXT temperature");
-      return s;
-    }
-  case ev3_touch:
-    {
-      static const std::string s("EV3 touch");
-      return s;
-    }
-  case ev3_color:
-    {
-      static const std::string s("EV3 color");
-      return s;
-    }
-  case ev3_ultrasonic:
-    {
-      static const std::string s("EV3 ultrasonic");
-      return s;
-    }
-  case ev3_gyro:
-    {
-      static const std::string s("EV3 gyro");
-      return s;
-    }
-  case ev3_infrared:
-    {
-      static const std::string s("EV3 infrared");
-      return s;
-    }
-  default:
-    break;
-  }
-
-  static const std::string s("<no string available>");
-  return s;
 }
 
 //-----------------------------------------------------------------------------

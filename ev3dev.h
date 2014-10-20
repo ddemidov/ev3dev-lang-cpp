@@ -38,6 +38,7 @@ namespace ev3dev {
 
 //-----------------------------------------------------------------------------
   
+typedef std::string         device_type;
 typedef std::string         port_type;
 typedef std::string         mode_type;
 typedef std::set<mode_type> mode_set;
@@ -76,14 +77,29 @@ protected:
 class sensor : protected device
 {
 public:
+  typedef device_type sensor_type;
+  
+  static const sensor_type ev3_touch;
+  static const sensor_type ev3_color;
+  static const sensor_type ev3_ultrasonic;
+  static const sensor_type ev3_gyro;
+  static const sensor_type ev3_infrared;
+  
+  static const sensor_type nxt_touch;
+  static const sensor_type nxt_light;
+  static const sensor_type nxt_sound;
+  static const sensor_type nxt_ultrasonic;
+  static const sensor_type nxt_temperature;
+  
   sensor(port_type port_ = INPUT_AUTO);
-  sensor(port_type port_, const std::set<unsigned> &types_);
+  sensor(port_type port_, const std::set<sensor_type> &types_);
   
   inline bool              connected()    const { return !_port_name.empty(); }
   inline unsigned          device_index() const { return _device_index; }
-  inline const std::string port_name()    const { return _port_name; }
-  inline unsigned          type()         const { return _type; }
-  inline unsigned          num_values()   const { return _nvalues; }
+  inline const std::string &port_name()   const { return _port_name; }
+  inline const sensor_type &type()        const { return _type; }
+         const std::string &type_name()   const;
+  inline unsigned           num_values()  const { return _nvalues; }
   
   int   value(unsigned index=0) const;
   float float_value(unsigned index=0) const;
@@ -93,37 +109,19 @@ public:
   
   void set_mode(const mode_type&);
   
-  enum type
-  {
-    nxt_touch       = 1,
-    nxt_light       = 2,
-    nxt_sound       = 3,
-    nxt_color       = 4,
-    nxt_ultrasonic  = 5,
-    nxt_temperature = 6,
-    
-    ev3_touch       = 16,
-    ev3_color       = 29,
-    ev3_ultrasonic  = 30,
-    ev3_gyro        = 32,
-    ev3_infrared    = 33,
-  };
-
-  static const std::string &as_string(unsigned type);
-  
 protected:
-  bool init(port_type port_, const std::set<unsigned> &types_) noexcept;
+  bool init(port_type port_, const std::set<sensor_type> &types_) noexcept;
   void read_mode_values();
   
 protected:
   unsigned _device_index = 0;
-  unsigned _type = 0;
   unsigned _nvalues = 0;
   float    _dp_scale = 1.f;
   
-  port_type _port_name;
-  mode_set  _modes;
-  mode_type _mode;
+  sensor_type _type;
+  port_type   _port_name;
+  mode_set    _modes;
+  mode_type   _mode;
 };
 
 //-----------------------------------------------------------------------------
@@ -189,7 +187,7 @@ public:
 class motor : protected device
 {
 public:
-  typedef std::string motor_type;
+  typedef device_type motor_type;
   
   motor(port_type port_ = OUTPUT_AUTO);
   motor(port_type port_, const motor_type&);

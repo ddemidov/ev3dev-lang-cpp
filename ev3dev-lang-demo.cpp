@@ -33,7 +33,7 @@ void sensor_action(sensor &s)
   do
   {
     cout << endl
-         << "*** " << s.as_string(s.type()) << " (" << s.mode() << ") actions ***" << endl
+         << "*** " << s.type_name() << " (" << s.mode() << ") actions ***" << endl
          << endl
          << "(s)how modes"  << endl
          << "(c)hange mode" << endl
@@ -93,7 +93,7 @@ void sensor_menu()
       sensor &s = arrSensors[i];
       if (s.connected())
       {
-        cout << "(" << i+1 << ") " << s.as_string(s.type()) << " (type " << s.type()
+        cout << "(" << i+1 << ") " << s.type_name() << " (type " << s.type()
              << ", port " << s.port_name() << ", mode " << s.mode() << ")" << endl;
       }
     }
