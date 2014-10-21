@@ -68,6 +68,9 @@ protected:
   std::string get_attr_string(const std::string &name) const;
   void        set_attr_string(const std::string &name,
                               const std::string &value);
+
+  std::string get_attr_line  (const std::string &name) const;
+  
 protected:
   std::string _path;
 };
@@ -209,9 +212,8 @@ public:
   static const mode_type position_mode_absolute;
   static const mode_type position_mode_relative;
   
-  inline bool              connected()    const { return (_port != 0); }
+  inline bool              connected()    const { return !_port_name.empty(); }
   inline unsigned          device_index() const { return _device_index; }
-  inline unsigned          port_id()      const { return _port; }
   inline const std::string port_name()    const { return _port_name; }
 
   motor_type type() const;
@@ -282,7 +284,6 @@ protected:
   
 protected:
   unsigned    _device_index = 0;
-  unsigned    _port = 0;
   std::string _port_name;
   motor_type  _type;
 };

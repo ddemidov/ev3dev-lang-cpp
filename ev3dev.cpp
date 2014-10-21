@@ -140,6 +140,26 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 
 //-----------------------------------------------------------------------------
 
+std::string device::get_attr_line(const std::string &name) const
+{
+  using namespace std;
+  
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+  
+  ifstream is((_path+name).c_str());
+  if (is.is_open())
+  {
+    string result;
+    getline(is, result);
+    return result;
+  }
+  
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
+}
+
+//-----------------------------------------------------------------------------
+
 const sensor::sensor_type sensor::ev3_touch       { "lego-ev3-touch" };
 const sensor::sensor_type sensor::ev3_color       { "ev3-uart-29" };
 const sensor::sensor_type sensor::ev3_ultrasonic  { "ev3-uart-30" };
@@ -185,48 +205,39 @@ bool sensor::init(port_type port_, const std::set<sensor_type> &types_) noexcept
       {
         try
         {
-          string strDir = strClassDir + dp->d_name;
-          ifstream is((strDir+"/name").c_str());
-          if (is.is_open())
+          _path = strClassDir + dp->d_name + '/';
+          
+          _port_name = get_attr_string("port_name");
+          if (port_.empty() || (_port_name == port_))
           {
-            sensor_type type = 0;
-            is >> type;
-            if (is.bad() || (!types_.empty() && (types_.find(type)==types_.cend())))
-              continue;
-            
-            is.close();
-            is.open((strDir+"/port_name").c_str());
-            port_type port;
-            is >> port;
-            if (is.bad() || (!port_.empty() && (port != port_)))
-              continue;
-            
-            is.close();
-            
-            _device_index = 0;
-            for (unsigned i=6; dp->d_name[i]!=0; ++i)
+            _type = get_attr_string("name");
+            if (types_.empty() || (types_.find(_type) != types_.cend()))
             {
-              _device_index *= 10;
-              _device_index += dp->d_name[i]-'0';
+              _device_index = 0;
+              for (unsigned i=6; dp->d_name[i]!=0; ++i)
+              {
+                _device_index *= 10;
+                _device_index += dp->d_name[i]-'0';
+              }
+              
+              read_mode_values();
+            
+              return true;
             }
-            
-            _port_name = port;
-            _type    = type;
-            _path    = strDir + '/';
-            
-            read_mode_values();
-            
-            return true;
           }
         }
-        catch (...)
-        {
-          _path.erase();
-        }
+        catch (...) { }
+        
+        _path.clear();
+        _port_name.clear();
+        _type.clear();
       }
     }
+    
     closedir(dfd);
   }
+  else
+    cerr << "no msensor dir!" << endl;
   
   return false;
 }
@@ -300,49 +311,30 @@ const mode_type &sensor::mode() const
 void sensor::read_mode_values()
 {
   using namespace std;
-  
-  ifstream is((_path+"/modes").c_str());
-  if (is.is_open())
-  {
-    _mode = get_attr_string("mode");
-  }
-  else
-  {
-    _mode.clear();
-    is.open((_path+"/mode").c_str());
-  }
-  
+
+  _mode = get_attr_string("mode");
+
   _modes.clear();
-  
-  if (is.is_open())
-  {
-    string s;
-    getline(is, s);
+
+  string s = get_attr_line("modes");
+  size_t pos, last_pos = 0;
+  string m;
+  do {
+    pos = s.find(' ', last_pos);
     
-    size_t pos, last_pos = 0;
-    string m;
-    do {
-      pos = s.find(' ', last_pos);
-      
-      if (pos != string::npos)
-      {
-        m = s.substr(last_pos, pos-last_pos);
-        last_pos = pos+1;
-      }
-      else
-        m = s.substr(last_pos);
-      
-      if (!m.empty())
-      {
-        if (*m.begin()=='[')
-        {
-          _mode = m.substr(1, m.length()-2);
-          m = _mode;
-        }
-        _modes.insert(m);
-      }
-    } while (pos!=string::npos);
-  }
+    if (pos != string::npos)
+    {
+      m = s.substr(last_pos, pos-last_pos);
+      last_pos = pos+1;
+    }
+    else
+      m = s.substr(last_pos);
+    
+    if (!m.empty())
+    {
+      _modes.insert(m);
+    }
+  } while (pos!=string::npos);
   
   _nvalues = get_attr_int("num_values");
   _dp_scale = 1.f;
@@ -470,35 +462,32 @@ bool motor::init(port_type port_, const motor_type &type_) noexcept
         {
           _path = strClassDir + dp->d_name + '/';
           
-          std::string port = get_attr_string("port_name");
-
-          if (!port_.empty() && (port != port_))
-            continue;
-          
-          _device_index = 0;
-          for (unsigned i=11; dp->d_name[i]!=0; ++i)
+          _port_name = get_attr_string("port_name");
+          if (port_.empty() || (_port_name == port_))
           {
-            _device_index *= 10;
-            _device_index += dp->d_name[i]-'0';
+            _type = get_attr_string("type");
+            if (type_.empty() || (_type == type_))
+            {
+              _device_index = 0;
+              for (unsigned i=11; dp->d_name[i]!=0; ++i)
+              {
+                _device_index *= 10;
+                _device_index += dp->d_name[i]-'0';
+              }
+              
+              return true;
+            }
           }
-          
-          _port_name = port;
-          
-          _type = get_attr_string("type");
-          if (!type_.empty() && _type != type_)
-            continue;
-          
-          return true;
         }
         catch (...) { }
+        
+        _path.clear();
+        _port_name.clear();
+        _type.clear();
       }
     }
     closedir(dfd);
   }
-  
-  _port = 0;
-  _path.clear();
-  _type.clear();
   
   return false;
 }
