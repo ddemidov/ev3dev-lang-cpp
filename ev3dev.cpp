@@ -170,7 +170,8 @@ const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
 const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
 const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
 const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-ultrasonic" };
-  
+const sensor::sensor_type sensor::nxt_i2c_sensor  { "nxt-i2c-sensor" };
+
 //-----------------------------------------------------------------------------
 
 sensor::sensor(port_type port_)
@@ -261,6 +262,7 @@ const std::string &sensor::type_name() const
     { nxt_light,       "NXT light" },
     { nxt_sound,       "NXT sound" },
     { nxt_ultrasonic,  "NXT ultrasonic" },
+    { nxt_i2c_sensor,  "I2C sensor" },
   };
   
   auto s = lookup_table.find(_type);
@@ -352,6 +354,13 @@ void sensor::set_mode(const mode_type &mode_)
     set_attr_string("mode", mode_);
     const_cast<sensor*>(this)->read_mode_values();
   }
+}
+    
+//-----------------------------------------------------------------------------
+
+i2c_sensor::i2c_sensor(port_type port_, address_type address_) :
+  sensor(port_, { nxt_i2c_sensor })
+{
 }
 
 //-----------------------------------------------------------------------------
