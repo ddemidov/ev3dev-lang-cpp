@@ -92,7 +92,6 @@ public:
   static const sensor_type nxt_light;
   static const sensor_type nxt_sound;
   static const sensor_type nxt_ultrasonic;
-  static const sensor_type nxt_temperature;
   
   sensor(port_type port_ = INPUT_AUTO);
   sensor(port_type port_, const std::set<sensor_type> &types_);

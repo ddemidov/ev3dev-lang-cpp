@@ -170,7 +170,6 @@ const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
 const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
 const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
 const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-ultrasonic" };
-const sensor::sensor_type sensor::nxt_temperature { "tmp275" };
   
 //-----------------------------------------------------------------------------
 
