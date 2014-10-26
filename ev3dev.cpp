@@ -261,7 +261,6 @@ const std::string &sensor::type_name() const
     { nxt_light,       "NXT light" },
     { nxt_sound,       "NXT sound" },
     { nxt_ultrasonic,  "NXT ultrasonic" },
-    { nxt_temperature, "NXT temperature" }
   };
   
   auto s = lookup_table.find(_type);
