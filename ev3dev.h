@@ -102,6 +102,7 @@ public:
   inline const sensor_type &type()        const { return _type; }
          const std::string &type_name()   const;
   inline unsigned           num_values()  const { return _nvalues; }
+  inline unsigned           dp()          const { return _dp; }
   
   int   value(unsigned index=0) const;
   float float_value(unsigned index=0) const;
@@ -118,6 +119,7 @@ protected:
 protected:
   unsigned _device_index = 0;
   unsigned _nvalues = 0;
+  unsigned _dp = 0;
   float    _dp_scale = 1.f;
   
   sensor_type _type;

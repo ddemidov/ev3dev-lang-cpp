@@ -335,8 +335,9 @@ void sensor::read_mode_values()
   } while (pos!=string::npos);
   
   _nvalues = get_attr_int("num_values");
+  _dp = get_attr_int("dp");
   _dp_scale = 1.f;
-  for (unsigned dp = get_attr_int("dp"); dp; --dp)
+  for (unsigned dp = _dp; dp; --dp)
   {
     _dp_scale /= 10.f;
   }
