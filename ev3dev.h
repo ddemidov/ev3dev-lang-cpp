@@ -42,6 +42,7 @@ typedef std::string         device_type;
 typedef std::string         port_type;
 typedef std::string         mode_type;
 typedef std::set<mode_type> mode_set;
+typedef std::string         address_type;
 
 //-----------------------------------------------------------------------------
 
@@ -57,6 +58,8 @@ const port_type OUTPUT_B { "outB" }; //!< Motor port B
 const port_type OUTPUT_C { "outC" }; //!< Motor port C
 const port_type OUTPUT_D { "outD" }; //!< Motor port D
 
+const address_type ADRESS_AUTO;      //!< Automatic address selection
+  
 //-----------------------------------------------------------------------------
 
 class device
@@ -92,6 +95,7 @@ public:
   static const sensor_type nxt_light;
   static const sensor_type nxt_sound;
   static const sensor_type nxt_ultrasonic;
+  static const sensor_type nxt_i2c_sensor;
   
   sensor(port_type port_ = INPUT_AUTO);
   sensor(port_type port_, const std::set<sensor_type> &types_);
@@ -126,6 +130,14 @@ protected:
   port_type   _port_name;
   mode_set    _modes;
   mode_type   _mode;
+};
+
+//-----------------------------------------------------------------------------
+
+class i2c_sensor : public sensor
+{
+public:
+  i2c_sensor(port_type port_ = INPUT_AUTO, address_type address_ = ADRESS_AUTO);
 };
 
 //-----------------------------------------------------------------------------
