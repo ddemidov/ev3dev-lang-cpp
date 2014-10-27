@@ -54,7 +54,7 @@
 
 #define SYS_BUTTON SYS_ROOT "/devices/platform/ev3dev/button"
 #define SYS_SOUND  SYS_ROOT "/devices/platform/snd-legoev3/"
-#define SYS_POWER  SYS_ROOT "/class/power_supply/legoev3-battery/"
+#define SYS_POWER  SYS_ROOT "/class/power_supply/"
 
 //-----------------------------------------------------------------------------
 
@@ -780,30 +780,39 @@ large_motor::large_motor(port_type port_) : motor(port_, motor_large)
 
 //-----------------------------------------------------------------------------
 
-led::led(const std::string &name)
+led::led(std::string name)
 {
-  std::string p(SYS_ROOT "/class/leds/ev3:" + name);
+  std::string p(SYS_ROOT "/class/leds/" + name);
   
   DIR *dfd;
   if ((dfd = opendir(p.c_str())) != NULL)
   {
     _path = p + '/';
     closedir(dfd);
+    
+    _max_brightness = get_attr_int("max_brightness");
   }
 }
 
 //-----------------------------------------------------------------------------
 
-int led::level() const
+int led::brightness() const
 {
   return get_attr_int("brightness");
 }
 
 //-----------------------------------------------------------------------------
 
+void led::set_brightness(int value)
+{
+  set_attr_int("brightness", value);
+}
+    
+//-----------------------------------------------------------------------------
+
 void led::on()
 {
-  set_attr_int("brightness", 1);
+  set_attr_int("brightness", _max_brightness);
 }
 
 //-----------------------------------------------------------------------------
@@ -928,10 +937,10 @@ void led::set_trigger(const mode_type &trigger_)
 
 //-----------------------------------------------------------------------------
 
-led led::red_right   { "red:right"   };
-led led::red_left    { "red:left"    };
-led led::green_right { "green:right" };
-led led::green_left  { "green:left"  };
+led led::red_right   { "ev3:red:right"   };
+led led::red_left    { "ev3:red:left"    };
+led led::green_right { "ev3:green:right" };
+led led::green_left  { "ev3:green:left"  };
 
 //-----------------------------------------------------------------------------
 
@@ -941,6 +950,83 @@ void led::green_on () { green_right.on();  green_left.on();  }
 void led::green_off() { green_right.off(); green_left.off(); }
 void led::all_on   () { red_on();  green_on();  }
 void led::all_off  () { red_off(); green_off(); }
+
+//-----------------------------------------------------------------------------
+
+power_supply::power_supply(std::string name)
+{
+  if (name.empty())
+    name = "legoev3-battery";
+  
+  std::string p(SYS_POWER + name);
+  
+  DIR *dfd;
+  if ((dfd = opendir(p.c_str())) != NULL)
+  {
+    _path = p + '/';
+    closedir(dfd);
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+int power_supply::current_now() const
+{
+  return get_attr_int("current_now");
+}
+
+//-----------------------------------------------------------------------------
+
+float power_supply::current_amps() const
+{
+  return get_attr_int("current_now") / 1000.f;
+}
+
+//-----------------------------------------------------------------------------
+
+int power_supply::current_max_design() const
+{
+  return get_attr_int("current_max_design");
+}
+
+//-----------------------------------------------------------------------------
+
+int power_supply::voltage_now() const
+{
+  return get_attr_int("voltage_now");
+}
+
+//-----------------------------------------------------------------------------
+
+float power_supply::voltage_volts() const
+{
+  return get_attr_int("voltage_now") / 1000000.f;
+}
+
+//-----------------------------------------------------------------------------
+
+int power_supply::voltage_max_design() const
+{
+  return get_attr_int("voltage_max_design");
+}
+
+//-----------------------------------------------------------------------------
+
+std::string power_supply::technology() const
+{
+  return get_attr_string("technology");
+}
+
+//-----------------------------------------------------------------------------
+
+std::string power_supply::type() const
+{
+  return get_attr_string("type");
+}
+
+//-----------------------------------------------------------------------------
+
+power_supply power_supply::battery { "" };
 
 //-----------------------------------------------------------------------------
 
@@ -1049,36 +1135,6 @@ void sound::set_volume(unsigned v)
   {
     os << v;
   }
-}
-
-//-----------------------------------------------------------------------------
-
-float battery::voltage()
-{
-  unsigned result = 0;
-  
-  std::ifstream is(SYS_POWER "/voltage_now");
-  if (is.is_open())
-  {
-    is >> result;
-  }
-  
-  return (result / 1000000.f);
-}
-
-//-----------------------------------------------------------------------------
-
-float battery::current()
-{
-  unsigned result = 0;
-  
-  std::ifstream is(SYS_POWER "/current_now");
-  if (is.is_open())
-  {
-    is >> result;
-  }
-  
-  return (result / 1000.f);
 }
 
 //-----------------------------------------------------------------------------

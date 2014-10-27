@@ -322,9 +322,15 @@ public:
 class led : protected device
 {
 public:
-  led(const std::string &name);
- 
-  int  level() const;
+  led(std::string name);
+
+  inline bool connected() const { return !_path.empty(); }
+  
+  int brightness() const;
+  void set_brightness(int);
+
+  inline int max_brightness() const { return _max_brightness; }
+  
   void on();
   void off();
   void flash(unsigned interval_ms);
@@ -346,6 +352,32 @@ public:
   static void green_off();
   static void all_on   ();
   static void all_off  ();
+  
+protected:
+  int _max_brightness = 0;
+};
+
+//-----------------------------------------------------------------------------
+
+class power_supply : protected device
+{
+public:
+  power_supply(std::string name);
+  
+  inline bool connected() const { return !_path.empty(); }
+  
+  int   current_now() const;
+  float current_amps() const;
+  int   current_max_design() const;
+
+  int voltage_now() const;
+  float voltage_volts() const;
+  int voltage_max_design() const;
+  
+  std::string technology() const;
+  std::string type() const;
+  
+  static power_supply battery;
 };
 
 //-----------------------------------------------------------------------------
@@ -390,15 +422,6 @@ public:
   
   static unsigned volume();
   static void set_volume(unsigned);
-};
-
-//-----------------------------------------------------------------------------
-
-class battery
-{
-public:
-  static float voltage();
-  static float current();
 };
 
 //-----------------------------------------------------------------------------

@@ -505,10 +505,10 @@ void battery_menu()
     switch (c)
     {
     case 'v':
-      cout << endl << "voltage is " << battery::voltage() << " Volt" << endl << endl;
+      cout << endl << "voltage is " << power_supply::battery.voltage_volts() << " Volt" << endl << endl;
       break;
     case 'c':
-      cout << endl << "current is " << battery::current() << " mA" << endl << endl;
+      cout << endl << "current is " << power_supply::battery.current_amps() << " mA" << endl << endl;
       break;
     }
   }

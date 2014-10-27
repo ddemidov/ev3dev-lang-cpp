@@ -88,13 +88,13 @@ int main()
   test_motor<medium_motor>("medium");
   test_motor<large_motor>("large");
   
-  cout << "Level of left green led is " << led::green_left.level() << endl;
+  cout << "Brightness of left green led is " << led::green_left.brightness() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;
   
   cout << "Beeping..." << endl << endl; sound::beep();
   
-  cout << "Battery voltage is " << battery::voltage() << " V" << endl;
-  cout << "Battery current is " << battery::current() << " mA" <<  endl;
+  cout << "Battery voltage is " << power_supply::battery.voltage_volts() << " V" << endl;
+  cout << "Battery current is " << power_supply::battery.current_amps() << " mA" <<  endl;
   
   cout << endl;
   
