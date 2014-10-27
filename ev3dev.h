@@ -28,6 +28,7 @@
 
 //-----------------------------------------------------------------------------
 
+#include <map>
 #include <set>
 #include <string>
 #include <functional>
@@ -58,8 +59,6 @@ const port_type OUTPUT_B { "outB" }; //!< Motor port B
 const port_type OUTPUT_C { "outC" }; //!< Motor port C
 const port_type OUTPUT_D { "outD" }; //!< Motor port D
 
-const address_type ADRESS_AUTO;      //!< Automatic address selection
-  
 //-----------------------------------------------------------------------------
 
 class device
@@ -117,7 +116,11 @@ public:
   void set_mode(const mode_type&);
   
 protected:
-  bool init(port_type port_, const std::set<sensor_type> &types_) noexcept;
+  sensor(port_type port_, const std::set<sensor_type> &types_,
+         const std::map<std::string, std::string> &attributes_);
+  
+  bool init(port_type port_, const std::set<sensor_type> &types_,
+            const std::map<std::string, std::string> &attributes_) noexcept;
   void read_mode_values();
   
 protected:
@@ -137,7 +140,8 @@ protected:
 class i2c_sensor : public sensor
 {
 public:
-  i2c_sensor(port_type port_ = INPUT_AUTO, address_type address_ = ADRESS_AUTO);
+  i2c_sensor(port_type port_ = INPUT_AUTO);
+  i2c_sensor(port_type port_, address_type address_);
 };
 
 //-----------------------------------------------------------------------------

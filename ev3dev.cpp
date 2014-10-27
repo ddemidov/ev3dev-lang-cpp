@@ -176,19 +176,28 @@ const sensor::sensor_type sensor::nxt_i2c_sensor  { "nxt-i2c-sensor" };
 
 sensor::sensor(port_type port_)
 {
-  init(port_, std::set<sensor_type>());
+  init(port_, std::set<sensor_type>(), std::map<std::string, std::string>());
 }
 
 //-----------------------------------------------------------------------------
 
 sensor::sensor(port_type port_, const std::set<sensor_type> &types_)
 {
-  init(port_, types_);
+  init(port_, types_, std::map<std::string, std::string>());
 }
 
 //-----------------------------------------------------------------------------
 
-bool sensor::init(port_type port_, const std::set<sensor_type> &types_) noexcept
+sensor::sensor(port_type port_, const std::set<sensor_type> &types_,
+               const std::map<std::string, std::string> &attributes_)
+{
+  init(port_, types_, attributes_);
+}
+
+//-----------------------------------------------------------------------------
+
+bool sensor::init(port_type port_, const std::set<sensor_type> &types_,
+                  const std::map<std::string, std::string> &attributes_) noexcept
 {
   using namespace std;
   
@@ -213,15 +222,28 @@ bool sensor::init(port_type port_, const std::set<sensor_type> &types_) noexcept
             _type = get_attr_string("name");
             if (types_.empty() || (types_.find(_type) != types_.cend()))
             {
-              _device_index = 0;
-              for (unsigned i=6; dp->d_name[i]!=0; ++i)
+              bool bMatch = true;
+              for (auto a : attributes_)
               {
-                _device_index *= 10;
-                _device_index += dp->d_name[i]-'0';
+                if (get_attr_string(a.first) != a.second)
+                {
+                  bMatch = false;
+                  break;
+                }
               }
               
-              read_mode_values();
-            
+              if (bMatch)
+              {
+                _device_index = 0;
+                for (unsigned i=6; dp->d_name[i]!=0; ++i)
+                {
+                  _device_index *= 10;
+                  _device_index += dp->d_name[i]-'0';
+                }
+                
+                read_mode_values();
+              }
+              
               return true;
             }
           }
@@ -358,8 +380,15 @@ void sensor::set_mode(const mode_type &mode_)
     
 //-----------------------------------------------------------------------------
 
-i2c_sensor::i2c_sensor(port_type port_, address_type address_) :
+i2c_sensor::i2c_sensor(port_type port_) :
   sensor(port_, { nxt_i2c_sensor })
+{
+}
+
+//-----------------------------------------------------------------------------
+
+i2c_sensor::i2c_sensor(port_type port_, address_type address_) :
+  sensor(port_, { nxt_i2c_sensor }, { { "address", address_ } } )
 {
 }
 

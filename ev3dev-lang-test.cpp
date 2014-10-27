@@ -84,6 +84,9 @@ int main()
   test_sensor<ultrasonic_sensor>("ultrasonic");
   test_sensor<gyro_sensor>("gyro");
   test_sensor<infrared_sensor>("infrared");
+  test_sensor<i2c_sensor>("i2c");
+  
+  cout << endl;
   
   test_motor<medium_motor>("medium");
   test_motor<large_motor>("large");
