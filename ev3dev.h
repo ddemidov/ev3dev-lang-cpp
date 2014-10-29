@@ -63,7 +63,15 @@ const port_type OUTPUT_D { "outD" }; //!< Motor port D
 
 class device
 {
-protected:
+public:
+  bool connect(const std::string &dir,
+               const std::string &pattern,
+               const std::map<std::string,
+                              std::set<std::string>> match) noexcept;
+  inline bool connected() const { return !_path.empty(); }
+
+  int         device_index() const;
+  
   int         get_attr_int   (const std::string &name) const;
   void        set_attr_int   (const std::string &name,
                               int value);
@@ -72,9 +80,14 @@ protected:
                               const std::string &value);
 
   std::string get_attr_line  (const std::string &name) const;
+  mode_set    get_attr_set   (const std::string &name,
+                              std::string *pCur = nullptr) const;
+  
+  std::string get_attr_from_set(const std::string &name) const;
   
 protected:
   std::string _path;
+  mutable int _device_index = -1;
 };
 
 //-----------------------------------------------------------------------------
@@ -99,8 +112,9 @@ public:
   sensor(port_type port_ = INPUT_AUTO);
   sensor(port_type port_, const std::set<sensor_type> &types_);
   
-  inline bool              connected()    const { return !_port_name.empty(); }
-  inline unsigned          device_index() const { return _device_index; }
+  using device::connected;
+  using device::device_index;
+
   inline const std::string &port_name()   const { return _port_name; }
   inline const sensor_type &type()        const { return _type; }
          const std::string &type_name()   const;
@@ -229,11 +243,11 @@ public:
   static const mode_type position_mode_absolute;
   static const mode_type position_mode_relative;
   
-  inline bool              connected()    const { return !_port_name.empty(); }
-  inline unsigned          device_index() const { return _device_index; }
   inline const std::string port_name()    const { return _port_name; }
 
   motor_type type() const;
+  using device::connected;
+  using device::device_index;
 
   void run(bool bRun=true);
   void stop();
@@ -328,7 +342,7 @@ class led : protected device
 public:
   led(std::string name);
 
-  inline bool connected() const { return !_path.empty(); }
+  using device::connected;
   
   int brightness() const;
   void set_brightness(int);
@@ -368,7 +382,7 @@ class power_supply : protected device
 public:
   power_supply(std::string name);
   
-  inline bool connected() const { return !_path.empty(); }
+  using device::connected;
   
   int   current_now() const;
   float current_amps() const;

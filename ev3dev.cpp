@@ -62,6 +62,84 @@ namespace ev3dev {
 
 //-----------------------------------------------------------------------------
 
+bool device::connect(const std::string &dir,
+                     const std::string &pattern,
+                     const std::map<std::string,
+                                    std::set<std::string>> match) noexcept
+{
+  using namespace std;
+  
+  const size_t pattern_length = pattern.length();
+  
+  struct dirent *dp;
+  DIR *dfd;
+  
+  if ((dfd = opendir(dir.c_str())) != NULL)
+  {
+    while ((dp = readdir(dfd)) != NULL)
+    {
+      if (strncmp(dp->d_name, pattern.c_str(), pattern_length)==0)
+      {
+        try
+        {
+          _path = dir + dp->d_name + '/';
+          
+          for (auto &m : match)
+          {
+            const auto &attribute = m.first;
+            const auto &matches   = m.second;
+            const auto strValue   = get_attr_string(attribute);
+            
+            if (!matches.empty() && (matches.find(strValue) == matches.end()))
+            {
+              closedir(dfd);
+              return false;
+            }
+          }
+          
+          return true;
+        }
+        catch (...) { }
+        
+        _path.clear();
+      }
+    }
+    
+    closedir(dfd);
+  }
+  
+  return false;
+  
+}
+
+//-----------------------------------------------------------------------------
+
+int device::device_index() const
+{
+  using namespace std;
+  
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+
+  if (_device_index < 0)
+  {
+    unsigned f = 1;
+    _device_index = 0;
+    for (auto it=_path.rbegin(); it!=_path.rend(); ++it)
+    {
+      if ((*it < '0') || (*it > '9'))
+        break;
+      
+      _device_index += (*it -'0') * f;
+      f *= 10;
+    }
+  }
+  
+  return _device_index;
+}
+
+//-----------------------------------------------------------------------------
+
 int device::get_attr_int(const std::string &name) const
 {
   using namespace std;
@@ -156,6 +234,77 @@ std::string device::get_attr_line(const std::string &name) const
   }
   
   throw system_error(make_error_code(errc::no_such_device), _path+name);
+}
+
+//-----------------------------------------------------------------------------
+
+mode_set device::get_attr_set(const std::string &name,
+                              std::string *pCur) const
+{
+  using namespace std;
+
+  string s = get_attr_line(name);
+
+  mode_set result;
+  size_t pos, last_pos = 0;
+  string t;
+  do {
+    pos = s.find(' ', last_pos);
+    
+    if (pos != string::npos)
+    {
+      t = s.substr(last_pos, pos-last_pos);
+      last_pos = pos+1;
+    }
+    else
+      t = s.substr(last_pos);
+    
+    if (!t.empty())
+    {
+      if (*t.begin()=='[')
+      {
+        t = t.substr(1, t.length()-2);
+        if (pCur)
+          *pCur = t;
+      }
+      result.insert(t);
+    }
+  } while (pos!=string::npos);
+  
+  return result;
+}
+
+//-----------------------------------------------------------------------------
+
+std::string device::get_attr_from_set(const std::string &name) const
+{
+  using namespace std;
+  
+  string s = get_attr_line(name);
+  
+  size_t pos, last_pos = 0;
+  string t;
+  do {
+    pos = s.find(' ', last_pos);
+    
+    if (pos != string::npos)
+    {
+      t = s.substr(last_pos, pos-last_pos);
+      last_pos = pos+1;
+    }
+    else
+      t = s.substr(last_pos);
+    
+    if (!t.empty())
+    {
+      if (*t.begin()=='[')
+      {
+        return t.substr(1, t.length()-2);
+      }
+    }
+  } while (pos!=string::npos);
+  
+  return { "none" };
 }
 
 //-----------------------------------------------------------------------------
