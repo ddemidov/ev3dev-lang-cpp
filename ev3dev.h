@@ -109,9 +109,9 @@ public:
   static const sensor_type nxt_ultrasonic;
   static const sensor_type nxt_i2c_sensor;
   
-  sensor(port_type port_ = INPUT_AUTO);
-  sensor(port_type port_, const std::set<sensor_type> &types_);
-  
+  sensor(port_type);
+  sensor(port_type, const std::set<sensor_type>&);
+ 
   using device::connected;
   using device::device_index;
 
@@ -130,15 +130,12 @@ public:
   void set_mode(const mode_type&);
   
 protected:
-  sensor(port_type port_, const std::set<sensor_type> &types_,
-         const std::map<std::string, std::string> &attributes_);
-  
-  bool init(port_type port_, const std::set<sensor_type> &types_,
-            const std::map<std::string, std::string> &attributes_) noexcept;
-  void read_mode_values();
+  sensor() {}
+
+  bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
+  void init_members(bool);
   
 protected:
-  unsigned _device_index = 0;
   unsigned _nvalues = 0;
   unsigned _dp = 0;
   float    _dp_scale = 1.f;
@@ -154,8 +151,8 @@ protected:
 class i2c_sensor : public sensor
 {
 public:
-  i2c_sensor(port_type port_ = INPUT_AUTO);
-  i2c_sensor(port_type port_, address_type address_);
+  i2c_sensor(port_type port = INPUT_AUTO);
+  i2c_sensor(port_type port, address_type address);
 };
 
 //-----------------------------------------------------------------------------
@@ -223,8 +220,8 @@ class motor : protected device
 public:
   typedef device_type motor_type;
   
-  motor(port_type port_ = OUTPUT_AUTO);
-  motor(port_type port_, const motor_type&);
+  motor(port_type);
+  motor(port_type, const motor_type&);
   
   static const motor_type motor_large;
   static const motor_type motor_medium;
@@ -308,7 +305,9 @@ public:
   void set_speed_regulation_k(int v) { set_attr_int("speed_regulation_k", v); }
   
 protected:
-  bool init(port_type port_, const motor_type&) noexcept;
+  motor() {}
+
+  bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
   
 protected:
   std::string _port_name;

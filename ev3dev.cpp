@@ -54,7 +54,6 @@
 
 #define SYS_BUTTON SYS_ROOT "/devices/platform/ev3dev/button"
 #define SYS_SOUND  SYS_ROOT "/devices/platform/snd-legoev3/"
-#define SYS_POWER  SYS_ROOT "/class/power_supply/"
 
 //-----------------------------------------------------------------------------
 
@@ -323,92 +322,39 @@ const sensor::sensor_type sensor::nxt_i2c_sensor  { "nxt-i2c-sensor" };
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port_)
+sensor::sensor(port_type port)
 {
-  init(port_, std::set<sensor_type>(), std::map<std::string, std::string>());
+  connect({{ "port_name", { port }}});
 }
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port_, const std::set<sensor_type> &types_)
+sensor::sensor(port_type port, const std::set<sensor_type> &types)
 {
-  init(port_, types_, std::map<std::string, std::string>());
+  connect({{ "port_name", { port }},
+           { "name",        types }});
 }
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port_, const std::set<sensor_type> &types_,
-               const std::map<std::string, std::string> &attributes_)
+bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
-  init(port_, types_, attributes_);
-}
-
-//-----------------------------------------------------------------------------
-
-bool sensor::init(port_type port_, const std::set<sensor_type> &types_,
-                  const std::map<std::string, std::string> &attributes_) noexcept
-{
-  using namespace std;
+  static const std::string _strClassDir { SYS_ROOT "/class/msensor/" };
+  static const std::string _strPattern  { "sensor" };
   
-  string strClassDir(SYS_ROOT "/class/msensor/");
-  
-  struct dirent *dp;
-  DIR *dfd;
-  
-  if ((dfd = opendir(strClassDir.c_str())) != NULL)
+  try
   {
-    while ((dp = readdir(dfd)) != NULL)
+    if (device::connect(_strClassDir, _strPattern, match))
     {
-      if (strncmp(dp->d_name, "sensor", 6)==0)
-      {
-        try
-        {
-          _path = strClassDir + dp->d_name + '/';
-          
-          _port_name = get_attr_string("port_name");
-          if (port_.empty() || (_port_name == port_))
-          {
-            _type = get_attr_string("name");
-            if (types_.empty() || (types_.find(_type) != types_.cend()))
-            {
-              bool bMatch = true;
-              for (auto a : attributes_)
-              {
-                if (get_attr_string(a.first) != a.second)
-                {
-                  bMatch = false;
-                  break;
-                }
-              }
-              
-              if (bMatch)
-              {
-                _device_index = 0;
-                for (unsigned i=6; dp->d_name[i]!=0; ++i)
-                {
-                  _device_index *= 10;
-                  _device_index += dp->d_name[i]-'0';
-                }
-                
-                read_mode_values();
-              }
-              
-              return true;
-            }
-          }
-        }
-        catch (...) { }
-        
-        _path.clear();
-        _port_name.clear();
-        _type.clear();
-      }
+      init_members(true);
+      return true;
     }
-    
-    closedir(dfd);
   }
-  else
-    cerr << "no msensor dir!" << endl;
+  catch (...) { }
+  
+  _path.clear();
+  _port_name.clear();
+  _type.clear();
   
   return false;
 }
@@ -479,36 +425,21 @@ const mode_type &sensor::mode() const
 
 //-----------------------------------------------------------------------------
 
-void sensor::read_mode_values()
+void sensor::init_members(bool bAll)
 {
   using namespace std;
 
-  _mode = get_attr_string("mode");
+  if (bAll)
+  {
+    _port_name = get_attr_string("port_name");
+    _type = get_attr_string("name");
+  }
 
-  _modes.clear();
-
-  string s = get_attr_line("modes");
-  size_t pos, last_pos = 0;
-  string m;
-  do {
-    pos = s.find(' ', last_pos);
-    
-    if (pos != string::npos)
-    {
-      m = s.substr(last_pos, pos-last_pos);
-      last_pos = pos+1;
-    }
-    else
-      m = s.substr(last_pos);
-    
-    if (!m.empty())
-    {
-      _modes.insert(m);
-    }
-  } while (pos!=string::npos);
-  
+  _mode    = get_attr_string("mode");
+  _modes   = get_attr_set("modes");
   _nvalues = get_attr_int("num_values");
-  _dp = get_attr_int("dp");
+  _dp      = get_attr_int("dp");
+  
   _dp_scale = 1.f;
   for (unsigned dp = _dp; dp; --dp)
   {
@@ -523,10 +454,10 @@ void sensor::set_mode(const mode_type &mode_)
   if (mode_ != _mode)
   {
     set_attr_string("mode", mode_);
-    const_cast<sensor*>(this)->read_mode_values();
+    const_cast<sensor*>(this)->init_members(false);
   }
 }
-    
+
 //-----------------------------------------------------------------------------
 
 i2c_sensor::i2c_sensor(port_type port_) :
@@ -536,9 +467,11 @@ i2c_sensor::i2c_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-i2c_sensor::i2c_sensor(port_type port_, address_type address_) :
-  sensor(port_, { nxt_i2c_sensor }, { { "address", address_ } } )
+i2c_sensor::i2c_sensor(port_type port_, address_type address_)
 {
+  connect({{ "port_name", { port_ }},
+           { "name",      { nxt_i2c_sensor }},
+           { "address",   { address_ }}});
 }
 
 //-----------------------------------------------------------------------------
@@ -615,72 +548,42 @@ const mode_type motor::position_mode_relative { "relative" };
 
 //-----------------------------------------------------------------------------
 
-motor::motor(port_type p)
+motor::motor(port_type port)
 {
-  init(p, std::string());
+  connect({{ "port_name", { port } }});
 }
 
 //-----------------------------------------------------------------------------
 
-motor::motor(port_type p, const motor_type &t)
+motor::motor(port_type port, const motor_type &t)
 {
-  init(p, t);
+  connect({{ "port_name", { port } }, { "type", { t }}});
 }
 
 //-----------------------------------------------------------------------------
 
-bool motor::init(port_type port_, const motor_type &type_) noexcept
+bool motor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
-  using namespace std;
+  static const std::string _strClassDir { SYS_ROOT "/class/tacho-motor/" };
+  static const std::string _strPattern  { "tacho-motor" };
   
-  string strClassDir(SYS_ROOT "/class/tacho-motor/");
-  
-  struct dirent *dp;
-  DIR *dfd;
-  
-  if ((dfd = opendir(strClassDir.c_str())) != NULL)
+  try
   {
-    while ((dp = readdir(dfd)) != NULL)
+    if (device::connect(_strClassDir, _strPattern, match))
     {
-      if (strncmp(dp->d_name, "tacho-motor", 11)==0)
-      {
-        try
-        {
-          _path = strClassDir + dp->d_name + '/';
-          
-          _port_name = get_attr_string("port_name");
-          if (port_.empty() || (_port_name == port_))
-          {
-            _type = get_attr_string("type");
-            if (type_.empty() || (_type == type_))
-            {
-              _device_index = 0;
-              for (unsigned i=11; dp->d_name[i]!=0; ++i)
-              {
-                _device_index *= 10;
-                _device_index += dp->d_name[i]-'0';
-              }
-              
-              return true;
-            }
-          }
-        }
-        catch (...) { }
-        
-        _path.clear();
-        _port_name.clear();
-        _type.clear();
-      }
+      _port_name = get_attr_string("port_name");
+      _type = get_attr_string("type");
+
+      return true;
     }
-    closedir(dfd);
   }
+  catch (...) { }
+
+  _path.clear();
+  _port_name.clear();
+  _type.clear();
   
   return false;
-}
-
-//-----------------------------------------------------------------------------
-
-  
 }
 
 //-----------------------------------------------------------------------------
@@ -699,14 +602,10 @@ large_motor::large_motor(port_type port_) : motor(port_, motor_large)
 
 led::led(std::string name)
 {
-  std::string p(SYS_ROOT "/class/leds/" + name);
+  static const std::string _strClassDir { SYS_ROOT "/class/leds/" };
   
-  DIR *dfd;
-  if ((dfd = opendir(p.c_str())) != NULL)
+  if (connect(_strClassDir, name, std::map<std::string, std::set<std::string>>()))
   {
-    _path = p + '/';
-    closedir(dfd);
-    
     _max_brightness = get_attr_int("max_brightness");
   }
 }
@@ -742,21 +641,18 @@ void led::all_off  () { red_off(); green_off(); }
 
 //-----------------------------------------------------------------------------
 
+power_supply power_supply::battery { "" };
+
+//-----------------------------------------------------------------------------
+
 power_supply::power_supply(std::string name)
 {
+  static const std::string _strClassDir { SYS_ROOT "/class/power_supply/" };
+  
   if (name.empty())
     name = "legoev3-battery";
   
-  std::string p(SYS_POWER + name);
-  
-  DIR *dfd;
-  if ((dfd = opendir(p.c_str())) != NULL)
-  {
-    _path = p + '/';
-    closedir(dfd);
-  }
-}
-
+  connect(_strClassDir, name, std::map<std::string, std::set<std::string>>());
 }
 
 //-----------------------------------------------------------------------------
