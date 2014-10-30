@@ -154,6 +154,11 @@ class i2c_sensor : public sensor
 public:
   i2c_sensor(port_type port = INPUT_AUTO);
   i2c_sensor(port_type port, address_type address);
+  
+  std::string address()    const { return get_attr_string("address"); }
+  int         fw_version() const { return get_attr_int("fw_version"); }
+  int         poll_ms()    const { return get_attr_int("poll_ms"); }
+  void    set_poll_ms(int v)            { set_attr_int("poll_ms", v); }
 };
 
 //-----------------------------------------------------------------------------
