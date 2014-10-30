@@ -118,6 +118,7 @@ public:
   inline const std::string &port_name()   const { return _port_name; }
   inline const sensor_type &type()        const { return _type; }
          const std::string &type_name()   const;
+               std::string  units()       const { return get_attr_string("units"); }
   inline unsigned           num_values()  const { return _nvalues; }
   inline unsigned           dp()          const { return _dp; }
   

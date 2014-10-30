@@ -27,6 +27,21 @@
 using namespace std;
 using namespace ev3dev;
 
+void print_values(sensor &s)
+{
+  auto dp = s.dp();
+  unsigned m = s.num_values();
+  for (unsigned i=0; i<m; ++i)
+  {
+    if (i) cout << "; ";
+    if (dp)
+      cout << s.float_value(i);
+    else
+      cout << s.value(i);
+  }
+  cout << " " << s.units();
+}
+
 void sensor_action(sensor &s)
 {
   char c = 0;
@@ -66,7 +81,7 @@ void sensor_action(sensor &s)
       }
       break;
     case 'v':
-      cout << endl << "value is " << s.value() << endl;
+      cout << endl << "value is "; print_values(s); cout << endl;
       break;
     case 'm':
       {
@@ -83,7 +98,8 @@ void sensor_action(sensor &s)
           if (value != lastValue)
           {
             lastValue = value;
-            cout << lastValue << endl;
+            print_values(s);
+            cout << endl;
           }
           this_thread::sleep_for(chrono::milliseconds(100));
         }

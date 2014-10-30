@@ -73,9 +73,9 @@ bool device::connect(const std::string &dir,
   struct dirent *dp;
   DIR *dfd;
   
-  if ((dfd = opendir(dir.c_str())) != NULL)
+  if ((dfd = opendir(dir.c_str())) != nullptr)
   {
-    while ((dp = readdir(dfd)) != NULL)
+    while ((dp = readdir(dfd)) != nullptr)
     {
       if (strncmp(dp->d_name, pattern.c_str(), pattern_length)==0)
       {
@@ -83,20 +83,23 @@ bool device::connect(const std::string &dir,
         {
           _path = dir + dp->d_name + '/';
           
+          bool bMatch = true;
           for (auto &m : match)
           {
             const auto &attribute = m.first;
             const auto &matches   = m.second;
             const auto strValue   = get_attr_string(attribute);
-            
-            if (!matches.empty() && (matches.find(strValue) == matches.end()))
+
+            if (!matches.empty() && !matches.begin()->empty() &&
+                (matches.find(strValue) == matches.end()))
             {
-              closedir(dfd);
-              return false;
+              bMatch = false;
+              break;
             }
           }
           
-          return true;
+          if (bMatch)
+            return true;
         }
         catch (...) { }
         
@@ -396,8 +399,8 @@ int sensor::value(unsigned index) const
   if (index >= _nvalues)
     throw std::invalid_argument("index");
     
-  char svalue[8] = "value0";
-  svalue[7] += index;
+  char svalue[7] = "value0";
+  svalue[5] += index;
   
   return get_attr_int(svalue);
 }
