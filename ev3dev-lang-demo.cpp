@@ -547,7 +547,7 @@ void battery_menu()
       cout << endl << "voltage is " << power_supply::battery.voltage_volts() << " Volt" << endl << endl;
       break;
     case 'c':
-      cout << endl << "current is " << power_supply::battery.current_amps() << " mA" << endl << endl;
+      cout << endl << "current is " << power_supply::battery.current_amps() << " A" << endl << endl;
       break;
     }
   }

@@ -97,7 +97,7 @@ int main()
   cout << "Beeping..." << endl << endl; sound::beep();
   
   cout << "Battery voltage is " << power_supply::battery.voltage_volts() << " V" << endl;
-  cout << "Battery current is " << power_supply::battery.current_amps() << " mA" <<  endl;
+  cout << "Battery current is " << power_supply::battery.current_amps() << " A" <<  endl;
   
   cout << endl;
   
