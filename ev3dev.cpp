@@ -568,7 +568,7 @@ motor::motor(port_type port, const motor_type &t)
 bool motor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
   static const std::string _strClassDir { SYS_ROOT "/class/tacho-motor/" };
-  static const std::string _strPattern  { "tacho-motor" };
+  static const std::string _strPattern  { "motor" };
   
   try
   {
