@@ -338,6 +338,86 @@ public:
 
 //-----------------------------------------------------------------------------
 
+class dc_motor : protected device
+{
+public:
+  dc_motor(port_type port_ = OUTPUT_AUTO);
+
+  static const std::string command_run;
+  static const std::string command_brake;
+  static const std::string command_coast;
+  static const std::string polarity_normal;
+  static const std::string polarity_inverted;
+
+  using device::connected;
+  using device::device_index;
+
+  std::string port_name() const { return get_attr_string("port_name"); }
+  std::string type_name() const { return get_attr_string("name"); }
+
+  std::string command() const         { return get_attr_string("command"); }
+  void set_command(const std::string &value) { set_attr_string("command", value); }
+  
+  std::set<std::string> commands() const { return get_attr_set("commands"); }
+
+  int duty_cycle() const  { return get_attr_int("duty_cycle"); }
+  void set_duty_cycle(int value) { set_attr_int("duty_cycle", value); }
+
+  int ramp_down_ms() const  { return get_attr_int("ramp_down_ms"); }
+  void set_ramp_down_ms(int value) { set_attr_int("ramp_down_ms", value); }
+  
+  int ramp_up_ms() const  { return get_attr_int("ramp_up_ms"); }
+  void set_ramp_up_ms(int value) { set_attr_int("ramp_up_ms", value); }
+
+  std::string polarity() const         { return get_attr_string("polarity"); }
+  void set_polarity(const std::string &value) { set_attr_string("polarity", value); }
+
+protected:
+  std::string _port_name;
+};
+
+//-----------------------------------------------------------------------------
+
+class servo_motor : protected device
+{
+public:
+  servo_motor(port_type port_ = OUTPUT_AUTO);
+
+  static const std::string command_run;
+  static const std::string command_float;
+  static const std::string polarity_normal;
+  static const std::string polarity_inverted;
+
+  using device::connected;
+  using device::device_index;
+
+  std::string port_name() const { return get_attr_string("port_name"); }
+  std::string type_name() const { return get_attr_string("name"); }
+
+  std::string command() const         { return get_attr_string("command"); }
+  void set_command(const std::string &value) { set_attr_string("command", value); }
+
+  int position() const  { return get_attr_int("position"); }
+  void set_position(int value) { set_attr_int("position", value); }
+
+  int rate() const { return get_attr_int("rate"); }
+  void set_rate(int value) { set_attr_int("rate", value); }
+
+  int max_pulse_ms() const  { return get_attr_int("max_pulse_ms"); }
+  void set_max_pulse_ms(int value) { set_attr_int("max_pulse_ms", value); }
+
+  int mid_pulse_ms() const  { return get_attr_int("mid_pulse_ms"); }
+  void set_mid_pulse_ms(int value) { set_attr_int("mid_pulse_ms", value); }
+
+  int min_pulse_ms() const  { return get_attr_int("min_pulse_ms"); }
+  void set_min_pulse_ms(int value) { set_attr_int("min_pulse_ms", value); }
+  
+  std::string polarity() const         { return get_attr_string("polarity"); }
+  void set_polarity(const std::string &value) { set_attr_string("polarity", value); }
+};
+
+//-----------------------------------------------------------------------------
+
 class led : protected device
 {
 public:

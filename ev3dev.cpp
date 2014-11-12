@@ -603,6 +603,37 @@ large_motor::large_motor(port_type port_) : motor(port_, motor_large)
 
 //-----------------------------------------------------------------------------
 
+dc_motor::dc_motor(port_type port)
+{
+  static const std::string _strClassDir { SYS_ROOT "/class/dc-motor/" };
+  static const std::string _strPattern  { "motor" };
+
+  connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
+}
+  
+const std::string dc_motor::command_run       { "run" };
+const std::string dc_motor::command_brake     { "brake" };
+const std::string dc_motor::command_coast     { "coast" };
+const std::string dc_motor::polarity_normal   { "normal" };
+const std::string dc_motor::polarity_inverted { "inverted" };
+
+//-----------------------------------------------------------------------------
+
+servo_motor::servo_motor(port_type port)
+{
+  static const std::string _strClassDir { SYS_ROOT "/class/servo-motor/" };
+  static const std::string _strPattern  { "motor" };
+  
+  connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
+}
+  
+const std::string servo_motor::command_run       { "run" };
+const std::string servo_motor::command_float     { "float" };
+const std::string servo_motor::polarity_normal   { "normal" };
+const std::string servo_motor::polarity_inverted { "inverted" };
+  
+//-----------------------------------------------------------------------------
+
 led::led(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/leds/" };
