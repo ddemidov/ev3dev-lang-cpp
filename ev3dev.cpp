@@ -52,7 +52,6 @@
 #define KEY_CNT 8
 #endif
 
-#define SYS_BUTTON SYS_ROOT "/devices/platform/ev3dev/button"
 #define SYS_SOUND  SYS_ROOT "/devices/platform/snd-legoev3/"
 
 //-----------------------------------------------------------------------------
@@ -110,8 +109,7 @@ bool device::connect(const std::string &dir,
     closedir(dfd);
   }
   
-  return false;
-  
+  return false;  
 }
 
 //-----------------------------------------------------------------------------
