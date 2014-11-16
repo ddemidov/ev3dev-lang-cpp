@@ -467,7 +467,7 @@ public:
   using device::connected;
   
   int   current_now()        const { return get_attr_int("current_now"); }
-  float current_amps()       const { return get_attr_int("current_now") / 1000.f; }
+  float current_amps()       const { return get_attr_int("current_now") / 1000000.f; }
   int   current_max_design() const { return get_attr_int("current_max_design"); }
 
   int   voltage_now()        const { return get_attr_int("voltage_now"); }
