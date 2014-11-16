@@ -75,6 +75,45 @@ void test_motor(const char *name)
     cout << "No " << name << " motor found" << endl;
 }
 
+void test_dc_motor()
+{
+  dc_motor m;
+  if (m.connected())
+  {
+    cout << endl
+         << "Found dc motor on port " << m.port_name() << endl
+         << endl;
+    
+    cout << "  Current command is " << m.command() << endl
+         << "    duty_cycle:   " << m.duty_cycle() << endl
+         << "    ramp_up_ms:   " << m.ramp_up_ms() << endl << endl
+         << "    ramp_down_ms: " << m.ramp_down_ms() << endl << endl
+         << "    polarity:     " << m.polarity() << endl << endl;
+  }
+  else
+    cout << "No dc motor found" << endl;
+}
+
+void test_servo_motor()
+{
+  servo_motor m;
+  if (m.connected())
+  {
+    cout << endl
+         << "Found servo motor on port " << m.port_name() << endl
+         << endl;
+    
+    cout << "  Current command is " << m.command() << endl
+         << "    position:     " << m.position() << endl
+         << "    rate:         " << m.rate() << endl
+         << "    min_pulse_ms: " << m.min_pulse_ms() << endl << endl
+         << "    mid_pulse_ms: " << m.mid_pulse_ms() << endl << endl
+         << "    max_pulse_ms: " << m.max_pulse_ms() << endl << endl
+         << "    polarity:     " << m.polarity() << endl << endl;
+  }
+  else
+    cout << "No servo motor found" << endl;
+}
 
 int main()
 {
@@ -90,6 +129,9 @@ int main()
   
   test_motor<medium_motor>("medium");
   test_motor<large_motor>("large");
+  
+  test_dc_motor();
+  test_servo_motor();
   
   cout << "Brightness of left green led is " << led::green_left.brightness() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;
