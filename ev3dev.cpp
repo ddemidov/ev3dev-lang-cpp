@@ -714,7 +714,7 @@ bool button::pressed() const
 
 //-----------------------------------------------------------------------------
 #ifndef NO_LINUX_HEADERS
-button button::back (KEY_ESC);
+button button::back (KEY_BACKSPACE);
 button button::left (KEY_LEFT);
 button button::right(KEY_RIGHT);
 button button::up   (KEY_UP);
