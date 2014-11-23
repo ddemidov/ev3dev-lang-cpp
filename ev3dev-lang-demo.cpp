@@ -505,6 +505,9 @@ void led_action(const char *name, led &l)
 
 void led_menu()
 {
+  led arrPortLEDs[4] {
+    { "ev3::outA" }, { "ev3::outB" }, { "ev3::outC" }, { "ev3::outD" } };
+
   char c = 0;
   do
   {
@@ -514,8 +517,17 @@ void led_menu()
          << "(1) green:left"  << endl
          << "(2) green:right" << endl
          << "(3) red:left"    << endl
-         << "(4) red:right"   << endl
-         << endl
+         << "(4) red:right"   << endl;
+    
+    for (unsigned i=0; i<4; ++i)
+    {
+      if (arrPortLEDs[i].connected())
+      {
+        cout << "(" << 5+i << ") out" << static_cast<char>('A'+i) << endl;
+      }
+    }
+    
+    cout << endl
          << "(b)ack"          << endl
          << endl
          << "Choice: ";
@@ -534,6 +546,18 @@ void led_menu()
       break;
     case '4':
       led_action("red:right", led::red_right);
+      break;
+    case '5':
+      led_action("outA", arrPortLEDs[0]);
+      break;
+    case '6':
+      led_action("outB", arrPortLEDs[1]);
+      break;
+    case '7':
+      led_action("outC", arrPortLEDs[2]);
+      break;
+    case '8':
+      led_action("outD", arrPortLEDs[3]);
       break;
     }
   }
