@@ -113,11 +113,11 @@ void sensor_action(sensor &s)
 
 void sensor_menu()
 {
-  sensor arrSensors[4] = {
-    sensor(INPUT_1),
-    sensor(INPUT_2),
-    sensor(INPUT_3),
-    sensor(INPUT_4)
+  sensor arrSensors[4] {
+    { INPUT_1 },
+    { INPUT_2 },
+    { INPUT_3 },
+    { INPUT_4 }
   };
   
   char c = 0;
@@ -175,7 +175,7 @@ void motor_action(motor &m)
     if (m.regulation_mode()==m.mode_on)
       cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_setpoint() << ")" << endl;
     else
-      cout << "duty_cycle (s)etpoint (" << m.duty_cycle_setpoint() << ")" << endl;
+      cout << "duty cycle (s)etpoint (" << m.duty_cycle_setpoint() << ")" << endl;
 
     if (m.run_mode()==m.run_mode_position)
     {
@@ -206,7 +206,7 @@ void motor_action(motor &m)
     case 'i':
       cout << endl
            << "  state      is " << m.state() << endl
-           << "  duty_cycle is " << m.duty_cycle() << endl
+           << "  duty cycle is " << m.duty_cycle() << endl
            << "  pulses/sec is " << m.pulses_per_second() << endl
            << "  position   is " << m.position() << endl;
       break;
@@ -229,7 +229,7 @@ void motor_action(motor &m)
       }
       else
       {
-        cout << "duty_cycle: "; cin >> new_value; m.set_duty_cycle_setpoint(new_value); cout << endl;
+        cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_setpoint(new_value); cout << endl;
       }
       break;
     case 'm':
