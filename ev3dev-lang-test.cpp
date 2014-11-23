@@ -22,7 +22,7 @@
 #include "ev3dev.h"
 
 #include <iostream>
-
+#include <vector>
 
 using namespace std;
 using namespace ev3dev;
@@ -132,6 +132,22 @@ int main()
   
   test_dc_motor();
   test_servo_motor();
+  
+  const vector<string> outPortLEDs {
+    "ev3::outA",
+    "ev3::outB",
+    "ev3::outC",
+    "ev3::outD"
+  };
+  for (auto const &portName : outPortLEDs)
+  {
+    led l { portName };
+    if (l.connected())
+    {
+      cout << "Brightness of " << portName << " led is " << l.brightness() << endl;
+      cout << "Trigger of " << portName << " led is " << l.trigger() << endl << endl;
+    }
+  }
   
   cout << "Brightness of left green led is " << led::green_left.brightness() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;
