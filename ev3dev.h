@@ -67,7 +67,7 @@ public:
   bool connect(const std::string &dir,
                const std::string &pattern,
                const std::map<std::string,
-                              std::set<std::string>> match) noexcept;
+                              std::set<std::string>> &match) noexcept;
   inline bool connected() const { return !_path.empty(); }
 
   int         device_index() const;
