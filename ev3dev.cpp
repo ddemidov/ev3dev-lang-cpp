@@ -32,13 +32,10 @@
 #include <algorithm>
 #include <system_error>
 #include <mutex>
-#include <dirent.h>
 #include <string.h>
 
-#include <cstdio>
-
+#include <dirent.h>
 #include <sys/mman.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <stdlib.h>
 
@@ -139,6 +136,8 @@ std::ofstream &ofstream_open(const std::string &path)
   std::ofstream &file = ofstream_cache[path];
   if (!file.is_open())
   {
+    // Don't buffer writes. Also saves a bit of memory.
+    file.rdbuf()->pubsetbuf(NULL, 0);
     file.open(path);
   } 
   else 
@@ -172,7 +171,7 @@ std::ifstream &ifstream_open(const std::string &path)
   return file;
 }
 
-}
+} // namespace
 
 //-----------------------------------------------------------------------------
 
