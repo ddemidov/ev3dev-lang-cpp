@@ -46,8 +46,8 @@
 #define SYS_ROOT "/sys"
 #endif
 
-#ifndef FILE_CACHE_SIZE
-#define FILE_CACHE_SIZE 16
+#ifndef FSTREAM_CACHE_SIZE
+#define FSTREAM_CACHE_SIZE 16
 #endif
 
 #ifndef NO_LINUX_HEADERS
@@ -126,20 +126,20 @@ private:
 };
 
 // A global cache of files.
-lru_cache<std::pair<std::string, std::ios::openmode>, std::fstream> 
-  file_cache(FILE_CACHE_SIZE);
-std::mutex file_cache_lock;
+lru_cache<std::string, std::ifstream> ifstream_cache(FSTREAM_CACHE_SIZE);
+lru_cache<std::string, std::ofstream> ofstream_cache(FSTREAM_CACHE_SIZE);
+std::mutex ofstream_cache_lock;
+std::mutex ifstream_cache_lock;
 
 //-----------------------------------------------------------------------------
 
-std::fstream &fstream_open(const std::string &path, 
-                           std::ios::openmode mode)
+std::ofstream &ofstream_open(const std::string &path)
 {
-  std::lock_guard<std::mutex> lock(file_cache_lock);
-  std::fstream &file = file_cache[std::make_pair(path, mode)];
+  std::lock_guard<std::mutex> lock(ofstream_cache_lock);
+  std::ofstream &file = ofstream_cache[path];
   if (!file.is_open())
   {
-    file.open(path, mode);
+    file.open(path);
   } 
   else 
   {
@@ -148,10 +148,26 @@ std::fstream &fstream_open(const std::string &path,
     {
       file.clear();
     }
-    if ((mode & std::ios::in) != 0)
+  }
+  return file;
+}
+
+std::ifstream &ifstream_open(const std::string &path)
+{
+  std::lock_guard<std::mutex> lock(ifstream_cache_lock);
+  std::ifstream &file = ifstream_cache[path];
+  if (!file.is_open())
+  {
+    file.open(path);
+  }
+  else 
+  {
+    // If something happened (like reaching EOF), clear the error state.
+    if (!file.good())
     {
-      file.seekg(0, std::ios::beg);
+      file.clear();
     }
+    file.seekg(0, std::ios::beg);
   }
   return file;
 }
@@ -247,7 +263,7 @@ int device::get_attr_int(const std::string &name) const
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
   
-  fstream &is = fstream_open(_path + name, std::ios::in);
+  ifstream &is = ifstream_open(_path + name);
   if (is.is_open())
   {
     int result = 0;
@@ -267,7 +283,7 @@ void device::set_attr_int(const std::string &name, int value)
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-  fstream &os = fstream_open(_path + name, std::ios::out);
+  ofstream &os = ofstream_open(_path + name);
   if (os.is_open())
   {
     os << value;
@@ -286,7 +302,7 @@ std::string device::get_attr_string(const std::string &name) const
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-  fstream &is = fstream_open(_path + name, std::ios::in);
+  ifstream &is = ifstream_open(_path + name);
   if (is.is_open())
   {
     string result;
@@ -306,7 +322,7 @@ void device::set_attr_string(const std::string &name, const std::string &value)
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-  fstream &os = fstream_open(_path + name, std::ios::out);
+  ofstream &os = ofstream_open(_path + name);
   if (os.is_open())
   {
     os << value;
@@ -325,7 +341,7 @@ std::string device::get_attr_line(const std::string &name) const
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
   
-  fstream &is = fstream_open(_path + name, std::ios::in);
+  ifstream &is = ifstream_open(_path + name);
   if (is.is_open())
   {
     string result;
