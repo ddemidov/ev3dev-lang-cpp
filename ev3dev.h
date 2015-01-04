@@ -28,6 +28,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
+    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 1. 
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -118,12 +119,13 @@ public:
   using device::connected;
   using device::device_index;
 
-  inline const std::string &port_name()   const { return _port_name; }
-  inline const sensor_type &type()        const { return _type; }
-         const std::string &type_name()   const;
-               std::string  units()       const { return get_attr_string("units"); }
-  inline unsigned           num_values()  const { return _nvalues; }
-  inline unsigned           dp()          const { return _dp; }
+  std::string port_name()   const { return get_attr_string("port_name"); }
+  std::string device_name() const { return get_attr_string("device_name"); }
+  std::string type_name()   const;
+  std::string units()       const { return get_attr_string("units"); }
+  
+  inline unsigned num_values()  const { return _nvalues; }
+  inline unsigned decimals()    const { return _dp; }
   
   int   value(unsigned index=0) const;
   float float_value(unsigned index=0) const;
@@ -132,20 +134,20 @@ public:
   const mode_type &mode()  const;
   
   void set_mode(const mode_type&);
+
+  void set_command(std::string v) { set_attr_string("command", v); }
   
 protected:
   sensor() {}
 
   bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
-  void init_members(bool);
+  void init_members();
   
 protected:
   unsigned _nvalues = 0;
   unsigned _dp = 0;
   float    _dp_scale = 1.f;
   
-  sensor_type _type;
-  port_type   _port_name;
   mode_set    _modes;
   mode_type   _mode;
 };
@@ -159,11 +161,15 @@ public:
   i2c_sensor(port_type port, address_type address);
   
   //~autogen cpp_generic-get-set classes.i2cSensor>currentClass
-  //~autogen
-  std::string address()    const { return get_attr_string("address"); }
-  int         fw_version() const { return get_attr_int("fw_version"); }
-  int         poll_ms()    const { return get_attr_int("poll_ms"); }
-  void    set_poll_ms(int v)            { set_attr_int("poll_ms", v); }
+  std::string fw_version() const { return get_attr_string("fw_version"); }
+
+  std::string address() const { return get_attr_string("address"); }
+
+  int poll_ms() const { return get_attr_int("poll_ms"); }
+  void set_poll_ms(int v) { set_attr_int("poll_ms", v); }
+    
+
+//~autogen
 };
 
 //-----------------------------------------------------------------------------

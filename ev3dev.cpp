@@ -456,24 +456,23 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
   {
     if (device::connect(_strClassDir, _strPattern, match))
     {
-      init_members(true);
+      init_members();
       return true;
     }
   }
   catch (...) { }
   
   _path.clear();
-  _port_name.clear();
-  _type.clear();
   
   return false;
 }
 
 //-----------------------------------------------------------------------------
 
-const std::string &sensor::type_name() const
+std::string sensor::type_name() const
 {
-  if (_type.empty())
+  auto type = device_name();
+  if (type.empty())
   {
     static const std::string s("<none>");
     return s;
@@ -492,11 +491,11 @@ const std::string &sensor::type_name() const
     { nxt_i2c_sensor,  "I2C sensor" },
   };
   
-  auto s = lookup_table.find(_type);
+  auto s = lookup_table.find(type);
   if (s != lookup_table.end())
     return s->second;
   
-  return _type;
+  return type;
 }
 
 //-----------------------------------------------------------------------------
@@ -535,15 +534,9 @@ const mode_type &sensor::mode() const
 
 //-----------------------------------------------------------------------------
 
-void sensor::init_members(bool bAll)
+void sensor::init_members()
 {
   using namespace std;
-
-  if (bAll)
-  {
-    _port_name = get_attr_string("port_name");
-    _type = get_attr_string("name");
-  }
 
   _mode    = get_attr_string("mode");
   _modes   = get_attr_set("modes");
@@ -564,7 +557,7 @@ void sensor::set_mode(const mode_type &mode_)
   if (mode_ != _mode)
   {
     set_attr_string("mode", mode_);
-    const_cast<sensor*>(this)->init_members(false);
+    const_cast<sensor*>(this)->init_members();
   }
 }
 

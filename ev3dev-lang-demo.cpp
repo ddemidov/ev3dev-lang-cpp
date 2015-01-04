@@ -29,7 +29,7 @@ using namespace ev3dev;
 
 void print_values(sensor &s)
 {
-  auto dp = s.dp();
+  auto dp = s.decimals();
   unsigned m = s.num_values();
   for (unsigned i=0; i<m; ++i)
   {
@@ -132,7 +132,7 @@ void sensor_menu()
       sensor &s = arrSensors[i];
       if (s.connected())
       {
-        cout << "(" << i+1 << ") " << s.type_name() << " (type " << s.type()
+        cout << "(" << i+1 << ") " << s.type_name() << " (device " << s.device_name()
              << ", port " << s.port_name() << ", mode " << s.mode() << ")" << endl;
       }
     }
