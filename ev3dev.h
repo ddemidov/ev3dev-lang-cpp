@@ -27,6 +27,9 @@
 #pragma once
 
 //-----------------------------------------------------------------------------
+//~autogen autogen-header
+//~autogen
+//-----------------------------------------------------------------------------
 
 #include <map>
 #include <set>
@@ -155,6 +158,8 @@ public:
   i2c_sensor(port_type port = INPUT_AUTO);
   i2c_sensor(port_type port, address_type address);
   
+  //~autogen cpp_generic-get-set classes.i2cSensor>currentClass
+  //~autogen
   std::string address()    const { return get_attr_string("address"); }
   int         fw_version() const { return get_attr_int("fw_version"); }
   int         poll_ms()    const { return get_attr_int("poll_ms"); }
