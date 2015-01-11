@@ -173,19 +173,19 @@ void motor_action(motor &m)
          << "r(e)gulation mode   [" << m.regulation_mode()   << "]" << endl;
     
     if (m.regulation_mode()==m.mode_on)
-      cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_setpoint() << ")" << endl;
+      cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_sp() << ")" << endl;
     else
-      cout << "duty cycle (s)etpoint (" << m.duty_cycle_setpoint() << ")" << endl;
+      cout << "duty cycle (s)etpoint (" << m.duty_cycle_sp() << ")" << endl;
 
     if (m.run_mode()==m.run_mode_position)
     {
-      cout << "position (m)ode     [" << m.position_mode()     << "]" << endl
-           << "(p)osition setpoint (" << m.position_setpoint() << ")" << endl
-           << "ramp (u)p           (" << m.ramp_up()           << ")" << endl
-           << "ramp (d)own         (" << m.ramp_down()         << ")" << endl;
+      cout << "position (m)ode      [" << m.position_mode() << "]" << endl
+           << "(p)osition setpoint  (" << m.position_sp()   << ")" << endl
+           << "ramp (u)p setpoint   (" << m.ramp_up_sp()    << ")" << endl
+           << "ramp (d)own setpoint (" << m.ramp_down_sp()  << ")" << endl;
     }
     else if (m.run_mode()==m.run_mode_time)
-      cout << "(t)ime setpoint     (" << m.time_setpoint()     << ")" << endl;
+      cout << "(t)ime setpoint      (" << m.time_sp()       << ")" << endl;
     
     cout << endl
          << "(0) reset position" << endl
@@ -225,11 +225,11 @@ void motor_action(motor &m)
     case 's':
       if (m.regulation_mode()==m.mode_on)
       {
-        cout << "pulses/sec: "; cin >> new_value; m.set_pulses_per_second_setpoint(new_value); cout << endl;
+        cout << "pulses/sec: "; cin >> new_value; m.set_pulses_per_second_sp(new_value); cout << endl;
       }
       else
       {
-        cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_setpoint(new_value); cout << endl;
+        cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_sp(new_value); cout << endl;
       }
       break;
     case 'm':
@@ -242,25 +242,25 @@ void motor_action(motor &m)
     case 'p':
       if (m.run_mode()==m.run_mode_position)
       {
-        cout << "position: "; cin >> new_value; m.set_position_setpoint(new_value); cout << endl;
+        cout << "position: "; cin >> new_value; m.set_position_sp(new_value); cout << endl;
       }
       break;
     case 'u':
       if (m.run_mode()==m.run_mode_position)
       {
-        cout << "ramp up: "; cin >> new_value; m.set_ramp_up(new_value); cout << endl;
+        cout << "ramp up: "; cin >> new_value; m.set_ramp_up_sp(new_value); cout << endl;
       }
       break;
     case 'd':
       if (m.run_mode()==m.run_mode_position)
       {
-        cout << "ramp down: "; cin >> new_value; m.set_ramp_down(new_value); cout << endl;
+        cout << "ramp down: "; cin >> new_value; m.set_ramp_down_sp(new_value); cout << endl;
       }
       break;
     case 't':
       if (m.run_mode()==m.run_mode_time)
       {
-        cout << "time: "; cin >> new_value; m.set_time_setpoint(new_value); cout << endl;
+        cout << "time: "; cin >> new_value; m.set_time_sp(new_value); cout << endl;
       }
       break;
     case '0':

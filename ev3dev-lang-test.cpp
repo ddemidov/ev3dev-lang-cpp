@@ -61,15 +61,15 @@ void test_motor(const char *name)
          << "    regulation mode: " << m.regulation_mode() << endl << endl;
     
     if (m.regulation_mode()==m.mode_on)
-      cout << "  pulses_per_second setpoint is " << m.pulses_per_second_setpoint() << endl;
+      cout << "  pulses_per_second setpoint is " << m.pulses_per_second_sp() << endl;
     else
-      cout << "  duty_cycle setpoint is " << m.duty_cycle_setpoint() << endl;
+      cout << "  duty_cycle setpoint is " << m.duty_cycle_sp() << endl;
     
     if (m.run_mode()==m.run_mode_time)
-      cout << "  Time setpoint is " << m.time_setpoint() << endl;
+      cout << "  Time setpoint is " << m.time_sp() << endl;
     if (m.run_mode()==m.run_mode_position)
-      cout << "  Position setpoint is " << m.position_setpoint() << endl;
-    cout << "    ramp up: " << m.ramp_up()  << "   ramp down: " << m.ramp_down() << endl<< endl;
+      cout << "  Position setpoint is " << m.position_sp() << endl;
+    cout << "    ramp up: " << m.ramp_up_sp()  << "   ramp down: " << m.ramp_down_sp() << endl << endl;
   }
   else
     cout << "No " << name << " motor found" << endl;

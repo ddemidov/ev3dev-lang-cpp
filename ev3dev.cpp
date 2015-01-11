@@ -672,19 +672,11 @@ bool motor::connect(const std::map<std::string, std::set<std::string>> &match) n
   
   try
   {
-    if (device::connect(_strClassDir, _strPattern, match))
-    {
-      _port_name = get_attr_string("port_name");
-      _type = get_attr_string("type");
-
-      return true;
-    }
+    return device::connect(_strClassDir, _strPattern, match);
   }
   catch (...) { }
 
   _path.clear();
-  _port_name.clear();
-  _type.clear();
   
   return false;
 }
