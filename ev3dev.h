@@ -298,17 +298,17 @@ public:
   int  ramp_down() const { return get_attr_int("ramp_down_sp"); }
   void set_ramp_down(int v)     { set_attr_int("ramp_down_sp", v); }
 
-  int speed_regulation_p() const { return get_attr_int("speed_regulation_p"); }
-  void set_speed_regulation_p(int v)    { set_attr_int("speed_regulation_p", v); }
+  int speed_regulation_p() const { return get_attr_int("speed_regulation_P"); }
+  void set_speed_regulation_p(int v)    { set_attr_int("speed_regulation_P", v); }
 
-  int speed_regulation_i() const { return get_attr_int("speed_regulation_i"); }
-  void set_speed_regulation_i(int v)    { set_attr_int("speed_regulation_i", v); }
+  int speed_regulation_i() const { return get_attr_int("speed_regulation_I"); }
+  void set_speed_regulation_i(int v)    { set_attr_int("speed_regulation_I", v); }
 
-  int speed_regulation_d() const { return get_attr_int("speed_regulation_d"); }
-  void set_speed_regulation_d(int v)    { set_attr_int("speed_regulation_d", v); }
+  int speed_regulation_d() const { return get_attr_int("speed_regulation_D"); }
+  void set_speed_regulation_d(int v)    { set_attr_int("speed_regulation_D", v); }
 
-  int speed_regulation_k() const { return get_attr_int("speed_regulation_k"); }
-  void set_speed_regulation_k(int v) { set_attr_int("speed_regulation_k", v); }
+  int speed_regulation_k() const { return get_attr_int("speed_regulation_K"); }
+  void set_speed_regulation_k(int v) { set_attr_int("speed_regulation_K", v); }
   
 protected:
   motor() {}
