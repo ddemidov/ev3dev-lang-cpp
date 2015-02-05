@@ -2,30 +2,45 @@
 CFLAGS=-O2 -march=armv5
 CCFLAGS=-std=c++11 -D_GLIBCXX_USE_NANOSLEEP
 DEPS=ev3dev.h
-OBJ=ev3dev.o
-LIBS=-lstdc++
+LIBS=-Llib -lev3dev -lstdc++
 
-%.o: %.cpp $(DEPS)
+obj/%.o: %.cpp $(DEPS)
+	mkdir -p $(@D)
 	$(CC) -c -o $@ $< $(CFLAGS) $(CCFLAGS)
 
-ev3dev-lang-test: $(OBJ) ev3dev-lang-test.o
+lib/libev3dev.a: obj/ev3dev.o
+	mkdir -p $(@D)
+	ar rc $@ $^ && ranlib $@
+	
+bin/ev3dev-lang-test: lib/libev3dev.a obj/ev3dev-lang-test.o
+	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
-ev3dev-lang-demo: $(OBJ) ev3dev-lang-demo.o
+bin/ev3dev-lang-demo: lib/libev3dev.a obj/ev3dev-lang-demo.o
+	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS) -lpthread
 
-remote_control-test: $(OBJ) remote_control-test.o
+bin/remote_control-test: lib/libev3dev.a obj/remote_control-test.o
+	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
-drive-test: $(OBJ) drive-test.o
+bin/drive-test: lib/libev3dev.a obj/drive-test.o
+	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS) -lpthread
 	
-button-test: $(OBJ) button-test.o
+bin/button-test: lib/libev3dev.a obj/button-test.o
+	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
 .PHONY: all clean
 
 clean:
-	rm -f *.o *~ ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test button-test
+	rm -f obj/* lib/* bin/* *~
 
-all:  ev3dev-lang-test ev3dev-lang-demo remote_control-test drive-test button-test
+all: \
+	lib/libev3dev.a \
+	bin/ev3dev-lang-test \
+	bin/ev3dev-lang-demo \
+	bin/remote_control-test \
+	bin/drive-test \
+	bin/button-test
