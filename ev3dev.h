@@ -392,7 +392,7 @@ public:
   int duty_cycle() const { return get_attr_int("duty_cycle"); }
   void set_duty_cycle(int v) { set_attr_int("duty_cycle", v); }
     
-  std::string device_name() const { return get_attr_string("device_name"); }
+  std::string driver_name() const { return get_attr_string("driver_name"); }
 
   std::string port_name() const { return get_attr_string("port_name"); }
 
@@ -433,7 +433,7 @@ public:
   std::string command() const { return get_attr_string("command"); }
   void set_command(std::string v) { set_attr_string("command", v); }
     
-  std::string device_name() const { return get_attr_string("device_name"); }
+  std::string driver_name() const { return get_attr_string("driver_name"); }
 
   std::string port_name() const { return get_attr_string("port_name"); }
 
