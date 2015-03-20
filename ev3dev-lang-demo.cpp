@@ -59,7 +59,7 @@ void sensor_action(sensor &s)
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 's':
@@ -90,7 +90,7 @@ void sensor_action(sensor &s)
           char cc; cin >> cc;
           bStop = true;
         });
-       
+
         int value, lastValue = -99999;
         while (!bStop)
         {
@@ -119,14 +119,14 @@ void sensor_menu()
     { INPUT_3 },
     { INPUT_4 }
   };
-  
+
   char c = 0;
   do
   {
     cout << endl
          << "*** sensor menu ***" << endl
          << endl;
-    
+
     for (unsigned i=0; i<4; ++i)
     {
       sensor &s = arrSensors[i];
@@ -141,7 +141,7 @@ void sensor_menu()
     cout << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case '1':
@@ -161,7 +161,7 @@ void motor_action(motor &m)
   int new_value = 0;
   std::string new_mode;
   bool running = false;
-  
+
   do
   {
     cout << endl
@@ -171,7 +171,7 @@ void motor_action(motor &m)
          << "(r)un mode          [" << m.run_mode()          << "]" << endl
          << "st(o)p mode         [" << m.stop_mode()         << "]" << endl
          << "r(e)gulation mode   [" << m.regulation_mode()   << "]" << endl;
-    
+
     if (m.regulation_mode()==m.mode_on)
       cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_sp() << ")" << endl;
     else
@@ -186,7 +186,7 @@ void motor_action(motor &m)
     }
     else if (m.run_mode()==m.run_mode_time)
       cout << "(t)ime setpoint      (" << m.time_sp()       << ")" << endl;
-    
+
     cout << endl
          << "(0) reset position" << endl
          << "(#) reset all" << endl
@@ -200,7 +200,7 @@ void motor_action(motor &m)
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'i':
@@ -282,7 +282,7 @@ void motor_action(dc_motor &m)
   char c = 0;
   int new_value = 0;
   std::string new_mode;
-  
+
   do
   {
     cout << endl
@@ -297,7 +297,7 @@ void motor_action(dc_motor &m)
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'c':
@@ -328,7 +328,7 @@ void motor_action(servo_motor &m)
   char c = 0;
   int new_value = 0;
   std::string new_mode;
-  
+
   do
   {
     cout << endl
@@ -345,7 +345,7 @@ void motor_action(servo_motor &m)
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'c':
@@ -396,14 +396,14 @@ void motor_menu()
     { OUTPUT_C },
     { OUTPUT_D }
   };
-  
+
   char c = 0;
   do
   {
     cout << endl
          << "*** motor menu ***" << endl
          << endl;
-    
+
     for (unsigned i=0; i<4; ++i)
     {
       motor &m = arrMotors[i];
@@ -425,7 +425,7 @@ void motor_menu()
     cout << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case '1':
@@ -463,7 +463,7 @@ void led_action(const char *name, led &l)
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case '0':
@@ -492,7 +492,7 @@ void led_action(const char *name, led &l)
             cout << *it << " ";
         }
         cout << endl << endl << "choice: ";
-       
+
         cin >> t;
         if (!t.empty())
           l.set_trigger(t);
@@ -518,7 +518,7 @@ void led_menu()
          << "(2) green:right" << endl
          << "(3) red:left"    << endl
          << "(4) red:right"   << endl;
-    
+
     for (unsigned i=0; i<4; ++i)
     {
       if (arrPortLEDs[i].connected())
@@ -526,13 +526,13 @@ void led_menu()
         cout << "(" << 5+i << ") out" << static_cast<char>('A'+i) << endl;
       }
     }
-    
+
     cout << endl
          << "(b)ack"          << endl
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case '1':
@@ -583,7 +583,7 @@ void button_menu()
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case '1':
@@ -629,7 +629,7 @@ void sound_menu()
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'e':
@@ -688,7 +688,7 @@ void battery_menu()
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'v':
@@ -705,14 +705,14 @@ void battery_menu()
 void lcd_menu()
 {
   lcd l;
-  
+
   if (!l.available())
   {
     cout << endl
          << "###error: lcd not available ###" << endl;
     return;
   }
-  
+
   char c = 0;
   do
   {
@@ -727,7 +727,7 @@ void lcd_menu()
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 'i':
@@ -766,7 +766,7 @@ void main_menu()
          << endl
          << "Choice: ";
     cin >> c;
-    
+
     switch (c)
     {
     case 's':
@@ -798,6 +798,6 @@ void main_menu()
 int main()
 {
   main_menu();
-  
+
   return 0;
 }

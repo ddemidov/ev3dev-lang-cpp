@@ -19,7 +19,7 @@ remote_control-test: $(OBJ) remote_control-test.o
 
 drive-test: $(OBJ) drive-test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS) -lpthread
-	
+
 button-test: $(OBJ) button-test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 

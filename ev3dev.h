@@ -42,7 +42,7 @@
 namespace ev3dev {
 
 //-----------------------------------------------------------------------------
-  
+
 typedef std::string         device_type;
 typedef std::string         port_type;
 typedef std::string         mode_type;
@@ -56,7 +56,7 @@ const port_type INPUT_1  { "in1" };  //!< Sensor port 1
 const port_type INPUT_2  { "in2" };  //!< Sensor port 2
 const port_type INPUT_3  { "in3" };  //!< Sensor port 3
 const port_type INPUT_4  { "in4" };  //!< Sensor port 4
- 
+
 const port_type OUTPUT_AUTO;         //!< Automatic output selection
 const port_type OUTPUT_A { "outA" }; //!< Motor port A
 const port_type OUTPUT_B { "outB" }; //!< Motor port B
@@ -75,7 +75,7 @@ public:
   inline bool connected() const { return !_path.empty(); }
 
   int         device_index() const;
-  
+
   int         get_attr_int   (const std::string &name) const;
   void        set_attr_int   (const std::string &name,
                               int value);
@@ -86,9 +86,9 @@ public:
   std::string get_attr_line  (const std::string &name) const;
   mode_set    get_attr_set   (const std::string &name,
                               std::string *pCur = nullptr) const;
-  
+
   std::string get_attr_from_set(const std::string &name) const;
-  
+
 protected:
   std::string _path;
   mutable int _device_index = -1;
@@ -100,22 +100,22 @@ class sensor : protected device
 {
 public:
   typedef device_type sensor_type;
-  
+
   static const sensor_type ev3_touch;
   static const sensor_type ev3_color;
   static const sensor_type ev3_ultrasonic;
   static const sensor_type ev3_gyro;
   static const sensor_type ev3_infrared;
-  
+
   static const sensor_type nxt_touch;
   static const sensor_type nxt_light;
   static const sensor_type nxt_sound;
   static const sensor_type nxt_ultrasonic;
   static const sensor_type nxt_i2c_sensor;
-  
+
   sensor(port_type);
   sensor(port_type, const std::set<sensor_type>&);
- 
+
   using device::connected;
   using device::device_index;
 
@@ -123,31 +123,31 @@ public:
   std::string device_name() const { return get_attr_string("device_name"); }
   std::string type_name()   const;
   std::string units()       const { return get_attr_string("units"); }
-  
+
   inline unsigned num_values()  const { return _nvalues; }
   inline unsigned decimals()    const { return _dp; }
-  
+
   int   value(unsigned index=0) const;
   float float_value(unsigned index=0) const;
-  
+
   const mode_set  &modes() const;
   const mode_type &mode()  const;
-  
+
   void set_mode(const mode_type&);
 
   void set_command(std::string v) { set_attr_string("command", v); }
-  
+
 protected:
   sensor() {}
 
   bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
   void init_members();
-  
+
 protected:
   unsigned _nvalues = 0;
   unsigned _dp = 0;
   float    _dp_scale = 1.f;
-  
+
   mode_set    _modes;
   mode_type   _mode;
 };
@@ -159,7 +159,7 @@ class i2c_sensor : public sensor
 public:
   i2c_sensor(port_type port = INPUT_AUTO);
   i2c_sensor(port_type port, address_type address);
-  
+
   //~autogen cpp_generic-get-set classes.i2cSensor>currentClass
   std::string fw_version() const { return get_attr_string("fw_version"); }
 
@@ -187,7 +187,7 @@ class color_sensor : public sensor
 {
 public:
   color_sensor(port_type port_ = INPUT_AUTO);
-  
+
   static const mode_type mode_reflect;
   static const mode_type mode_ambient;
   static const mode_type mode_color;
@@ -213,7 +213,7 @@ class gyro_sensor : public sensor
 {
 public:
   gyro_sensor(port_type port_ = INPUT_AUTO);
-  
+
   static const mode_type mode_angle;
   static const mode_type mode_speed;
   static const mode_type mode_angle_and_speed;
@@ -237,16 +237,16 @@ class motor : protected device
 {
 public:
   typedef device_type motor_type;
-  
+
   motor(port_type);
   motor(port_type, const motor_type&);
-  
+
   static const motor_type motor_large;
   static const motor_type motor_medium;
-  
+
   static const mode_type mode_off;
   static const mode_type mode_on;
-    
+
   static const mode_type run_mode_forever;
   static const mode_type run_mode_time;
   static const mode_type run_mode_position;
@@ -254,10 +254,10 @@ public:
   static const mode_type stop_mode_coast;
   static const mode_type stop_mode_brake;
   static const mode_type stop_mode_hold;
-  
+
   static const mode_type position_mode_absolute;
   static const mode_type position_mode_relative;
-  
+
   using device::connected;
   using device::device_index;
 
@@ -340,7 +340,7 @@ public:
 
 
 //~autogen
-  
+
   void run(bool bRun=true) { set_attr_int("run",   bRun); }
   void stop()              { set_attr_int("run",   0);    }
   bool running() const { return get_attr_int("run")!=0; }
@@ -386,7 +386,7 @@ public:
 
   std::string command() const         { return get_attr_string("command"); }
   std::set<std::string> commands() const { return get_attr_set("commands"); }
-  
+
   //~autogen cpp_generic-get-set classes.dcMotor>currentClass
   void set_command(std::string v) { set_attr_string("command", v); }
 
@@ -431,7 +431,7 @@ public:
   using device::device_index;
 
   std::set<std::string> commands() const { return get_attr_set("commands"); }
-  
+
   //~autogen cpp_generic-get-set classes.servoMotor>currentClass
   std::string command() const { return get_attr_string("command"); }
   void set_command(std::string v) { set_attr_string("command", v); }
@@ -471,19 +471,19 @@ public:
   led(std::string name);
 
   using device::connected;
-  
+
   int brightness() const { return get_attr_int("brightness"); }
   void set_brightness(int v)    { set_attr_int("brightness", v); }
 
   inline int max_brightness() const { return _max_brightness; }
-  
+
   void on()  { set_attr_int("brightness", _max_brightness); }
   void off() { set_attr_int("brightness", 0); }
-  
+
   void flash(unsigned interval_ms);
   void set_on_delay (unsigned ms) { set_attr_int("delay_on",  ms); }
   void set_off_delay(unsigned ms) { set_attr_int("delay_off", ms); }
-  
+
   mode_type trigger()  const  { return get_attr_from_set("trigger"); }
   mode_set  triggers() const  { return get_attr_set     ("trigger"); }
   void set_trigger(const mode_type &v) { set_attr_string("trigger", v); }
@@ -499,7 +499,7 @@ public:
   static void green_off();
   static void all_on   ();
   static void all_off  ();
-  
+
 protected:
   int _max_brightness = 0;
 };
@@ -510,9 +510,9 @@ class power_supply : protected device
 {
 public:
   power_supply(std::string name);
-  
+
   using device::connected;
-  
+
   int   current_now()        const { return get_attr_int("current_now"); }
   float current_amps()       const { return get_attr_int("current_now") / 1000000.f; }
   int   current_max_design() const { return get_attr_int("current_max_design"); }
@@ -520,10 +520,10 @@ public:
   int   voltage_now()        const { return get_attr_int("voltage_now"); }
   float voltage_volts()      const { return get_attr_int("voltage_now") / 1000000.f; }
   int   voltage_max_design() const { return get_attr_int("voltage_max_design"); }
-  
+
   std::string technology() const { return get_attr_string("technology"); }
   std::string type()       const { return get_attr_string("type"); }
-  
+
   static power_supply battery;
 };
 
@@ -537,9 +537,9 @@ public:
   {
     delete _buf;
   }
-  
+
   bool pressed() const;
-  
+
   static button back;
   static button left;
   static button right;
@@ -563,10 +563,10 @@ class sound
 public:
   static void beep();
   static void tone(unsigned frequency, unsigned ms);
-  
+
   static void play (const std::string &soundfile, bool bSynchronous = false);
   static void speak(const std::string &text, bool bSynchronous = false);
-  
+
   static unsigned volume();
   static void set_volume(unsigned);
 };
@@ -587,15 +587,15 @@ public:
 
   uint32_t frame_buffer_size() const { return _fbsize; }
   uint32_t line_length()       const { return _llength; }
-  
+
   unsigned char *frame_buffer() { return _fb; }
-  
+
   void fill(unsigned char pixel);
-  
+
 protected:
   void init();
   void deinit();
-  
+
 private:
   unsigned char *_fb;
   uint32_t _fbsize;
@@ -613,7 +613,7 @@ public:
   remote_control(unsigned channel = 1);
   remote_control(infrared_sensor&, unsigned channel = 1);
   virtual ~remote_control();
-  
+
   inline bool   connected() const { return _sensor->connected(); }
   inline unsigned channel() const { return _channel+1; }
 
@@ -624,10 +624,10 @@ public:
   std::function<void (bool)> on_blue_up;
   std::function<void (bool)> on_blue_down;
   std::function<void (bool)> on_beacon;
-  
+
 protected:
   virtual void on_value_changed(int value);
-  
+
   enum
   {
     red_up    = (1 << 0),
@@ -636,7 +636,7 @@ protected:
     blue_down = (1 << 3),
     beacon    = (1 << 4),
   };
-  
+
 protected:
   infrared_sensor *_sensor = nullptr;
   bool             _owns_sensor = false;

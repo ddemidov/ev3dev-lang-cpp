@@ -46,15 +46,15 @@ int main()
   r.on_red_up    = bind(print_button, "red up",    placeholders::_1);
   r.on_blue_down = bind(print_button, "blue down", placeholders::_1);
   r.on_blue_up   = bind(print_button, "blue up",   placeholders::_1);
-  
+
   bool stop = false;
   r.on_beacon = [&] (bool state) { if (state) stop = true; };
-  
+
   cout << "ensure that channel 1 is selected," << endl
        << "press middle (beacon) button to exit!" << endl << endl;
-  
+
   while (!stop)
     r.process();
-  
+
   return 0;
 }

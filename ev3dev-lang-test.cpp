@@ -52,19 +52,19 @@ void test_motor(const char *name)
     cout << endl
          << "Found " << name << " motor on port " << m.port_name() << endl
          << endl;
-    
+
     cout << "  Current state is " << m.state() << endl
          << "    duty_cycle: " << m.duty_cycle() << endl
          << "    pulses_per_second: " << m.pulses_per_second() << endl << endl
          << "  Current run mode is " << m.run_mode() << endl
          << "    stop mode: " << m.stop_mode() << endl
          << "    regulation mode: " << m.regulation_mode() << endl << endl;
-    
+
     if (m.regulation_mode()==m.mode_on)
       cout << "  pulses_per_second setpoint is " << m.pulses_per_second_sp() << endl;
     else
       cout << "  duty_cycle setpoint is " << m.duty_cycle_sp() << endl;
-    
+
     if (m.run_mode()==m.run_mode_time)
       cout << "  Time setpoint is " << m.time_sp() << endl;
     if (m.run_mode()==m.run_mode_position)
@@ -83,7 +83,7 @@ void test_dc_motor()
     cout << endl
          << "Found dc motor on port " << m.port_name() << endl
          << endl;
-    
+
     cout << "  Current command is " << m.command() << endl
          << "    duty_cycle:   " << m.duty_cycle() << endl
          << "    ramp_up_ms:   " << m.ramp_up_ms() << endl << endl
@@ -102,7 +102,7 @@ void test_servo_motor()
     cout << endl
          << "Found servo motor on port " << m.port_name() << endl
          << endl;
-    
+
     cout << "  Current command is " << m.command() << endl
          << "    position:     " << m.position() << endl
          << "    rate:         " << m.rate() << endl
@@ -124,15 +124,15 @@ int main()
   test_sensor<gyro_sensor>("gyro");
   test_sensor<infrared_sensor>("infrared");
   test_sensor<i2c_sensor>("i2c");
-  
+
   cout << endl;
-  
+
   test_motor<medium_motor>("medium");
   test_motor<large_motor>("large");
-  
+
   test_dc_motor();
   test_servo_motor();
-  
+
   const vector<string> outPortLEDs {
     "ev3::outA",
     "ev3::outB",
@@ -148,16 +148,16 @@ int main()
       cout << "Trigger of " << portName << " led is " << l.trigger() << endl << endl;
     }
   }
-  
+
   cout << "Brightness of left green led is " << led::green_left.brightness() << endl;
   cout << "Trigger of right red led is " << led::red_right.trigger() << endl << endl;
-  
+
   cout << "Beeping..." << endl << endl; sound::beep();
-  
+
   cout << "Battery voltage is " << power_supply::battery.voltage_volts() << " V" << endl;
   cout << "Battery current is " << power_supply::battery.current_amps() << " A" <<  endl;
-  
+
   cout << endl;
-  
+
   return 0;
 }

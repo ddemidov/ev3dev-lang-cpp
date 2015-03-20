@@ -59,7 +59,7 @@
 //-----------------------------------------------------------------------------
 
 namespace ev3dev {
-  
+
 namespace {
 
 // This class implements a small LRU cache. It assumes the number of elements
@@ -111,7 +111,7 @@ public:
 
 private:
   typedef typename std::list<item>::iterator iterator;
-  
+
   iterator find(const K &k)
   {
     return std::find_if(_items.begin(), _items.end(),
@@ -139,8 +139,8 @@ std::ofstream &ofstream_open(const std::string &path)
     // Don't buffer writes to avoid latency. Also saves a bit of memory.
     file.rdbuf()->pubsetbuf(NULL, 0);
     file.open(path);
-  } 
-  else 
+  }
+  else
   {
     // Clear the error bits in case something happened.
     file.clear();
@@ -156,7 +156,7 @@ std::ifstream &ifstream_open(const std::string &path)
   {
     file.open(path);
   }
-  else 
+  else
   {
     // Clear the flags bits in case something happened (like reaching EOF).
     file.clear();
@@ -177,10 +177,10 @@ bool device::connect(const std::string &dir,
   using namespace std;
 
   const size_t pattern_length = pattern.length();
-  
+
   struct dirent *dp;
   DIR *dfd;
-  
+
   if ((dfd = opendir(dir.c_str())) != nullptr)
   {
     while ((dp = readdir(dfd)) != nullptr)
@@ -190,7 +190,7 @@ bool device::connect(const std::string &dir,
         try
         {
           _path = dir + dp->d_name + '/';
-          
+
           bool bMatch = true;
           for (auto &m : match)
           {
@@ -205,22 +205,22 @@ bool device::connect(const std::string &dir,
               break;
             }
           }
-          
+
           if (bMatch) {
             closedir(dfd);
             return true;
           }
         }
         catch (...) { }
-        
+
         _path.clear();
       }
     }
-    
+
     closedir(dfd);
   }
 
-  return false;  
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -228,7 +228,7 @@ bool device::connect(const std::string &dir,
 int device::device_index() const
 {
   using namespace std;
-  
+
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
@@ -240,12 +240,12 @@ int device::device_index() const
     {
       if ((*it < '0') || (*it > '9'))
         break;
-      
+
       _device_index += (*it -'0') * f;
       f *= 10;
     }
   }
-  
+
   return _device_index;
 }
 
@@ -254,10 +254,10 @@ int device::device_index() const
 int device::get_attr_int(const std::string &name) const
 {
   using namespace std;
-  
+
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
-  
+
   ifstream &is = ifstream_open(_path + name);
   if (is.is_open())
   {
@@ -265,7 +265,7 @@ int device::get_attr_int(const std::string &name) const
     is >> result;
     return result;
   }
-  
+
   throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
@@ -274,7 +274,7 @@ int device::get_attr_int(const std::string &name) const
 void device::set_attr_int(const std::string &name, int value)
 {
   using namespace std;
-  
+
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
@@ -284,7 +284,7 @@ void device::set_attr_int(const std::string &name, int value)
     os << value;
     return;
   }
-  
+
   throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
@@ -293,7 +293,7 @@ void device::set_attr_int(const std::string &name, int value)
 std::string device::get_attr_string(const std::string &name) const
 {
   using namespace std;
-  
+
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
@@ -304,7 +304,7 @@ std::string device::get_attr_string(const std::string &name) const
     is >> result;
     return result;
   }
-  
+
   throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
@@ -323,7 +323,7 @@ void device::set_attr_string(const std::string &name, const std::string &value)
     os << value;
     return;
   }
-  
+
   throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
@@ -332,10 +332,10 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 std::string device::get_attr_line(const std::string &name) const
 {
   using namespace std;
-  
+
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
-  
+
   ifstream &is = ifstream_open(_path + name);
   if (is.is_open())
   {
@@ -343,7 +343,7 @@ std::string device::get_attr_line(const std::string &name) const
     getline(is, result);
     return result;
   }
-  
+
   throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
@@ -361,7 +361,7 @@ mode_set device::get_attr_set(const std::string &name,
   string t;
   do {
     pos = s.find(' ', last_pos);
-    
+
     if (pos != string::npos)
     {
       t = s.substr(last_pos, pos-last_pos);
@@ -369,7 +369,7 @@ mode_set device::get_attr_set(const std::string &name,
     }
     else
       t = s.substr(last_pos);
-    
+
     if (!t.empty())
     {
       if (*t.begin()=='[')
@@ -381,7 +381,7 @@ mode_set device::get_attr_set(const std::string &name,
       result.insert(t);
     }
   } while (pos!=string::npos);
-  
+
   return result;
 }
 
@@ -390,14 +390,14 @@ mode_set device::get_attr_set(const std::string &name,
 std::string device::get_attr_from_set(const std::string &name) const
 {
   using namespace std;
-  
+
   string s = get_attr_line(name);
-  
+
   size_t pos, last_pos = 0;
   string t;
   do {
     pos = s.find(' ', last_pos);
-    
+
     if (pos != string::npos)
     {
       t = s.substr(last_pos, pos-last_pos);
@@ -405,7 +405,7 @@ std::string device::get_attr_from_set(const std::string &name) const
     }
     else
       t = s.substr(last_pos);
-    
+
     if (!t.empty())
     {
       if (*t.begin()=='[')
@@ -414,7 +414,7 @@ std::string device::get_attr_from_set(const std::string &name) const
       }
     }
   } while (pos!=string::npos);
-  
+
   return { "none" };
 }
 
@@ -425,7 +425,7 @@ const sensor::sensor_type sensor::ev3_color       { "ev3-uart-29" };
 const sensor::sensor_type sensor::ev3_ultrasonic  { "ev3-uart-30" };
 const sensor::sensor_type sensor::ev3_gyro        { "ev3-uart-32" };
 const sensor::sensor_type sensor::ev3_infrared    { "ev3-uart-33" };
-  
+
 const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
 const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
 const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
@@ -453,7 +453,7 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
 {
   static const std::string _strClassDir { SYS_ROOT "/class/lego-sensor/" };
   static const std::string _strPattern  { "sensor" };
-  
+
   try
   {
     if (device::connect(_strClassDir, _strPattern, match))
@@ -463,9 +463,9 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
     }
   }
   catch (...) { }
-  
+
   _path.clear();
-  
+
   return false;
 }
 
@@ -479,7 +479,7 @@ std::string sensor::type_name() const
     static const std::string s("<none>");
     return s;
   }
-  
+
   static const std::map<sensor_type, const std::string> lookup_table {
     { ev3_touch,       "EV3 touch" },
     { ev3_color,       "EV3 color" },
@@ -492,11 +492,11 @@ std::string sensor::type_name() const
     { nxt_ultrasonic,  "NXT ultrasonic" },
     { nxt_i2c_sensor,  "I2C sensor" },
   };
-  
+
   auto s = lookup_table.find(type);
   if (s != lookup_table.end())
     return s->second;
-  
+
   return type;
 }
 
@@ -506,29 +506,29 @@ int sensor::value(unsigned index) const
 {
   if (index >= _nvalues)
     throw std::invalid_argument("index");
-    
+
   char svalue[7] = "value0";
   svalue[5] += index;
-  
+
   return get_attr_int(svalue);
 }
 
 //-----------------------------------------------------------------------------
-  
+
 float sensor::float_value(unsigned index) const
 {
   return value(index) * _dp_scale;
 }
 
 //-----------------------------------------------------------------------------
-  
+
 const mode_set &sensor::modes() const
 {
   return _modes;
 }
 
 //-----------------------------------------------------------------------------
-  
+
 const mode_type &sensor::mode() const
 {
   return _mode;
@@ -544,7 +544,7 @@ void sensor::init_members()
   _modes   = get_attr_set("modes");
   _nvalues = get_attr_int("num_values");
   _dp      = get_attr_int("decimals");
-  
+
   _dp_scale = 1.f;
   for (unsigned dp = _dp; dp; --dp)
   {
@@ -633,7 +633,7 @@ infrared_sensor::infrared_sensor(port_type port_) :
 }
 
 //-----------------------------------------------------------------------------
-  
+
 const motor::motor_type motor::motor_large  { "tacho"     };
 const motor::motor_type motor::motor_medium { "minitacho" };
 
@@ -643,7 +643,7 @@ const mode_type motor::mode_on  { "on"  };
 const mode_type motor::run_mode_forever  { "forever"  };
 const mode_type motor::run_mode_time     { "time"     };
 const mode_type motor::run_mode_position { "position" };
-  
+
 const mode_type motor::stop_mode_coast { "coast" };
 const mode_type motor::stop_mode_brake { "brake" };
 const mode_type motor::stop_mode_hold  { "hold"  };
@@ -671,7 +671,7 @@ bool motor::connect(const std::map<std::string, std::set<std::string>> &match) n
 {
   static const std::string _strClassDir { SYS_ROOT "/class/tacho-motor/" };
   static const std::string _strPattern  { "motor" };
-  
+
   try
   {
     return device::connect(_strClassDir, _strPattern, match);
@@ -679,7 +679,7 @@ bool motor::connect(const std::map<std::string, std::set<std::string>> &match) n
   catch (...) { }
 
   _path.clear();
-  
+
   return false;
 }
 
@@ -704,7 +704,7 @@ dc_motor::dc_motor(port_type port)
 
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
-  
+
 const std::string dc_motor::command_run       { "run" };
 const std::string dc_motor::command_brake     { "brake" };
 const std::string dc_motor::command_coast     { "coast" };
@@ -717,21 +717,21 @@ servo_motor::servo_motor(port_type port)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/servo-motor/" };
   static const std::string _strPattern  { "motor" };
-  
+
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
-  
+
 const std::string servo_motor::command_run       { "run" };
 const std::string servo_motor::command_float     { "float" };
 const std::string servo_motor::polarity_normal   { "normal" };
 const std::string servo_motor::polarity_inverted { "inverted" };
-  
+
 //-----------------------------------------------------------------------------
 
 led::led(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/leds/" };
-  
+
   if (connect(_strClassDir, name, std::map<std::string, std::set<std::string>>()))
   {
     _max_brightness = get_attr_int("max_brightness");
@@ -776,10 +776,10 @@ power_supply power_supply::battery { "" };
 power_supply::power_supply(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/power_supply/" };
-  
+
   if (name.empty())
     name = "legoev3-battery";
-  
+
   connect(_strClassDir, name, std::map<std::string, std::set<std::string>>());
 }
 
@@ -847,7 +847,7 @@ void sound::play(const std::string &soundfile, bool bSynchronous)
   {
     cmd.append(" &");
   }
-  
+
   std::system(cmd.c_str());
 }
 
@@ -862,7 +862,7 @@ void sound::speak(const std::string &text, bool bSynchronous)
   {
     cmd.append(" &");
   }
-  
+
   std::system(cmd.c_str());
 }
 
@@ -871,7 +871,7 @@ void sound::speak(const std::string &text, bool bSynchronous)
 unsigned sound::volume()
 {
   unsigned result = 0;
-  
+
   std::ifstream is(SYS_SOUND "/volume");
   if (is.is_open())
   {
@@ -893,7 +893,7 @@ void sound::set_volume(unsigned v)
 }
 
 //-----------------------------------------------------------------------------
-  
+
 lcd::lcd() :
   _fb(nullptr),
   _fbsize(0),
@@ -904,7 +904,7 @@ lcd::lcd() :
 {
   init();
 }
- 
+
 //-----------------------------------------------------------------------------
 
 lcd::~lcd()
@@ -932,20 +932,20 @@ void lcd::init()
   int fbf = open("/dev/fb0", O_RDWR);
   if (fbf < 0)
     return;
-  
+
   fb_fix_screeninfo i;
   if (ioctl(fbf, FBIOGET_FSCREENINFO, &i) < 0)
     return;
-  
+
   _fbsize  = i.smem_len;
   _llength = i.line_length;
-  
+
   _fb = (unsigned char*)mmap(NULL, _fbsize, PROT_READ|PROT_WRITE, MAP_SHARED, fbf, 0);
   if (_fb == nullptr)
     return;
-  
+
 	fb_var_screeninfo v;
-  
+
   if (ioctl(fbf, FBIOGET_VSCREENINFO, &v) < 0)
     return;
 
@@ -954,7 +954,7 @@ void lcd::init()
   _bpp  = v.bits_per_pixel;
  #endif
 }
-  
+
 //-----------------------------------------------------------------------------
 
 void lcd::deinit()
@@ -963,7 +963,7 @@ void lcd::deinit()
   {
     munmap(_fb, 0);
   }
-  
+
   _fbsize = 0;
 }
 
@@ -975,7 +975,7 @@ remote_control::remote_control(unsigned channel) :
 {
   if ((channel >= 1) && (channel <=4))
     _channel = channel-1;
-  
+
   if (_sensor->connected())
     _sensor->set_mode(infrared_sensor::mode_ir_remote);
 }
@@ -988,7 +988,7 @@ remote_control::remote_control(infrared_sensor &ir, unsigned channel) :
 {
   if ((channel >= 1) && (channel <=4))
     _channel = channel-1;
-  
+
   if (_sensor->connected())
     _sensor->set_mode(infrared_sensor::mode_ir_remote);
 }
@@ -1012,7 +1012,7 @@ bool remote_control::process()
     _value = value;
     return true;
   }
-  
+
   return false;
 }
 
@@ -1021,7 +1021,7 @@ bool remote_control::process()
 void remote_control::on_value_changed(int value)
 {
   int new_state = 0;
-  
+
   switch (value)
   {
   case 1:
@@ -1058,32 +1058,32 @@ void remote_control::on_value_changed(int value)
     new_state = blue_up | blue_down;
     break;
   }
-  
+
   if (((new_state & red_up) != (_state & red_up)) &&
       static_cast<bool>(on_red_up))
     on_red_up(new_state & red_up);
-  
+
   if (((new_state & red_down) != (_state & red_down)) &&
       static_cast<bool>(on_red_down))
     on_red_down(new_state & red_down);
-  
+
   if (((new_state & blue_up) != (_state & blue_up)) &&
       static_cast<bool>(on_blue_up))
     on_blue_up(new_state & blue_up);
-  
+
   if (((new_state & blue_down) != (_state & blue_down)) &&
       static_cast<bool>(on_blue_down))
     on_blue_down(new_state & blue_down);
-  
+
   if (((new_state & beacon) != (_state & beacon)) &&
       static_cast<bool>(on_beacon))
     on_beacon(new_state & beacon);
-  
+
   _state = new_state;
 }
 
 //-----------------------------------------------------------------------------
-  
+
 } // namespace ev3dev
 
 //-----------------------------------------------------------------------------

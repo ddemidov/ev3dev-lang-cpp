@@ -42,35 +42,35 @@ class control
 public:
   control();
   ~control();
-  
+
   void drive(int speed, int time=0);
   void turn(int direction);
   void stop();
   void reset();
-  
+
   bool initialized() const;
-  
+
   void terminate_on_key();
   void panic_if_touched();
-  
+
   void remote_loop();
   void drive_autonomously();
-  
+
   void terminate() { _terminate = true; }
-  
+
 protected:
   large_motor     _motor_left;
   large_motor     _motor_right;
   infrared_sensor _sensor_ir;
   touch_sensor    _sensor_touch;
-  
+
   enum state
   {
     state_idle,
     state_driving,
     state_turning
   };
-  
+
   state _state;
   bool  _terminate;
 };
@@ -94,7 +94,7 @@ void control::drive(int speed, int time)
   {
     _motor_left .set_run_mode(motor::run_mode_time);
     _motor_right.set_run_mode(motor::run_mode_time);
-    
+
     _motor_left .set_time_sp(time);
     _motor_right.set_time_sp(time);
   }
@@ -103,21 +103,21 @@ void control::drive(int speed, int time)
     _motor_left .set_run_mode(motor::run_mode_forever);
     _motor_right.set_run_mode(motor::run_mode_forever);
   }
-  
+
   _motor_left.set_duty_cycle_sp(-speed);
-  
+
   _motor_right.set_duty_cycle_sp(-speed);
-  
+
   _state = state_driving;
-  
+
   _motor_left .run();
   _motor_right.run();
-  
+
   if (time > 0)
   {
     while (_motor_left.running() || _motor_right.running())
       this_thread::sleep_for(chrono::milliseconds(10));
-    
+
     _state = state_idle;
   }
 }
@@ -129,7 +129,7 @@ void control::turn(int direction)
 
   if (direction == 0)
     return;
-  
+
   _motor_left.set_run_mode(motor::run_mode_position);
   //_motor_left.set_position_mode(motor::position_mode_relative);
   _motor_left.set_position(0);
@@ -143,7 +143,7 @@ void control::turn(int direction)
   _motor_right.set_position_sp(-direction);
   //_motor_right.set_regulation_mode(motor::mode_on);
   _motor_right.set_duty_cycle_sp(50);
-  
+
   _state = state_turning;
 
   _motor_left .run();
@@ -159,7 +159,7 @@ void control::stop()
 {
   _motor_left .stop();
   _motor_right.stop();
-  
+
   _state = state_idle;
 }
 
@@ -167,10 +167,10 @@ void control::reset()
 {
   if (_motor_left.connected())
     _motor_left .reset();
-  
+
   if (_motor_right.connected())
     _motor_right.reset();
-  
+
   _state = state_idle;
 }
 
@@ -218,7 +218,7 @@ void control::panic_if_touched()
     cout << "no touch sensor found!" << endl;
     return;
   }
-  
+
   thread t([&] () {
     while (!_terminate) {
       if (_sensor_touch.value())
@@ -236,16 +236,16 @@ void control::panic_if_touched()
 void control::remote_loop()
 {
   remote_control r(_sensor_ir);
-  
+
   if (!r.connected())
   {
     cout << "no infrared sensor found!" << endl;
     return;
   }
-  
+
   const int speed = 70;
   const int ninety_degrees = 260;
-  
+
   r.on_red_up = [&] (bool state)
   {
     if (state)
@@ -256,7 +256,7 @@ void control::remote_loop()
     else
       stop();
   };
-  
+
   r.on_red_down = [&] (bool state)
   {
     if (state)
@@ -276,7 +276,7 @@ void control::remote_loop()
         turn(-ninety_degrees);
     }
   };
-  
+
   r.on_blue_down = [&] (bool state)
   {
     if (state)
@@ -285,13 +285,13 @@ void control::remote_loop()
         turn(ninety_degrees);
     }
   };
-  
+
   r.on_beacon = [&] (bool state)
   {
     if (state)
       terminate();
   };
-  
+
   while (!_terminate)
   {
     if (!r.process())
@@ -299,7 +299,7 @@ void control::remote_loop()
       this_thread::sleep_for(chrono::milliseconds(10));
     }
   }
-  
+
   reset();
 }
 
@@ -310,7 +310,7 @@ void control::drive_autonomously()
     cout << "no infrared sensor found!" << endl;
     return;
   }
-  
+
   _sensor_ir.set_mode(infrared_sensor::mode_proximity);
 
   while (!_terminate)
@@ -332,14 +332,14 @@ void control::drive_autonomously()
     else
     {
       stop();
-      
+
       int direction = 100;
       int start_distance = distance;
-      
+
       while (distance <= 40)
       {
         turn(direction);
-        
+
         distance = _sensor_ir.value();
         if (distance < start_distance)
         {
@@ -360,7 +360,7 @@ void control::drive_autonomously()
 int main()
 {
   control c;
-  
+
   if (c.initialized())
   {
     c.terminate_on_key(); // we terminate if a button is pressed
@@ -376,13 +376,13 @@ int main()
            << "upper blue button - left" << endl
            << "lower blue button - right" << endl
            << "middle button     - exit" << endl << endl;
-    
+
       c.remote_loop();
     }
     else if (mode == 2)
     {
       cout << "touch the sensor or press a button to stop." << endl << endl;
-      
+
       c.drive_autonomously();
     }
   }
@@ -391,6 +391,6 @@ int main()
     cout << "you need to connect an infrared sensor and large motors to ports B and C!" << endl;
     return 1;
   }
-  
+
   return 0;
 }
