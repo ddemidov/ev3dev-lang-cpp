@@ -110,8 +110,8 @@ void control::drive(int speed, int time)
 
   _state = state_driving;
 
-  _motor_left .run();
-  _motor_right.run();
+  _motor_left .start();
+  _motor_right.start();
 
   if (time > 0)
   {
@@ -146,8 +146,8 @@ void control::turn(int direction)
 
   _state = state_turning;
 
-  _motor_left .run();
-  _motor_right.run();
+  _motor_left .start();
+  _motor_right.start();
 
   while (_motor_left.running() || _motor_right.running())
     this_thread::sleep_for(chrono::milliseconds(10));

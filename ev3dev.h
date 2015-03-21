@@ -341,10 +341,10 @@ public:
 
 //~autogen
 
-  void run(bool bRun=true) { set_attr_int("run",   bRun); }
-  void stop()              { set_attr_int("run",   0);    }
-  bool running() const { return get_attr_int("run")!=0; }
-  void reset()             { set_attr_int("reset", 1);    }
+  void start()         { set_attr_int("run", 1); }
+  void stop()          { set_attr_int("run", 0); }
+  bool running() const { return run(); }
+  void reset()         { set_attr_int("reset", 1);    }
 
 protected:
   motor() {}

@@ -270,7 +270,7 @@ void motor_action(motor &m)
       m.reset();
       break;
     case '!':
-      m.run(!running);
+      m.set_run(!running);
       break;
     }
   }
