@@ -132,7 +132,7 @@ void sensor_menu()
       sensor &s = arrSensors[i];
       if (s.connected())
       {
-        cout << "(" << i+1 << ") " << s.type_name() << " (device " << s.device_name()
+        cout << "(" << i+1 << ") " << s.type_name() << " (device " << s.driver_name()
              << ", port " << s.port_name() << ", mode " << s.mode() << ")" << endl;
       }
     }

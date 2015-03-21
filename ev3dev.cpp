@@ -33,6 +33,7 @@
 #include <system_error>
 #include <mutex>
 #include <string.h>
+#include <math.h>
 
 #include <dirent.h>
 #include <sys/mman.h>
@@ -458,7 +459,6 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
   {
     if (device::connect(_strClassDir, _strPattern, match))
     {
-      init_members();
       return true;
     }
   }
@@ -473,7 +473,7 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
 
 std::string sensor::type_name() const
 {
-  auto type = device_name();
+  auto type = driver_name();
   if (type.empty())
   {
     static const std::string s("<none>");
@@ -504,7 +504,7 @@ std::string sensor::type_name() const
 
 int sensor::value(unsigned index) const
 {
-  if (index >= _nvalues)
+  if (index >= num_values())
     throw std::invalid_argument("index");
 
   char svalue[7] = "value0";
@@ -517,50 +517,7 @@ int sensor::value(unsigned index) const
 
 float sensor::float_value(unsigned index) const
 {
-  return value(index) * _dp_scale;
-}
-
-//-----------------------------------------------------------------------------
-
-const mode_set &sensor::modes() const
-{
-  return _modes;
-}
-
-//-----------------------------------------------------------------------------
-
-const mode_type &sensor::mode() const
-{
-  return _mode;
-}
-
-//-----------------------------------------------------------------------------
-
-void sensor::init_members()
-{
-  using namespace std;
-
-  _mode    = get_attr_string("mode");
-  _modes   = get_attr_set("modes");
-  _nvalues = get_attr_int("num_values");
-  _dp      = get_attr_int("decimals");
-
-  _dp_scale = 1.f;
-  for (unsigned dp = _dp; dp; --dp)
-  {
-    _dp_scale /= 10.f;
-  }
-}
-
-//-----------------------------------------------------------------------------
-
-void sensor::set_mode(const mode_type &mode_)
-{
-  if (mode_ != _mode)
-  {
-    set_attr_string("mode", mode_);
-    const_cast<sensor*>(this)->init_members();
-  }
+  return value(index) * powf(10, -decimals());
 }
 
 //-----------------------------------------------------------------------------
@@ -731,11 +688,7 @@ const std::string servo_motor::polarity_inverted { "inverted" };
 led::led(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/leds/" };
-
-  if (connect(_strClassDir, name, std::map<std::string, std::set<std::string>>()))
-  {
-    _max_brightness = get_attr_int("max_brightness");
-  }
+  connect(_strClassDir, name, std::map<std::string, std::set<std::string>>());
 }
 
 //-----------------------------------------------------------------------------

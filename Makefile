@@ -3,7 +3,7 @@ CFLAGS=-O2 -march=armv5
 CCFLAGS=-std=c++11 -D_GLIBCXX_USE_NANOSLEEP
 DEPS=ev3dev.h
 OBJ=ev3dev.o
-LIBS=-lstdc++
+LIBS=-lstdc++ -lm
 
 %.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(CCFLAGS)
