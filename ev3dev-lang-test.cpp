@@ -84,7 +84,7 @@ void test_dc_motor()
          << "Found dc motor on port " << m.port_name() << endl
          << endl;
 
-    cout << "  Current command is " << m.command() << endl
+    cout << "  Current parameters" << endl
          << "    duty_cycle:   " << m.duty_cycle() << endl
          << "    ramp_up_ms:   " << m.ramp_up_ms() << endl << endl
          << "    ramp_down_ms: " << m.ramp_down_ms() << endl << endl

@@ -384,7 +384,6 @@ public:
   using device::connected;
   using device::device_index;
 
-  std::string command() const         { return get_attr_string("command"); }
   std::set<std::string> commands() const { return get_attr_set("commands"); }
 
   //~autogen cpp_generic-get-set classes.dcMotor>currentClass

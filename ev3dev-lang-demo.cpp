@@ -288,7 +288,6 @@ void motor_action(dc_motor &m)
     cout << endl
          << "*** dc motor (" << m.port_name() << ") actions ***" << endl
          << endl
-         << "(c)ommand      [" << m.command()      << "]" << endl
          << "(d)uty cycle   (" << m.duty_cycle()   << ")" << endl
          << "(r)amp down ms (" << m.ramp_down_ms() << ")" << endl
          << "ramp (u)p ms   (" << m.ramp_up_ms()   << ")" << endl
