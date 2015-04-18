@@ -591,8 +591,8 @@ infrared_sensor::infrared_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-const motor::motor_type motor::motor_large  { "tacho"     };
-const motor::motor_type motor::motor_medium { "minitacho" };
+const motor::motor_type motor::motor_large  { "lego-ev3-l-motor" };
+const motor::motor_type motor::motor_medium { "lego-ev3-m-motor" };
 
 const mode_type motor::mode_off { "off" };
 const mode_type motor::mode_on  { "on"  };
@@ -619,7 +619,7 @@ motor::motor(port_type port)
 
 motor::motor(port_type port, const motor_type &t)
 {
-  connect({{ "port_name", { port } }, { "type", { t }}});
+  connect({{ "port_name", { port } }, { "driver_name", { t }}});
 }
 
 //-----------------------------------------------------------------------------
