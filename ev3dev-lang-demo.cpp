@@ -27,6 +27,13 @@
 using namespace std;
 using namespace ev3dev;
 
+std::ostream& operator<<(std::ostream &os, const std::set<std::string> &ss) {
+  os << "[ ";
+  for(const auto &s : ss) os << s << " ";
+  return os << "]";
+}
+
+
 void print_values(sensor &s)
 {
   auto dp = s.decimals();
@@ -155,48 +162,36 @@ void sensor_menu()
   while (c != 'b');
 }
 
-void motor_action(motor &m)
+void motor_action(motor &dev)
 {
   char c = 0;
   int new_value = 0;
-  std::string new_mode;
+  std::string answer;
   bool running = false;
 
   do
   {
     cout << endl
-         << "*** " << m.type() << " motor (" << m.port_name() << ") actions ***" << endl
+         << "*** " << dev.driver_name() << " motor (" << dev.port_name() << ") actions ***" << endl
          << endl
          << "(i)nfo" << endl
-         << "(r)un mode          [" << m.run_mode()          << "]" << endl
-         << "st(o)p mode         [" << m.stop_mode()         << "]" << endl
-         << "r(e)gulation mode   [" << m.regulation_mode()   << "]" << endl;
+         << "(c)ommand" << endl
+         << "st(o)p command      [" << dev.stop_command()             << "]" << endl
+         << "speed r(e)gulation  [" << dev.speed_regulation_enabled() << "]" << endl;
 
-    if (m.regulation_mode()==m.mode_on)
-      cout << "pulses/sec (s)etpoint (" << m.pulses_per_second_sp() << ")" << endl;
+    if (dev.speed_regulation_enabled()==dev.mode_on)
+      cout << "speed (s)etpoint (" << dev.speed_sp() << ")" << endl;
     else
-      cout << "duty cycle (s)etpoint (" << m.duty_cycle_sp() << ")" << endl;
+      cout << "duty cycle (s)etpoint (" << dev.duty_cycle_sp() << ")" << endl;
 
-    if (m.run_mode()==m.run_mode_position)
-    {
-      cout << "position (m)ode      [" << m.position_mode() << "]" << endl
-           << "(p)osition setpoint  (" << m.position_sp()   << ")" << endl
-           << "ramp (u)p setpoint   (" << m.ramp_up_sp()    << ")" << endl
-           << "ramp (d)own setpoint (" << m.ramp_down_sp()  << ")" << endl;
-    }
-    else if (m.run_mode()==m.run_mode_time)
-      cout << "(t)ime setpoint      (" << m.time_sp()       << ")" << endl;
-
-    cout << endl
+    cout << "(p)osition setpoint  (" << dev.position_sp()   << ")" << endl
+         << "ramp (u)p setpoint   (" << dev.ramp_up_sp()    << ")" << endl
+         << "ramp (d)own setpoint (" << dev.ramp_down_sp()  << ")" << endl
+         << "(t)ime setpoint      (" << dev.time_sp()       << ")" << endl
+         << endl
          << "(0) reset position" << endl
-         << "(#) reset all" << endl
-         << "(!) ";
-    running = m.running();
-    if (running)
-      cout << "STOP" << endl;
-    else
-      cout << "RUN" << endl;
-    cout << endl << "(b)ack" << endl
+         << endl
+         << "(b)ack" << endl
          << endl
          << "Choice: ";
     cin >> c;
@@ -205,72 +200,76 @@ void motor_action(motor &m)
     {
     case 'i':
       cout << endl
-           << "  state      is " << m.state() << endl
-           << "  duty cycle is " << m.duty_cycle() << endl
-           << "  pulses/sec is " << m.pulses_per_second() << endl
-           << "  position   is " << m.position() << endl;
+//~autogen cpp_generic_report_status classes.motor>currentClass
+
+         << "    Commands: " << dev.commands() << endl
+         << "    Count Per Rot: " << dev.count_per_rot() << endl
+         << "    Driver Name: " << dev.driver_name() << endl
+         << "    Duty Cycle: " << dev.duty_cycle() << endl
+         << "    Duty Cycle SP: " << dev.duty_cycle_sp() << endl
+         << "    Encoder Polarity: " << dev.encoder_polarity() << endl
+         << "    Polarity: " << dev.polarity() << endl
+         << "    Port Name: " << dev.port_name() << endl
+         << "    Position: " << dev.position() << endl
+         /* These are broken, see https://github.com/ev3dev/ev3dev/issues/314
+         << "    Position P: " << dev.position_p() << endl
+         << "    Position I: " << dev.position_i() << endl
+         << "    Position D: " << dev.position_d() << endl
+         */
+         << "    Position SP: " << dev.position_sp() << endl
+         << "    Speed: " << dev.speed() << endl
+         << "    Speed SP: " << dev.speed_sp() << endl
+         << "    Ramp Up SP: " << dev.ramp_up_sp() << endl
+         << "    Ramp Down SP: " << dev.ramp_down_sp() << endl
+         << "    Speed Regulation Enabled: " << dev.speed_regulation_enabled() << endl
+         << "    Speed Regulation P: " << dev.speed_regulation_p() << endl
+         << "    Speed Regulation I: " << dev.speed_regulation_i() << endl
+         << "    Speed Regulation D: " << dev.speed_regulation_d() << endl
+         << "    State: " << dev.state() << endl
+         << "    Stop Command: " << dev.stop_command() << endl
+         << "    Stop Commands: " << dev.stop_commands() << endl
+         << "    Time SP: " << dev.time_sp() << endl
+
+
+//~autogen
+           << endl;
       break;
-    case 'r':
-      cout << "run mode (forever, position, time): ";
-      cin >> new_mode; m.set_run_mode(new_mode); cout << endl;
+    case 'c':
+      cout << "command " << dev.commands() << ": ";
+      cin >> answer; dev.set_command(answer); cout << endl;
       break;
     case 'o':
-      cout << "stop mode (coast, brake, hold): ";
-      cin >> new_mode; m.set_stop_mode(new_mode); cout << endl;
+      cout << "stop command " << dev.stop_commands() << ": ";
+      cin >> answer; dev.set_stop_command(answer); cout << endl;
       break;
     case 'e':
-      cout << "regulation mode (off, on): ";
-      cin >> new_mode; m.set_regulation_mode(new_mode); cout << endl;
+      cout << "speed regulation (off, on): ";
+      cin >> answer; dev.set_speed_regulation_enabled(answer); cout << endl;
       break;
     case 's':
-      if (m.regulation_mode()==m.mode_on)
+      if (dev.speed_regulation_enabled()==dev.mode_on)
       {
-        cout << "pulses/sec: "; cin >> new_value; m.set_pulses_per_second_sp(new_value); cout << endl;
+        cout << "speed: "; cin >> new_value; dev.set_speed_sp(new_value); cout << endl;
       }
       else
       {
-        cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_sp(new_value); cout << endl;
-      }
-      break;
-    case 'm':
-      if (m.run_mode()==m.run_mode_position)
-      {
-        cout << "position mode (absolute, relative): ";
-        cin >> new_mode; m.set_position_mode(new_mode); cout << endl;
+        cout << "duty cycle: "; cin >> new_value; dev.set_duty_cycle_sp(new_value); cout << endl;
       }
       break;
     case 'p':
-      if (m.run_mode()==m.run_mode_position)
-      {
-        cout << "position: "; cin >> new_value; m.set_position_sp(new_value); cout << endl;
-      }
+      cout << "position: "; cin >> new_value; dev.set_position_sp(new_value); cout << endl;
       break;
     case 'u':
-      if (m.run_mode()==m.run_mode_position)
-      {
-        cout << "ramp up: "; cin >> new_value; m.set_ramp_up_sp(new_value); cout << endl;
-      }
+      cout << "ramp up: "; cin >> new_value; dev.set_ramp_up_sp(new_value); cout << endl;
       break;
     case 'd':
-      if (m.run_mode()==m.run_mode_position)
-      {
-        cout << "ramp down: "; cin >> new_value; m.set_ramp_down_sp(new_value); cout << endl;
-      }
+      cout << "ramp down: "; cin >> new_value; dev.set_ramp_down_sp(new_value); cout << endl;
       break;
     case 't':
-      if (m.run_mode()==m.run_mode_time)
-      {
-        cout << "time: "; cin >> new_value; m.set_time_sp(new_value); cout << endl;
-      }
+      cout << "time: "; cin >> new_value; dev.set_time_sp(new_value); cout << endl;
       break;
     case '0':
-      m.set_position(0);
-      break;
-    case '#':
-      m.reset();
-      break;
-    case '!':
-      m.set_run(!running);
+      dev.set_position(0);
       break;
     }
   }
@@ -300,8 +299,7 @@ void motor_action(dc_motor &m)
     switch (c)
     {
     case 'c':
-      cout << "command ("; for (auto const &c : m.commands()) cout << c << ",";
-      cout << "): ";
+      cout << "command " << m.commands() << ": ";
       cin >> new_mode; m.set_command(new_mode); cout << endl;
       break;
     case 'o':
@@ -309,7 +307,7 @@ void motor_action(dc_motor &m)
       cin >> new_mode; m.set_polarity(new_mode); cout << endl;
       break;
     case 'd':
-      cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle(new_value); cout << endl;
+      cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_sp(new_value); cout << endl;
       break;
     case 'r':
       cout << "ramp down ms: "; cin >> new_value; m.set_ramp_down_ms(new_value); cout << endl;
@@ -408,7 +406,7 @@ void motor_menu()
       motor &m = arrMotors[i];
       if (m.connected())
       {
-        cout << "(" << 1+i << ") " << m.type() << " motor on port " << m.port_name() << endl;
+        cout << "(" << 1+i << ") " << m.driver_name() << " motor on port " << m.port_name() << endl;
       }
       else if (arrDCMotors[i].connected())
       {
@@ -691,10 +689,10 @@ void battery_menu()
     switch (c)
     {
     case 'v':
-      cout << endl << "voltage is " << power_supply::battery.voltage_volts() << " Volt" << endl << endl;
+      cout << endl << "voltage is " << power_supply::battery.measured_volts() << " Volt" << endl << endl;
       break;
     case 'c':
-      cout << endl << "current is " << power_supply::battery.current_amps() << " A" << endl << endl;
+      cout << endl << "current is " << power_supply::battery.measured_amps() << " A" << endl << endl;
       break;
     }
   }

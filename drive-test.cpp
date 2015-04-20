@@ -90,35 +90,28 @@ control::~control()
 
 void control::drive(int speed, int time)
 {
-  if (time > 0)
-  {
-    _motor_left .set_run_mode(motor::run_mode_time);
-    _motor_right.set_run_mode(motor::run_mode_time);
-
-    _motor_left .set_time_sp(time);
-    _motor_right.set_time_sp(time);
-  }
-  else
-  {
-    _motor_left .set_run_mode(motor::run_mode_forever);
-    _motor_right.set_run_mode(motor::run_mode_forever);
-  }
-
   _motor_left.set_duty_cycle_sp(-speed);
 
   _motor_right.set_duty_cycle_sp(-speed);
 
   _state = state_driving;
 
-  _motor_left .start();
-  _motor_right.start();
-
   if (time > 0)
   {
-    while (_motor_left.running() || _motor_right.running())
+    _motor_left .set_time_sp(time);
+    _motor_right.set_time_sp(time);
+    _motor_left.set_command("run-timed");
+    _motor_right.set_command("run-timed");
+
+    while (_motor_left.state().count("running") || _motor_right.state().count("running"))
       this_thread::sleep_for(chrono::milliseconds(10));
 
     _state = state_idle;
+  }
+  else
+  {
+    _motor_left.set_command("run-forever");
+    _motor_right.set_command("run-forever");
   }
 }
 
@@ -130,26 +123,20 @@ void control::turn(int direction)
   if (direction == 0)
     return;
 
-  _motor_left.set_run_mode(motor::run_mode_position);
-  //_motor_left.set_position_mode(motor::position_mode_relative);
   _motor_left.set_position(0);
-  _motor_left .set_position_sp(direction);
-  //_motor_left.set_regulation_mode(motor::mode_on);
+  _motor_left.set_position_sp(direction);
   _motor_left.set_duty_cycle_sp(50);
 
-  _motor_right.set_run_mode(motor::run_mode_position);
-  //_motor_right.set_position_mode(motor::position_mode_relative);
   _motor_right.set_position(0);
   _motor_right.set_position_sp(-direction);
-  //_motor_right.set_regulation_mode(motor::mode_on);
   _motor_right.set_duty_cycle_sp(50);
 
   _state = state_turning;
 
-  _motor_left .start();
-  _motor_right.start();
+  _motor_left .set_command("run-to-abs-pos");
+  _motor_right.set_command("run-to-abs-pos");
 
-  while (_motor_left.running() || _motor_right.running())
+  while (_motor_left.state().count("running") || _motor_right.state().count("running"))
     this_thread::sleep_for(chrono::milliseconds(10));
 
   _state = state_idle;
@@ -157,8 +144,8 @@ void control::turn(int direction)
 
 void control::stop()
 {
-  _motor_left .stop();
-  _motor_right.stop();
+  _motor_left .set_command("stop");
+  _motor_right.set_command("stop");
 
   _state = state_idle;
 }
@@ -166,10 +153,10 @@ void control::stop()
 void control::reset()
 {
   if (_motor_left.connected())
-    _motor_left .reset();
+    _motor_left .set_command("reset");
 
   if (_motor_right.connected())
-    _motor_right.reset();
+    _motor_right.set_command("reset");
 
   _state = state_idle;
 }

@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 2. 
+    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
 //~autogen
 //-----------------------------------------------------------------------------
 
