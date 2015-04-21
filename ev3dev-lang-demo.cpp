@@ -199,40 +199,88 @@ void motor_action(motor &dev)
     switch (c)
     {
     case 'i':
-      cout << endl
+      cout << endl;
 //~autogen cpp_generic_report_status classes.motor>currentClass
 
-         << "    Commands: " << dev.commands() << endl
-         << "    Count Per Rot: " << dev.count_per_rot() << endl
-         << "    Driver Name: " << dev.driver_name() << endl
-         << "    Duty Cycle: " << dev.duty_cycle() << endl
-         << "    Duty Cycle SP: " << dev.duty_cycle_sp() << endl
-         << "    Encoder Polarity: " << dev.encoder_polarity() << endl
-         << "    Polarity: " << dev.polarity() << endl
-         << "    Port Name: " << dev.port_name() << endl
-         << "    Position: " << dev.position() << endl
-         /* These are broken, see https://github.com/ev3dev/ev3dev/issues/314
-         << "    Position P: " << dev.position_p() << endl
-         << "    Position I: " << dev.position_i() << endl
-         << "    Position D: " << dev.position_d() << endl
-         */
-         << "    Position SP: " << dev.position_sp() << endl
-         << "    Speed: " << dev.speed() << endl
-         << "    Speed SP: " << dev.speed_sp() << endl
-         << "    Ramp Up SP: " << dev.ramp_up_sp() << endl
-         << "    Ramp Down SP: " << dev.ramp_down_sp() << endl
-         << "    Speed Regulation Enabled: " << dev.speed_regulation_enabled() << endl
-         << "    Speed Regulation P: " << dev.speed_regulation_p() << endl
-         << "    Speed Regulation I: " << dev.speed_regulation_i() << endl
-         << "    Speed Regulation D: " << dev.speed_regulation_d() << endl
-         << "    State: " << dev.state() << endl
-         << "    Stop Command: " << dev.stop_command() << endl
-         << "    Stop Commands: " << dev.stop_commands() << endl
-         << "    Time SP: " << dev.time_sp() << endl
+    cout << "    Commands: ";
+    try { cout << dev.commands() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Count Per Rot: ";
+    try { cout << dev.count_per_rot() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Driver Name: ";
+    try { cout << dev.driver_name() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Duty Cycle: ";
+    try { cout << dev.duty_cycle() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Duty Cycle SP: ";
+    try { cout << dev.duty_cycle_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Encoder Polarity: ";
+    try { cout << dev.encoder_polarity() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Polarity: ";
+    try { cout << dev.polarity() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Port Name: ";
+    try { cout << dev.port_name() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Position: ";
+    try { cout << dev.position() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Position P: ";
+    try { cout << dev.position_p() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Position I: ";
+    try { cout << dev.position_i() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Position D: ";
+    try { cout << dev.position_d() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Position SP: ";
+    try { cout << dev.position_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed: ";
+    try { cout << dev.speed() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed SP: ";
+    try { cout << dev.speed_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Ramp Up SP: ";
+    try { cout << dev.ramp_up_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Ramp Down SP: ";
+    try { cout << dev.ramp_down_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed Regulation Enabled: ";
+    try { cout << dev.speed_regulation_enabled() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed Regulation P: ";
+    try { cout << dev.speed_regulation_p() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed Regulation I: ";
+    try { cout << dev.speed_regulation_i() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Speed Regulation D: ";
+    try { cout << dev.speed_regulation_d() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    State: ";
+    try { cout << dev.state() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Stop Command: ";
+    try { cout << dev.stop_command() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Stop Commands: ";
+    try { cout << dev.stop_commands() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
+    cout << "    Time SP: ";
+    try { cout << dev.time_sp() << endl; }
+    catch(...) { cout << "[not supported by the device]" << endl; }
 
 
 //~autogen
-           << endl;
+      cout << endl;
       break;
     case 'c':
       cout << "command " << dev.commands() << ": ";
