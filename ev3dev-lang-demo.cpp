@@ -23,6 +23,8 @@
 
 #include <iostream>
 #include <thread>
+#include <string.h>
+#include <errno.h>
 
 using namespace std;
 using namespace ev3dev;
@@ -204,79 +206,79 @@ void motor_action(motor &dev)
 
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Count Per Rot: ";
     try { cout << dev.count_per_rot() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Driver Name: ";
     try { cout << dev.driver_name() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Duty Cycle: ";
     try { cout << dev.duty_cycle() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Duty Cycle SP: ";
     try { cout << dev.duty_cycle_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Encoder Polarity: ";
     try { cout << dev.encoder_polarity() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Port Name: ";
     try { cout << dev.port_name() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position: ";
     try { cout << dev.position() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position P: ";
     try { cout << dev.position_p() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position I: ";
     try { cout << dev.position_i() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position D: ";
     try { cout << dev.position_d() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position SP: ";
     try { cout << dev.position_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed: ";
     try { cout << dev.speed() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed SP: ";
     try { cout << dev.speed_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Ramp Up SP: ";
     try { cout << dev.ramp_up_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Ramp Down SP: ";
     try { cout << dev.ramp_down_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed Regulation Enabled: ";
     try { cout << dev.speed_regulation_enabled() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed Regulation P: ";
     try { cout << dev.speed_regulation_p() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed Regulation I: ";
     try { cout << dev.speed_regulation_i() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed Regulation D: ";
     try { cout << dev.speed_regulation_d() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    State: ";
     try { cout << dev.state() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Stop Command: ";
     try { cout << dev.stop_command() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Stop Commands: ";
     try { cout << dev.stop_commands() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
-    catch(...) { cout << "[not supported by the device]" << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
 
 
 //~autogen
