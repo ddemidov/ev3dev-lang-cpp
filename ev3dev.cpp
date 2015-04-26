@@ -430,7 +430,7 @@ const sensor::sensor_type sensor::ev3_infrared    { "lego-ev3-uart-33" };
 const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
 const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
 const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
-const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-ultrasonic" };
+const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-us" };
 const sensor::sensor_type sensor::nxt_i2c_sensor  { "nxt-i2c-sensor" };
 
 //-----------------------------------------------------------------------------
@@ -563,7 +563,7 @@ const mode_type ultrasonic_sensor::mode_single_cm { "US-SI-CM"   };
 const mode_type ultrasonic_sensor::mode_single_in { "US-SI-IN"   };
 
 ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
-  sensor(port_, { ev3_ultrasonic })
+  sensor(port_, { ev3_ultrasonic, nxt_ultrasonic })
 {
 }
 
