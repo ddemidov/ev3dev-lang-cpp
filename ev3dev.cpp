@@ -539,7 +539,7 @@ i2c_sensor::i2c_sensor(port_type port_, address_type address_)
 //-----------------------------------------------------------------------------
 
 touch_sensor::touch_sensor(port_type port_) :
-  sensor(port_, { ev3_touch })
+  sensor(port_, { ev3_touch, nxt_touch })
 {
 }
 
