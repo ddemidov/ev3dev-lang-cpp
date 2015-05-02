@@ -1032,6 +1032,10 @@ void remote_control::on_value_changed(int value)
       static_cast<bool>(on_beacon))
     on_beacon(new_state & beacon);
 
+  if ((new_state != _state) &&
+          static_cast<bool>(on_state_change))
+      on_state_change(new_state);
+
   _state = new_state;
 }
 

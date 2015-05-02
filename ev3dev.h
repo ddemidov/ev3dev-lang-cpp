@@ -562,11 +562,9 @@ public:
   std::function<void (bool)> on_blue_up;
   std::function<void (bool)> on_blue_down;
   std::function<void (bool)> on_beacon;
+  std::function<void (int)>  on_state_change;
 
-protected:
-  virtual void on_value_changed(int value);
-
-  enum
+  enum buttons
   {
     red_up    = (1 << 0),
     red_down  = (1 << 1),
@@ -576,6 +574,8 @@ protected:
   };
 
 protected:
+  virtual void on_value_changed(int value);
+
   infrared_sensor *_sensor = nullptr;
   bool             _owns_sensor = false;
   unsigned         _channel = 0;
