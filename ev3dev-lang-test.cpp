@@ -237,20 +237,17 @@ void test_servo_motor()
          << "  Current properties are:" << endl;
 //~autogen cpp_generic_report_status classes.servoMotor>currentClass
 
-    cout << "    Command: ";
-    try { cout << dev.command() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Driver Name: ";
     try { cout << dev.driver_name() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Max Pulse MS: ";
-    try { cout << dev.max_pulse_ms() << endl; }
+    cout << "    Max Pulse SP: ";
+    try { cout << dev.max_pulse_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Mid Pulse MS: ";
-    try { cout << dev.mid_pulse_ms() << endl; }
+    cout << "    Mid Pulse SP: ";
+    try { cout << dev.mid_pulse_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Min Pulse MS: ";
-    try { cout << dev.min_pulse_ms() << endl; }
+    cout << "    Min Pulse SP: ";
+    try { cout << dev.min_pulse_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
@@ -258,11 +255,14 @@ void test_servo_motor()
     cout << "    Port Name: ";
     try { cout << dev.port_name() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Position: ";
-    try { cout << dev.position() << endl; }
+    cout << "    Position SP: ";
+    try { cout << dev.position_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Rate: ";
-    try { cout << dev.rate() << endl; }
+    cout << "    Rate SP: ";
+    try { cout << dev.rate_sp() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    State: ";
+    try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
 
 

@@ -375,22 +375,22 @@ public:
 
   //~autogen cpp_generic-get-set classes.servoMotor>currentClass
 
-    std::string command() const { return get_attr_string("command"); }
     void set_command(std::string v) { set_attr_string("command", v); }
     std::string driver_name() const { return get_attr_string("driver_name"); }
-    int max_pulse_ms() const { return get_attr_int("max_pulse_ms"); }
-    void set_max_pulse_ms(int v) { set_attr_int("max_pulse_ms", v); }
-    int mid_pulse_ms() const { return get_attr_int("mid_pulse_ms"); }
-    void set_mid_pulse_ms(int v) { set_attr_int("mid_pulse_ms", v); }
-    int min_pulse_ms() const { return get_attr_int("min_pulse_ms"); }
-    void set_min_pulse_ms(int v) { set_attr_int("min_pulse_ms", v); }
+    int max_pulse_sp() const { return get_attr_int("max_pulse_sp"); }
+    void set_max_pulse_sp(int v) { set_attr_int("max_pulse_sp", v); }
+    int mid_pulse_sp() const { return get_attr_int("mid_pulse_sp"); }
+    void set_mid_pulse_sp(int v) { set_attr_int("mid_pulse_sp", v); }
+    int min_pulse_sp() const { return get_attr_int("min_pulse_sp"); }
+    void set_min_pulse_sp(int v) { set_attr_int("min_pulse_sp", v); }
     std::string polarity() const { return get_attr_string("polarity"); }
     void set_polarity(std::string v) { set_attr_string("polarity", v); }
     std::string port_name() const { return get_attr_string("port_name"); }
-    int position() const { return get_attr_int("position"); }
-    void set_position(int v) { set_attr_int("position", v); }
-    int rate() const { return get_attr_int("rate"); }
-    void set_rate(int v) { set_attr_int("rate", v); }
+    int position_sp() const { return get_attr_int("position_sp"); }
+    void set_position_sp(int v) { set_attr_int("position_sp", v); }
+    int rate_sp() const { return get_attr_int("rate_sp"); }
+    void set_rate_sp(int v) { set_attr_int("rate_sp", v); }
+    mode_set state() const { return get_attr_set("state"); }
 
 //~autogen
 };
