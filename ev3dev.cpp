@@ -504,7 +504,7 @@ std::string sensor::type_name() const
 
 int sensor::value(unsigned index) const
 {
-  if (index >= num_values())
+  if (static_cast<int>(index) >= num_values())
     throw std::invalid_argument("index");
 
   char svalue[7] = "value0";
