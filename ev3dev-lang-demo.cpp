@@ -181,7 +181,7 @@ void motor_action(motor &dev)
          << "st(o)p command      [" << dev.stop_command()             << "]" << endl
          << "speed r(e)gulation  [" << dev.speed_regulation_enabled() << "]" << endl;
 
-    if (dev.speed_regulation_enabled()==dev.mode_on)
+    if (dev.speed_regulation_enabled()==dev.speed_regulation_on)
       cout << "speed (s)etpoint (" << dev.speed_sp() << ")" << endl;
     else
       cout << "duty cycle (s)etpoint (" << dev.duty_cycle_sp() << ")" << endl;
@@ -297,7 +297,7 @@ void motor_action(motor &dev)
       cin >> answer; dev.set_speed_regulation_enabled(answer); cout << endl;
       break;
     case 's':
-      if (dev.speed_regulation_enabled()==dev.mode_on)
+      if (dev.speed_regulation_enabled()==dev.speed_regulation_on)
       {
         cout << "speed: "; cin >> new_value; dev.set_speed_sp(new_value); cout << endl;
       }
@@ -381,12 +381,12 @@ void motor_action(servo_motor &m)
     cout << endl
          << "*** servo motor (" << m.port_name() << ") actions ***" << endl
          << endl
-         << "(c)ommand      [" << m.command()      << "]" << endl
-         << "(p)osition     (" << m.position()     << ")" << endl
-         << "(r)ate         (" << m.rate()         << ")" << endl
-         << "mi(n) pulse ms (" << m.min_pulse_ms() << ")" << endl
-         << "mi(d) pulse ms (" << m.mid_pulse_ms() << ")" << endl
-         << "ma(x) pulse ms (" << m.max_pulse_ms() << ")" << endl
+         << "(c)ommand" << endl
+         << "(p)osition_sp  (" << m.position_sp()  << ")" << endl
+         << "(r)ate_sp      (" << m.rate_sp()      << ")" << endl
+         << "mi(n) pulse sp (" << m.min_pulse_sp() << ")" << endl
+         << "mi(d) pulse sp (" << m.mid_pulse_sp() << ")" << endl
+         << "ma(x) pulse sp (" << m.max_pulse_sp() << ")" << endl
          << "p(o)larity     [" << m.polarity()     << "]" << endl;
     cout << endl << "(b)ack" << endl
          << endl
@@ -400,23 +400,23 @@ void motor_action(servo_motor &m)
       cin >> new_mode; m.set_command(new_mode); cout << endl;
       break;
     case 'p':
-      cout << "position: "; cin >> new_value; m.set_position(new_value); cout << endl;
+      cout << "position sp: "; cin >> new_value; m.set_position_sp(new_value); cout << endl;
       break;
     case 'o':
       cout << "polarity (normal, inverted): ";
       cin >> new_mode; m.set_polarity(new_mode); cout << endl;
       break;
     case 'r':
-      cout << "rate: "; cin >> new_value; m.set_rate(new_value); cout << endl;
+      cout << "rate sp: "; cin >> new_value; m.set_rate_sp(new_value); cout << endl;
       break;
     case 'n':
-      cout << "min pulse ms: "; cin >> new_value; m.set_min_pulse_ms(new_value); cout << endl;
+      cout << "min pulse sp: "; cin >> new_value; m.set_min_pulse_sp(new_value); cout << endl;
       break;
     case 'd':
-      cout << "mid pulse ms: "; cin >> new_value; m.set_mid_pulse_ms(new_value); cout << endl;
+      cout << "mid pulse sp: "; cin >> new_value; m.set_mid_pulse_sp(new_value); cout << endl;
       break;
     case 'x':
-      cout << "max pulse ms: "; cin >> new_value; m.set_max_pulse_ms(new_value); cout << endl;
+      cout << "max pulse sp: "; cin >> new_value; m.set_max_pulse_sp(new_value); cout << endl;
       break;
     }
   }

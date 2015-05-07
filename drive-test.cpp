@@ -298,7 +298,7 @@ void control::drive_autonomously()
     return;
   }
 
-  _sensor_ir.set_mode(infrared_sensor::mode_proximity);
+  _sensor_ir.set_mode(infrared_sensor::mode_ir_prox);
 
   while (!_terminate)
   {

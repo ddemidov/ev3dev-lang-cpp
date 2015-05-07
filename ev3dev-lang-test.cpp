@@ -191,9 +191,6 @@ void test_dc_motor()
          << "  Current properties are:" << endl;
 //~autogen cpp_generic_report_status classes.dcMotor>currentClass
 
-    cout << "    Command: ";
-    try { cout << dev.command() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -217,6 +214,9 @@ void test_dc_motor()
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Ramp Up MS: ";
     try { cout << dev.ramp_up_ms() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Stop Commands: ";
+    try { cout << dev.stop_commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
 
 
