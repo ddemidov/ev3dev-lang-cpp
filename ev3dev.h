@@ -176,9 +176,16 @@ class color_sensor : public sensor
 public:
   color_sensor(port_type port_ = INPUT_AUTO);
 
-  static const mode_type mode_reflect;
-  static const mode_type mode_ambient;
-  static const mode_type mode_color;
+  //~autogen cpp_generic-declare-property-value classes.colorSensor>currentClass
+
+    static const std::string mode_col_reflect;
+    static const std::string mode_col_ambient;
+    static const std::string mode_col_color;
+    static const std::string mode_ref_raw;
+    static const std::string mode_rgb_raw;
+    static const std::string mode_col_cal;
+
+//~autogen
 };
 
 //-----------------------------------------------------------------------------
@@ -188,11 +195,17 @@ class ultrasonic_sensor : public sensor
 public:
   ultrasonic_sensor(port_type port_ = INPUT_AUTO);
 
-  static const mode_type mode_dist_cm;
-  static const mode_type mode_dist_in;
-  static const mode_type mode_listen;
-  static const mode_type mode_single_cm;
-  static const mode_type mode_single_in;
+  //~autogen cpp_generic-declare-property-value classes.ultrasonicSensor>currentClass
+
+    static const std::string mode_us_dist_cm;
+    static const std::string mode_us_dist_in;
+    static const std::string mode_us_listen;
+    static const std::string mode_us_si_cm;
+    static const std::string mode_us_si_in;
+    static const std::string mode_us_dc_cm;
+    static const std::string mode_us_dc_in;
+
+//~autogen
 };
 
 //-----------------------------------------------------------------------------
@@ -202,9 +215,15 @@ class gyro_sensor : public sensor
 public:
   gyro_sensor(port_type port_ = INPUT_AUTO);
 
-  static const mode_type mode_angle;
-  static const mode_type mode_speed;
-  static const mode_type mode_angle_and_speed;
+  //~autogen cpp_generic-declare-property-value classes.gyroSensor>currentClass
+
+    static const std::string mode_gyro_ang;
+    static const std::string mode_gyro_rate;
+    static const std::string mode_gyro_fas;
+    static const std::string mode_gyro_g_a;
+    static const std::string mode_gyro_cal;
+
+//~autogen
 };
 
 //-----------------------------------------------------------------------------
@@ -214,9 +233,16 @@ class infrared_sensor : public sensor
 public:
   infrared_sensor(port_type port_ = INPUT_AUTO);
 
-  static const mode_type mode_proximity;
-  static const mode_type mode_ir_seeker;
-  static const mode_type mode_ir_remote;
+  //~autogen cpp_generic-declare-property-value classes.infraredSensor>currentClass
+
+    static const std::string mode_ir_prox;
+    static const std::string mode_ir_seek;
+    static const std::string mode_ir_remote;
+    static const std::string mode_ir_rem_a;
+    static const std::string mode_ir_s_alt;
+    static const std::string mode_ir_cal;
+
+//~autogen
 };
 
 //-----------------------------------------------------------------------------
@@ -232,22 +258,29 @@ public:
   static const motor_type motor_large;
   static const motor_type motor_medium;
 
-  static const mode_type mode_off;
-  static const mode_type mode_on;
-
-  static const mode_type run_mode_forever;
-  static const mode_type run_mode_time;
-  static const mode_type run_mode_position;
-
-  static const mode_type stop_mode_coast;
-  static const mode_type stop_mode_brake;
-  static const mode_type stop_mode_hold;
-
-  static const mode_type position_mode_absolute;
-  static const mode_type position_mode_relative;
-
   using device::connected;
   using device::device_index;
+
+  //~autogen cpp_generic-declare-property-value classes.motor>currentClass
+
+    static const std::string command_run_forever;
+    static const std::string command_run_to_abs_pos;
+    static const std::string command_run_to_rel_pos;
+    static const std::string command_run_timed;
+    static const std::string command_run_direct;
+    static const std::string command_stop;
+    static const std::string command_reset;
+    static const std::string encoder_polarity_normal;
+    static const std::string encoder_polarity_inverted;
+    static const std::string polarity_normal;
+    static const std::string polarity_inverted;
+    static const std::string speed_regulation_on;
+    static const std::string speed_regulation_off;
+    static const std::string stop_command_coast;
+    static const std::string stop_command_brake;
+    static const std::string stop_command_hold;
+
+//~autogen
 
   //~autogen cpp_generic-get-set classes.motor>currentClass
 
@@ -326,18 +359,23 @@ class dc_motor : protected device
 public:
   dc_motor(port_type port_ = OUTPUT_AUTO);
 
-  static const std::string command_run;
-  static const std::string command_brake;
-  static const std::string command_coast;
-  static const std::string polarity_normal;
-  static const std::string polarity_inverted;
-
   using device::connected;
   using device::device_index;
 
+  //~autogen cpp_generic-declare-property-value classes.dcMotor>currentClass
+
+    static const std::string command_run_forever;
+    static const std::string command_run_timed;
+    static const std::string command_stop;
+    static const std::string polarity_normal;
+    static const std::string polarity_inverted;
+    static const std::string stop_command_coast;
+    static const std::string stop_command_brake;
+
+//~autogen
+
   //~autogen cpp_generic-get-set classes.dcMotor>currentClass
 
-    std::string command() const { return get_attr_string("command"); }
     void set_command(std::string v) { set_attr_string("command", v); }
     mode_set commands() const { return get_attr_set("commands"); }
     std::string driver_name() const { return get_attr_string("driver_name"); }
@@ -351,6 +389,8 @@ public:
     void set_ramp_down_ms(int v) { set_attr_int("ramp_down_ms", v); }
     int ramp_up_ms() const { return get_attr_int("ramp_up_ms"); }
     void set_ramp_up_ms(int v) { set_attr_int("ramp_up_ms", v); }
+    void set_stop_command(std::string v) { set_attr_string("stop_command", v); }
+    mode_set stop_commands() const { return get_attr_set("stop_commands"); }
 
 //~autogen
 
@@ -365,13 +405,17 @@ class servo_motor : protected device
 public:
   servo_motor(port_type port_ = OUTPUT_AUTO);
 
-  static const std::string command_run;
-  static const std::string command_float;
-  static const std::string polarity_normal;
-  static const std::string polarity_inverted;
-
   using device::connected;
   using device::device_index;
+
+  //~autogen cpp_generic-declare-property-value classes.servoMotor>currentClass
+
+    static const std::string command_run;
+    static const std::string command_float;
+    static const std::string polarity_normal;
+    static const std::string polarity_inverted;
+
+//~autogen
 
   //~autogen cpp_generic-get-set classes.servoMotor>currentClass
 

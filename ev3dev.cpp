@@ -23,6 +23,12 @@
  *
  */
 
+//-----------------------------------------------------------------------------
+//~autogen autogen-header
+    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
+//~autogen
+//-----------------------------------------------------------------------------
+
 #include "ev3dev.h"
 
 #include <iostream>
@@ -545,9 +551,16 @@ touch_sensor::touch_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-const mode_type color_sensor::mode_reflect { "COL-REFLECT" };
-const mode_type color_sensor::mode_ambient { "COL-AMBIENT" };
-const mode_type color_sensor::mode_color   { "COL-COLOR"   };
+//~autogen cpp_generic-define-property-value classes.colorSensor>currentClass
+
+const std::string color_sensor::mode_col_reflect{ "COL-REFLECT" };
+const std::string color_sensor::mode_col_ambient{ "COL-AMBIENT" };
+const std::string color_sensor::mode_col_color{ "COL-COLOR" };
+const std::string color_sensor::mode_ref_raw{ "REF-RAW" };
+const std::string color_sensor::mode_rgb_raw{ "RGB-RAW" };
+const std::string color_sensor::mode_col_cal{ "COL-CAL" };
+
+//~autogen
 
 color_sensor::color_sensor(port_type port_) :
   sensor(port_, { ev3_color })
@@ -556,11 +569,17 @@ color_sensor::color_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-const mode_type ultrasonic_sensor::mode_dist_cm   { "US-DIST-CM" };
-const mode_type ultrasonic_sensor::mode_dist_in   { "US-DIST-IN" };
-const mode_type ultrasonic_sensor::mode_listen    { "US-LISTEN"  };
-const mode_type ultrasonic_sensor::mode_single_cm { "US-SI-CM"   };
-const mode_type ultrasonic_sensor::mode_single_in { "US-SI-IN"   };
+//~autogen cpp_generic-define-property-value classes.ultrasonicSensor>currentClass
+
+const std::string ultrasonic_sensor::mode_us_dist_cm{ "US-DIST-CM" };
+const std::string ultrasonic_sensor::mode_us_dist_in{ "US-DIST-IN" };
+const std::string ultrasonic_sensor::mode_us_listen{ "US-LISTEN" };
+const std::string ultrasonic_sensor::mode_us_si_cm{ "US-SI-CM" };
+const std::string ultrasonic_sensor::mode_us_si_in{ "US-SI-IN" };
+const std::string ultrasonic_sensor::mode_us_dc_cm{ "US-DC-CM" };
+const std::string ultrasonic_sensor::mode_us_dc_in{ "US-DC-IN" };
+
+//~autogen
 
 ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
   sensor(port_, { ev3_ultrasonic, nxt_ultrasonic })
@@ -569,9 +588,15 @@ ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-const mode_type gyro_sensor::mode_angle           { "GYRO-ANG"  };
-const mode_type gyro_sensor::mode_speed           { "GYRO-RATE" };
-const mode_type gyro_sensor::mode_angle_and_speed { "GYRO-G&A"  };
+//~autogen cpp_generic-define-property-value classes.gyroSensor>currentClass
+
+const std::string gyro_sensor::mode_gyro_ang{ "GYRO-ANG" };
+const std::string gyro_sensor::mode_gyro_rate{ "GYRO-RATE" };
+const std::string gyro_sensor::mode_gyro_fas{ "GYRO-FAS" };
+const std::string gyro_sensor::mode_gyro_g_a{ "GYRO-G&A" };
+const std::string gyro_sensor::mode_gyro_cal{ "GYRO-CAL" };
+
+//~autogen
 
 gyro_sensor::gyro_sensor(port_type port_) :
   sensor(port_, { ev3_gyro })
@@ -580,9 +605,16 @@ gyro_sensor::gyro_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-const mode_type infrared_sensor::mode_proximity { "IR-PROX"   };
-const mode_type infrared_sensor::mode_ir_seeker { "IR-SEEK"   };
-const mode_type infrared_sensor::mode_ir_remote { "IR-REMOTE" };
+//~autogen cpp_generic-define-property-value classes.infraredSensor>currentClass
+
+const std::string infrared_sensor::mode_ir_prox{ "IR-PROX" };
+const std::string infrared_sensor::mode_ir_seek{ "IR-SEEK" };
+const std::string infrared_sensor::mode_ir_remote{ "IR-REMOTE" };
+const std::string infrared_sensor::mode_ir_rem_a{ "IR-REM-A" };
+const std::string infrared_sensor::mode_ir_s_alt{ "IR-S-ALT" };
+const std::string infrared_sensor::mode_ir_cal{ "IR-CAL" };
+
+//~autogen
 
 infrared_sensor::infrared_sensor(port_type port_) :
   sensor(port_, { ev3_infrared })
@@ -594,19 +626,26 @@ infrared_sensor::infrared_sensor(port_type port_) :
 const motor::motor_type motor::motor_large  { "lego-ev3-l-motor" };
 const motor::motor_type motor::motor_medium { "lego-ev3-m-motor" };
 
-const mode_type motor::mode_off { "off" };
-const mode_type motor::mode_on  { "on"  };
+//~autogen cpp_generic-define-property-value classes.motor>currentClass
 
-const mode_type motor::run_mode_forever  { "forever"  };
-const mode_type motor::run_mode_time     { "time"     };
-const mode_type motor::run_mode_position { "position" };
+const std::string motor::command_run_forever{ "run-forever" };
+const std::string motor::command_run_to_abs_pos{ "run-to-abs-pos" };
+const std::string motor::command_run_to_rel_pos{ "run-to-rel-pos" };
+const std::string motor::command_run_timed{ "run-timed" };
+const std::string motor::command_run_direct{ "run-direct" };
+const std::string motor::command_stop{ "stop" };
+const std::string motor::command_reset{ "reset" };
+const std::string motor::encoder_polarity_normal{ "normal" };
+const std::string motor::encoder_polarity_inverted{ "inverted" };
+const std::string motor::polarity_normal{ "normal" };
+const std::string motor::polarity_inverted{ "inverted" };
+const std::string motor::speed_regulation_on{ "on" };
+const std::string motor::speed_regulation_off{ "off" };
+const std::string motor::stop_command_coast{ "coast" };
+const std::string motor::stop_command_brake{ "brake" };
+const std::string motor::stop_command_hold{ "hold" };
 
-const mode_type motor::stop_mode_coast { "coast" };
-const mode_type motor::stop_mode_brake { "brake" };
-const mode_type motor::stop_mode_hold  { "hold"  };
-
-const mode_type motor::position_mode_absolute { "absolute" };
-const mode_type motor::position_mode_relative { "relative" };
+//~autogen
 
 //-----------------------------------------------------------------------------
 
@@ -662,11 +701,17 @@ dc_motor::dc_motor(port_type port)
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
 
-const std::string dc_motor::command_run       { "run" };
-const std::string dc_motor::command_brake     { "brake" };
-const std::string dc_motor::command_coast     { "coast" };
-const std::string dc_motor::polarity_normal   { "normal" };
-const std::string dc_motor::polarity_inverted { "inverted" };
+//~autogen cpp_generic-define-property-value classes.dcMotor>currentClass
+
+const std::string dc_motor::command_run_forever{ "run-forever" };
+const std::string dc_motor::command_run_timed{ "run-timed" };
+const std::string dc_motor::command_stop{ "stop" };
+const std::string dc_motor::polarity_normal{ "normal" };
+const std::string dc_motor::polarity_inverted{ "inverted" };
+const std::string dc_motor::stop_command_coast{ "coast" };
+const std::string dc_motor::stop_command_brake{ "brake" };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
@@ -678,10 +723,14 @@ servo_motor::servo_motor(port_type port)
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
 
-const std::string servo_motor::command_run       { "run" };
-const std::string servo_motor::command_float     { "float" };
-const std::string servo_motor::polarity_normal   { "normal" };
-const std::string servo_motor::polarity_inverted { "inverted" };
+//~autogen cpp_generic-define-property-value classes.servoMotor>currentClass
+
+const std::string servo_motor::command_run{ "run" };
+const std::string servo_motor::command_float{ "float" };
+const std::string servo_motor::polarity_normal{ "normal" };
+const std::string servo_motor::polarity_inverted{ "inverted" };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
