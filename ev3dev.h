@@ -385,10 +385,11 @@ public:
     std::string polarity() const { return get_attr_string("polarity"); }
     void set_polarity(std::string v) { set_attr_string("polarity", v); }
     std::string port_name() const { return get_attr_string("port_name"); }
-    int ramp_down_ms() const { return get_attr_int("ramp_down_ms"); }
-    void set_ramp_down_ms(int v) { set_attr_int("ramp_down_ms", v); }
-    int ramp_up_ms() const { return get_attr_int("ramp_up_ms"); }
-    void set_ramp_up_ms(int v) { set_attr_int("ramp_up_ms", v); }
+    int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
+    void set_ramp_down_sp(int v) { set_attr_int("ramp_down_sp", v); }
+    int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
+    void set_ramp_up_sp(int v) { set_attr_int("ramp_up_sp", v); }
+    mode_set state() const { return get_attr_set("state"); }
     void set_stop_command(std::string v) { set_attr_string("stop_command", v); }
     mode_set stop_commands() const { return get_attr_set("stop_commands"); }
 
