@@ -131,6 +131,7 @@ public:
   static const sensor_type nxt_sound;
   static const sensor_type nxt_ultrasonic;
   static const sensor_type nxt_i2c_sensor;
+  static const sensor_type nxt_analog;
 
   sensor(port_type);
   sensor(port_type, const std::set<sensor_type>&);
@@ -386,6 +387,54 @@ public:
 
   // Calibration ???
   static const std::string mode_ir_cal;
+
+
+//~autogen
+};
+
+//-----------------------------------------------------------------------------
+
+//~autogen cpp_generic-class-description classes.soundSensor>currentClass
+
+// LEGO NXT Sound Sensor
+
+//~autogen
+class sound_sensor : public sensor
+{
+public:
+  sound_sensor(port_type port_ = INPUT_AUTO);
+
+  //~autogen cpp_generic-declare-property-value classes.soundSensor>currentClass
+
+  // Sound pressure level. Flat weighting
+  static const std::string mode_db;
+
+  // Sound pressure level. A weighting
+  static const std::string mode_dba;
+
+
+//~autogen
+};
+
+//-----------------------------------------------------------------------------
+
+//~autogen cpp_generic-class-description classes.lightSensor>currentClass
+
+// LEGO NXT Light Sensor
+
+//~autogen
+class light_sensor : public sensor
+{
+public:
+  light_sensor(port_type port_ = INPUT_AUTO);
+
+  //~autogen cpp_generic-declare-property-value classes.lightSensor>currentClass
+
+  // Reflected light. LED on
+  static const std::string mode_reflect;
+
+  // Ambient light. LED off
+  static const std::string mode_ambient;
 
 
 //~autogen

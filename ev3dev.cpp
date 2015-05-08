@@ -439,6 +439,7 @@ const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
 const sensor::sensor_type sensor::nxt_sound       { "lego-nxt-sound" };
 const sensor::sensor_type sensor::nxt_ultrasonic  { "lego-nxt-us" };
 const sensor::sensor_type sensor::nxt_i2c_sensor  { "nxt-i2c-sensor" };
+const sensor::sensor_type sensor::nxt_analog      { "nxt-analog" };
 
 //-----------------------------------------------------------------------------
 
@@ -615,6 +616,49 @@ const std::string infrared_sensor::mode_ir_cal{ "IR-CAL" };
 
 infrared_sensor::infrared_sensor(port_type port_) :
   sensor(port_, { ev3_infrared })
+{
+}
+
+//-----------------------------------------------------------------------------
+
+//~autogen cpp_generic-define-property-value classes.soundSensor>currentClass
+
+const std::string sound_sensor::mode_db{ "DB" };
+const std::string sound_sensor::mode_dba{ "DBA" };
+
+//~autogen
+
+sound_sensor::sound_sensor(port_type port_) :
+  sensor(port_, { nxt_sound, nxt_analog })
+{
+    if (connected() && driver_name() == nxt_analog) {
+        device port;
+        port.connect(SYS_ROOT "/class/lego-port/", "port", {{"port_name", {port_name()}}});
+
+        if (port.connected()) {
+            port.set_attr_string("set_device", nxt_sound);
+
+            if (port.get_attr_string("status") != nxt_sound) {
+                // Failed to load lego-nxt-sound friver. Wrong port?
+                _path.clear();
+            }
+        } else {
+            _path.clear();
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+//~autogen cpp_generic-define-property-value classes.lightSensor>currentClass
+
+const std::string light_sensor::mode_reflect{ "REFLECT" };
+const std::string light_sensor::mode_ambient{ "AMBIENT" };
+
+//~autogen
+
+light_sensor::light_sensor(port_type port_) :
+  sensor(port_, { nxt_light })
 {
 }
 
