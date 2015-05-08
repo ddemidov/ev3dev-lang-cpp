@@ -337,9 +337,9 @@ void motor_action(dc_motor &m)
     cout << endl
          << "*** dc motor (" << m.port_name() << ") actions ***" << endl
          << endl
-         << "(d)uty cycle   (" << m.duty_cycle()   << ")" << endl
-         << "(r)amp down ms (" << m.ramp_down_ms() << ")" << endl
-         << "ramp (u)p ms   (" << m.ramp_up_ms()   << ")" << endl
+         << "(d)uty cycle sp(" << m.duty_cycle_sp() << ")" << endl
+         << "(r)amp down sp (" << m.ramp_down_sp() << ")" << endl
+         << "ramp (u)p sp   (" << m.ramp_up_sp()   << ")" << endl
          << "p(o)larity     [" << m.polarity()     << "]" << endl;
     cout << endl << "(b)ack" << endl
          << endl
@@ -357,13 +357,13 @@ void motor_action(dc_motor &m)
       cin >> new_mode; m.set_polarity(new_mode); cout << endl;
       break;
     case 'd':
-      cout << "duty cycle: "; cin >> new_value; m.set_duty_cycle_sp(new_value); cout << endl;
+      cout << "duty cycle sp: "; cin >> new_value; m.set_duty_cycle_sp(new_value); cout << endl;
       break;
     case 'r':
-      cout << "ramp down ms: "; cin >> new_value; m.set_ramp_down_ms(new_value); cout << endl;
+      cout << "ramp down sp: "; cin >> new_value; m.set_ramp_down_sp(new_value); cout << endl;
       break;
     case 'u':
-      cout << "ramp up ms: "; cin >> new_value; m.set_ramp_up_ms(new_value); cout << endl;
+      cout << "ramp up sp: "; cin >> new_value; m.set_ramp_up_sp(new_value); cout << endl;
       break;
     }
   }
