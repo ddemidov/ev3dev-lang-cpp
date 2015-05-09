@@ -125,12 +125,12 @@ public:
 
   //~autogen cpp_generic-get-set classes.sensor>currentClass
 
-    void set_command(std::string v) { set_attr_string("command", v); }
+    auto set_command(std::string v) -> decltype(*this) { set_attr_string("command", v); return *this; }
     mode_set commands() const { return get_attr_set("commands"); }
     int decimals() const { return get_attr_int("decimals"); }
     std::string driver_name() const { return get_attr_string("driver_name"); }
     std::string mode() const { return get_attr_string("mode"); }
-    void set_mode(std::string v) { set_attr_string("mode", v); }
+    auto set_mode(std::string v) -> decltype(*this) { set_attr_string("mode", v); return *this; }
     mode_set modes() const { return get_attr_set("modes"); }
     int num_values() const { return get_attr_int("num_values"); }
     std::string port_name() const { return get_attr_string("port_name"); }
@@ -156,7 +156,7 @@ public:
 
     std::string fw_version() const { return get_attr_string("fw_version"); }
     int poll_ms() const { return get_attr_int("poll_ms"); }
-    void set_poll_ms(int v) { set_attr_int("poll_ms", v); }
+    auto set_poll_ms(int v) -> decltype(*this) { set_attr_int("poll_ms", v); return *this; }
 
 //~autogen
 };
@@ -284,49 +284,61 @@ public:
 
   //~autogen cpp_generic-get-set classes.motor>currentClass
 
-    void set_command(std::string v) { set_attr_string("command", v); }
+    auto set_command(std::string v) -> decltype(*this) { set_attr_string("command", v); return *this; }
     mode_set commands() const { return get_attr_set("commands"); }
     int count_per_rot() const { return get_attr_int("count_per_rot"); }
     std::string driver_name() const { return get_attr_string("driver_name"); }
     int duty_cycle() const { return get_attr_int("duty_cycle"); }
     int duty_cycle_sp() const { return get_attr_int("duty_cycle_sp"); }
-    void set_duty_cycle_sp(int v) { set_attr_int("duty_cycle_sp", v); }
+    auto set_duty_cycle_sp(int v) -> decltype(*this) { set_attr_int("duty_cycle_sp", v); return *this; }
     std::string encoder_polarity() const { return get_attr_string("encoder_polarity"); }
-    void set_encoder_polarity(std::string v) { set_attr_string("encoder_polarity", v); }
+    auto set_encoder_polarity(std::string v) -> decltype(*this) { set_attr_string("encoder_polarity", v); return *this; }
     std::string polarity() const { return get_attr_string("polarity"); }
-    void set_polarity(std::string v) { set_attr_string("polarity", v); }
+    auto set_polarity(std::string v) -> decltype(*this) { set_attr_string("polarity", v); return *this; }
     std::string port_name() const { return get_attr_string("port_name"); }
     int position() const { return get_attr_int("position"); }
-    void set_position(int v) { set_attr_int("position", v); }
+    auto set_position(int v) -> decltype(*this) { set_attr_int("position", v); return *this; }
     int position_p() const { return get_attr_int("hold_pid/Kp"); }
-    void set_position_p(int v) { set_attr_int("hold_pid/Kp", v); }
+    auto set_position_p(int v) -> decltype(*this) { set_attr_int("hold_pid/Kp", v); return *this; }
     int position_i() const { return get_attr_int("hold_pid/Ki"); }
-    void set_position_i(int v) { set_attr_int("hold_pid/Ki", v); }
+    auto set_position_i(int v) -> decltype(*this) { set_attr_int("hold_pid/Ki", v); return *this; }
     int position_d() const { return get_attr_int("hold_pid/Kd"); }
-    void set_position_d(int v) { set_attr_int("hold_pid/Kd", v); }
+    auto set_position_d(int v) -> decltype(*this) { set_attr_int("hold_pid/Kd", v); return *this; }
     int position_sp() const { return get_attr_int("position_sp"); }
-    void set_position_sp(int v) { set_attr_int("position_sp", v); }
+    auto set_position_sp(int v) -> decltype(*this) { set_attr_int("position_sp", v); return *this; }
     int speed() const { return get_attr_int("speed"); }
     int speed_sp() const { return get_attr_int("speed_sp"); }
-    void set_speed_sp(int v) { set_attr_int("speed_sp", v); }
+    auto set_speed_sp(int v) -> decltype(*this) { set_attr_int("speed_sp", v); return *this; }
     int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
-    void set_ramp_up_sp(int v) { set_attr_int("ramp_up_sp", v); }
+    auto set_ramp_up_sp(int v) -> decltype(*this) { set_attr_int("ramp_up_sp", v); return *this; }
     int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
-    void set_ramp_down_sp(int v) { set_attr_int("ramp_down_sp", v); }
+    auto set_ramp_down_sp(int v) -> decltype(*this) { set_attr_int("ramp_down_sp", v); return *this; }
     std::string speed_regulation_enabled() const { return get_attr_string("speed_regulation"); }
-    void set_speed_regulation_enabled(std::string v) { set_attr_string("speed_regulation", v); }
+    auto set_speed_regulation_enabled(std::string v) -> decltype(*this) { set_attr_string("speed_regulation", v); return *this; }
     int speed_regulation_p() const { return get_attr_int("speed_pid/Kp"); }
-    void set_speed_regulation_p(int v) { set_attr_int("speed_pid/Kp", v); }
+    auto set_speed_regulation_p(int v) -> decltype(*this) { set_attr_int("speed_pid/Kp", v); return *this; }
     int speed_regulation_i() const { return get_attr_int("speed_pid/Ki"); }
-    void set_speed_regulation_i(int v) { set_attr_int("speed_pid/Ki", v); }
+    auto set_speed_regulation_i(int v) -> decltype(*this) { set_attr_int("speed_pid/Ki", v); return *this; }
     int speed_regulation_d() const { return get_attr_int("speed_pid/Kd"); }
-    void set_speed_regulation_d(int v) { set_attr_int("speed_pid/Kd", v); }
+    auto set_speed_regulation_d(int v) -> decltype(*this) { set_attr_int("speed_pid/Kd", v); return *this; }
     mode_set state() const { return get_attr_set("state"); }
     std::string stop_command() const { return get_attr_string("stop_command"); }
-    void set_stop_command(std::string v) { set_attr_string("stop_command", v); }
+    auto set_stop_command(std::string v) -> decltype(*this) { set_attr_string("stop_command", v); return *this; }
     mode_set stop_commands() const { return get_attr_set("stop_commands"); }
     int time_sp() const { return get_attr_int("time_sp"); }
-    void set_time_sp(int v) { set_attr_int("time_sp", v); }
+    auto set_time_sp(int v) -> decltype(*this) { set_attr_int("time_sp", v); return *this; }
+
+//~autogen
+
+    //~autogen cpp_motor_commands classes.motor>currentClass
+
+    void run_forever() { set_command("run-forever"); }
+    void run_to_abs_pos() { set_command("run-to-abs-pos"); }
+    void run_to_rel_pos() { set_command("run-to-rel-pos"); }
+    void run_timed() { set_command("run-timed"); }
+    void run_direct() { set_command("run-direct"); }
+    void stop() { set_command("stop"); }
+    void reset() { set_command("reset"); }
 
 //~autogen
 
@@ -376,22 +388,30 @@ public:
 
   //~autogen cpp_generic-get-set classes.dcMotor>currentClass
 
-    void set_command(std::string v) { set_attr_string("command", v); }
+    auto set_command(std::string v) -> decltype(*this) { set_attr_string("command", v); return *this; }
     mode_set commands() const { return get_attr_set("commands"); }
     std::string driver_name() const { return get_attr_string("driver_name"); }
     int duty_cycle() const { return get_attr_int("duty_cycle"); }
     int duty_cycle_sp() const { return get_attr_int("duty_cycle_sp"); }
-    void set_duty_cycle_sp(int v) { set_attr_int("duty_cycle_sp", v); }
+    auto set_duty_cycle_sp(int v) -> decltype(*this) { set_attr_int("duty_cycle_sp", v); return *this; }
     std::string polarity() const { return get_attr_string("polarity"); }
-    void set_polarity(std::string v) { set_attr_string("polarity", v); }
+    auto set_polarity(std::string v) -> decltype(*this) { set_attr_string("polarity", v); return *this; }
     std::string port_name() const { return get_attr_string("port_name"); }
     int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
-    void set_ramp_down_sp(int v) { set_attr_int("ramp_down_sp", v); }
+    auto set_ramp_down_sp(int v) -> decltype(*this) { set_attr_int("ramp_down_sp", v); return *this; }
     int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
-    void set_ramp_up_sp(int v) { set_attr_int("ramp_up_sp", v); }
+    auto set_ramp_up_sp(int v) -> decltype(*this) { set_attr_int("ramp_up_sp", v); return *this; }
     mode_set state() const { return get_attr_set("state"); }
-    void set_stop_command(std::string v) { set_attr_string("stop_command", v); }
+    auto set_stop_command(std::string v) -> decltype(*this) { set_attr_string("stop_command", v); return *this; }
     mode_set stop_commands() const { return get_attr_set("stop_commands"); }
+
+//~autogen
+
+    //~autogen cpp_motor_commands classes.dcMotor>currentClass
+
+    void run_forever() { set_command("run-forever"); }
+    void run_timed() { set_command("run-timed"); }
+    void stop() { set_command("stop"); }
 
 //~autogen
 
@@ -420,22 +440,29 @@ public:
 
   //~autogen cpp_generic-get-set classes.servoMotor>currentClass
 
-    void set_command(std::string v) { set_attr_string("command", v); }
+    auto set_command(std::string v) -> decltype(*this) { set_attr_string("command", v); return *this; }
     std::string driver_name() const { return get_attr_string("driver_name"); }
     int max_pulse_sp() const { return get_attr_int("max_pulse_sp"); }
-    void set_max_pulse_sp(int v) { set_attr_int("max_pulse_sp", v); }
+    auto set_max_pulse_sp(int v) -> decltype(*this) { set_attr_int("max_pulse_sp", v); return *this; }
     int mid_pulse_sp() const { return get_attr_int("mid_pulse_sp"); }
-    void set_mid_pulse_sp(int v) { set_attr_int("mid_pulse_sp", v); }
+    auto set_mid_pulse_sp(int v) -> decltype(*this) { set_attr_int("mid_pulse_sp", v); return *this; }
     int min_pulse_sp() const { return get_attr_int("min_pulse_sp"); }
-    void set_min_pulse_sp(int v) { set_attr_int("min_pulse_sp", v); }
+    auto set_min_pulse_sp(int v) -> decltype(*this) { set_attr_int("min_pulse_sp", v); return *this; }
     std::string polarity() const { return get_attr_string("polarity"); }
-    void set_polarity(std::string v) { set_attr_string("polarity", v); }
+    auto set_polarity(std::string v) -> decltype(*this) { set_attr_string("polarity", v); return *this; }
     std::string port_name() const { return get_attr_string("port_name"); }
     int position_sp() const { return get_attr_int("position_sp"); }
-    void set_position_sp(int v) { set_attr_int("position_sp", v); }
+    auto set_position_sp(int v) -> decltype(*this) { set_attr_int("position_sp", v); return *this; }
     int rate_sp() const { return get_attr_int("rate_sp"); }
-    void set_rate_sp(int v) { set_attr_int("rate_sp", v); }
+    auto set_rate_sp(int v) -> decltype(*this) { set_attr_int("rate_sp", v); return *this; }
     mode_set state() const { return get_attr_set("state"); }
+
+//~autogen
+
+    //~autogen cpp_motor_commands classes.servoMotor>currentClass
+
+    void run() { set_command("run"); }
+    void float_() { set_command("float"); }
 
 //~autogen
 };
@@ -453,9 +480,9 @@ public:
 
     int max_brightness() const { return get_attr_int("max_brightness"); }
     int brightness() const { return get_attr_int("brightness"); }
-    void set_brightness(int v) { set_attr_int("brightness", v); }
+    auto set_brightness(int v) -> decltype(*this) { set_attr_int("brightness", v); return *this; }
     std::string trigger() const { return get_attr_string("trigger"); }
-    void set_trigger(std::string v) { set_attr_string("trigger", v); }
+    auto set_trigger(std::string v) -> decltype(*this) { set_attr_string("trigger", v); return *this; }
 
 //~autogen
 
