@@ -839,7 +839,7 @@ void sound::tone(unsigned frequency, unsigned ms)
 
 void sound::play(const std::string &soundfile, bool bSynchronous)
 {
-  std::string cmd("aplay ");
+  std::string cmd("aplay -q ");
   cmd.append(soundfile);
   if (!bSynchronous)
   {
@@ -855,7 +855,7 @@ void sound::speak(const std::string &text, bool bSynchronous)
 {
   std::string cmd("espeak -a 200 --stdout \"");
   cmd.append(text);
-  cmd.append("\" | aplay");
+  cmd.append("\" | aplay -q");
   if (!bSynchronous)
   {
     cmd.append(" &");
