@@ -278,9 +278,10 @@ public:
   // Color. All LEDs rapidly cycling, appears white.
   static const std::string mode_col_color;
 
-  // Raw Color Components. All LEDs rapidly cycling, appears white.
+  // Raw reflected. Red LED on
   static const std::string mode_ref_raw;
 
+  // Raw Color Components. All LEDs rapidly cycling, appears white.
   static const std::string mode_rgb_raw;
 
 
