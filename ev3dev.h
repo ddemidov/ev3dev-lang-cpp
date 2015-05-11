@@ -269,12 +269,20 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.colorSensor>currentClass
 
+  // Reflected light. Red LED on.
   static const std::string mode_col_reflect;
+
+  // Ambient light. Red LEDs off.
   static const std::string mode_col_ambient;
+
+  // Color. All LEDs rapidly cycling, appears white.
   static const std::string mode_col_color;
+
+  // Raw Color Components. All LEDs rapidly cycling, appears white.
   static const std::string mode_ref_raw;
+
   static const std::string mode_rgb_raw;
-  static const std::string mode_col_cal;
+
 
 //~autogen
 };
@@ -293,13 +301,25 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.ultrasonicSensor>currentClass
 
+  // Continuous measurement in centimeters.
+  // LEDs: On, steady
   static const std::string mode_us_dist_cm;
+
+  // Continuous measurement in inches.
+  // LEDs: On, steady
   static const std::string mode_us_dist_in;
+
+  // Listen.  LEDs: On, blinking
   static const std::string mode_us_listen;
+
+  // Single measurement in centimeters.
+  // LEDs: On momentarily when mode is set, then off
   static const std::string mode_us_si_cm;
+
+  // Single measurement in inches.
+  // LEDs: On momentarily when mode is set, then off
   static const std::string mode_us_si_in;
-  static const std::string mode_us_dc_cm;
-  static const std::string mode_us_dc_in;
+
 
 //~autogen
 };
@@ -318,11 +338,21 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.gyroSensor>currentClass
 
+  // Angle
   static const std::string mode_gyro_ang;
+
+  // Rotational speed
   static const std::string mode_gyro_rate;
+
+  // Raw sensor value
   static const std::string mode_gyro_fas;
+
+  // Angle and rotational speed
   static const std::string mode_gyro_g_a;
+
+  // Calibration ???
   static const std::string mode_gyro_cal;
+
 
 //~autogen
 };
@@ -341,12 +371,21 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.infraredSensor>currentClass
 
+  // Proximity
   static const std::string mode_ir_prox;
+
+  // IR Seeker
   static const std::string mode_ir_seek;
+
+  // IR Remote Control
   static const std::string mode_ir_remote;
+
+  // IR Remote Control. State of the buttons is coded in binary
   static const std::string mode_ir_rem_a;
-  static const std::string mode_ir_s_alt;
+
+  // Calibration ???
   static const std::string mode_ir_cal;
+
 
 //~autogen
 };
@@ -377,22 +416,71 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.motor>currentClass
 
+  // Run the motor until another command is sent.
   static const std::string command_run_forever;
+
+  // Run to an absolute position specified by `position_sp` and then
+  // stop using the command specified in `stop_command`.
   static const std::string command_run_to_abs_pos;
+
+  // Run to a position relative to the current `position` value.
+  // The new position will be current `position` + `position_sp`.
+  // When the new position is reached, the motor will stop using
+  // the command specified by `stop_command`.
   static const std::string command_run_to_rel_pos;
+
+  // Run the motor for the amount of time specified in `time_sp`
+  // and then stop the motor using the command specified by `stop_command`.
   static const std::string command_run_timed;
+
+  // Run the motor at the duty cycle specified by `duty_cycle_sp`.
+  // Unlike other run commands, changing `duty_cycle_sp` while running *will*
+  // take effect immediately.
   static const std::string command_run_direct;
+
+  // Stop any of the run commands before they are complete using the
+  // command specified by `stop_command`.
   static const std::string command_stop;
+
+  // Reset all of the motor parameter attributes to their default value.
+  // This will also have the effect of stopping the motor.
   static const std::string command_reset;
+
+  // Sets the normal polarity of the rotary encoder.
   static const std::string encoder_polarity_normal;
+
+  // Sets the inverted polarity of the rotary encoder.
   static const std::string encoder_polarity_inverted;
+
+  // With `normal` polarity, a positive duty cycle will
+  // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
+
+  // With `inverted` polarity, a positive duty cycle will
+  // cause the motor to rotate counter-clockwise.
   static const std::string polarity_inverted;
+
+  // The motor controller will vary the power supplied to the motor
+  // to try to maintain the speed specified in `speed_sp`.
   static const std::string speed_regulation_on;
+
+  // The motor controller will use the power specified in `duty_cycle_sp`.
   static const std::string speed_regulation_off;
+
+  // Power will be removed from the motor and it will freely coast to a stop.
   static const std::string stop_command_coast;
+
+  // Power will be removed from the motor and a passive electrical load will
+  // be placed on the motor. This is usually done by shorting the motor terminals
+  // together. This load will absorb the energy from the rotation of the motors and
+  // cause the motor to stop more quickly than coasting.
   static const std::string stop_command_brake;
+
+  // Does not remove power from the motor. Instead it actively try to hold the motor
+  // at the current position. If an external force tries to turn the motor, the motor
+  // will ``push back`` to maintain its position.
   static const std::string stop_command_hold;
+
 
 //~autogen
 
@@ -647,13 +735,36 @@ public:
 
     //~autogen cpp_motor_commands classes.motor>currentClass
 
+    // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
+
+    // Run to an absolute position specified by `position_sp` and then
+    // stop using the command specified in `stop_command`.
     void run_to_abs_pos() { set_command("run-to-abs-pos"); }
+
+    // Run to a position relative to the current `position` value.
+    // The new position will be current `position` + `position_sp`.
+    // When the new position is reached, the motor will stop using
+    // the command specified by `stop_command`.
     void run_to_rel_pos() { set_command("run-to-rel-pos"); }
+
+    // Run the motor for the amount of time specified in `time_sp`
+    // and then stop the motor using the command specified by `stop_command`.
     void run_timed() { set_command("run-timed"); }
+
+    // Run the motor at the duty cycle specified by `duty_cycle_sp`.
+    // Unlike other run commands, changing `duty_cycle_sp` while running *will*
+    // take effect immediately.
     void run_direct() { set_command("run-direct"); }
+
+    // Stop any of the run commands before they are complete using the
+    // command specified by `stop_command`.
     void stop() { set_command("stop"); }
+
+    // Reset all of the motor parameter attributes to their default value.
+    // This will also have the effect of stopping the motor.
     void reset() { set_command("reset"); }
+
 
 //~autogen
 
@@ -700,13 +811,34 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.dcMotor>currentClass
 
+  // Run the motor until another command is sent.
   static const std::string command_run_forever;
+
+  // Run the motor for the amount of time specified in `time_sp`
+  // and then stop the motor using the command specified by `stop_command`.
   static const std::string command_run_timed;
+
+  // Stop any of the run commands before they are complete using the
+  // command specified by `stop_command`.
   static const std::string command_stop;
+
+  // With `normal` polarity, a positive duty cycle will
+  // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
+
+  // With `inverted` polarity, a positive duty cycle will
+  // cause the motor to rotate counter-clockwise.
   static const std::string polarity_inverted;
+
+  // Power will be removed from the motor and it will freely coast to a stop.
   static const std::string stop_command_coast;
+
+  // Power will be removed from the motor and a passive electrical load will
+  // be placed on the motor. This is usually done by shorting the motor terminals
+  // together. This load will absorb the energy from the rotation of the motors and
+  // cause the motor to stop more quickly than coasting.
   static const std::string stop_command_brake;
+
 
 //~autogen
 
@@ -801,9 +933,17 @@ public:
 
     //~autogen cpp_motor_commands classes.dcMotor>currentClass
 
+    // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
+
+    // Run the motor for the amount of time specified in `time_sp`
+    // and then stop the motor using the command specified by `stop_command`.
     void run_timed() { set_command("run-timed"); }
+
+    // Stop any of the run commands before they are complete using the
+    // command specified by `stop_command`.
     void stop() { set_command("stop"); }
+
 
 //~autogen
 
@@ -829,10 +969,20 @@ public:
 
   //~autogen cpp_generic-declare-property-value classes.servoMotor>currentClass
 
+  // Drive servo to the position set in the `position_sp` attribute.
   static const std::string command_run;
+
+  // Remove power from the motor.
   static const std::string command_float;
+
+  // With `normal` polarity, a positive duty cycle will
+  // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
+
+  // With `inverted` polarity, a positive duty cycle will
+  // cause the motor to rotate counter-clockwise.
   static const std::string polarity_inverted;
+
 
 //~autogen
 
@@ -937,8 +1087,12 @@ public:
 
     //~autogen cpp_motor_commands classes.servoMotor>currentClass
 
+    // Drive servo to the position set in the `position_sp` attribute.
     void run() { set_command("run"); }
+
+    // Remove power from the motor.
     void float_() { set_command("float"); }
+
 
 //~autogen
 };

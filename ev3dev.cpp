@@ -558,7 +558,6 @@ const std::string color_sensor::mode_col_ambient{ "COL-AMBIENT" };
 const std::string color_sensor::mode_col_color{ "COL-COLOR" };
 const std::string color_sensor::mode_ref_raw{ "REF-RAW" };
 const std::string color_sensor::mode_rgb_raw{ "RGB-RAW" };
-const std::string color_sensor::mode_col_cal{ "COL-CAL" };
 
 //~autogen
 
@@ -576,8 +575,6 @@ const std::string ultrasonic_sensor::mode_us_dist_in{ "US-DIST-IN" };
 const std::string ultrasonic_sensor::mode_us_listen{ "US-LISTEN" };
 const std::string ultrasonic_sensor::mode_us_si_cm{ "US-SI-CM" };
 const std::string ultrasonic_sensor::mode_us_si_in{ "US-SI-IN" };
-const std::string ultrasonic_sensor::mode_us_dc_cm{ "US-DC-CM" };
-const std::string ultrasonic_sensor::mode_us_dc_in{ "US-DC-IN" };
 
 //~autogen
 
@@ -611,7 +608,6 @@ const std::string infrared_sensor::mode_ir_prox{ "IR-PROX" };
 const std::string infrared_sensor::mode_ir_seek{ "IR-SEEK" };
 const std::string infrared_sensor::mode_ir_remote{ "IR-REMOTE" };
 const std::string infrared_sensor::mode_ir_rem_a{ "IR-REM-A" };
-const std::string infrared_sensor::mode_ir_s_alt{ "IR-S-ALT" };
 const std::string infrared_sensor::mode_ir_cal{ "IR-CAL" };
 
 //~autogen
