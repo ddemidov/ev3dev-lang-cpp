@@ -45,6 +45,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #ifndef SYS_ROOT
 #define SYS_ROOT "/sys"
@@ -288,7 +289,7 @@ void device::set_attr_int(const std::string &name, int value)
   ofstream &os = ofstream_open(_path + name);
   if (os.is_open())
   {
-    os << value;
+    if (!(os << value)) throw system_error(std::error_code(errno, std::system_category()));
     return;
   }
 
@@ -327,7 +328,7 @@ void device::set_attr_string(const std::string &name, const std::string &value)
   ofstream &os = ofstream_open(_path + name);
   if (os.is_open())
   {
-    os << value;
+    if (!(os << value)) throw system_error(std::error_code(errno, std::system_category()));
     return;
   }
 
