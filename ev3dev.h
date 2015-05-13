@@ -35,6 +35,8 @@
 #include <map>
 #include <set>
 #include <string>
+#include <vector>
+#include <algorithm>
 #include <functional>
 
 //-----------------------------------------------------------------------------
@@ -151,6 +153,35 @@ public:
   // Human-readable name of the connected sensor.
   std::string type_name() const;
 
+  // Bin Data Format: read-only
+  // Returns the format of the values in `bin_data` for the current mode.
+  // Possible values are:
+  //
+  //    - `u8`: Unsigned 8-bit integer (byte)
+  //    - `s8`: Signed 8-bit integer (sbyte)
+  //    - `u16`: Unsigned 16-bit integer (ushort)
+  //    - `s16`: Signed 16-bit integer (short)
+  //    - `s16_be`: Signed 16-bit integer, big endian
+  //    - `s32`: Signed 32-bit integer (int)
+  //    - `float`: IEEE 754 32-bit floating point (float)
+  std::string bin_data_format() const { return get_attr_string("bin_data_format"); };
+
+  // Bin Data: read-only
+  // Returns the unscaled raw values in the `value<N>` attributes as raw byte
+  // array. Use `bin_data_format`, `num_values` and the individual sensor
+  // documentation to determine how to interpret the data.
+  const std::vector<char>& bin_data() const;
+
+  // Bin Data: read-only
+  // Writes the unscaled raw values in the `value<N>` attributes into the
+  // user-provided struct/buffer.  Use `bin_data_format`, `num_values` and the
+  // individual sensor documentation to determine how to interpret the data.
+  template <class T>
+  void bin_data(T *buf) const {
+      bin_data(); // fills _bin_data
+      std::copy_n(_bin_data.data(), _bin_data.size(), static_cast<char*>(buf));
+  }
+
   //~autogen cpp_generic-get-set classes.sensor>currentClass
 
   // Command: write-only
@@ -210,6 +241,8 @@ protected:
   sensor() {}
 
   bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
+
+  mutable std::vector<char> _bin_data;
 };
 
 //-----------------------------------------------------------------------------

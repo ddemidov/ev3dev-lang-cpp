@@ -529,6 +529,45 @@ float sensor::float_value(unsigned index) const
 }
 
 //-----------------------------------------------------------------------------
+const std::vector<char>& sensor::bin_data() const
+{
+  using namespace std;
+
+  if (_path.empty())
+    throw system_error(make_error_code(errc::function_not_supported), "no device connected");
+
+  if (_bin_data.empty()) {
+    static const map<string, int> lookup_table {
+      {"u8",     1},
+      {"s8",     1},
+      {"u16",    2},
+      {"s16",    2},
+      {"s16_be", 2},
+      {"s32",    4},
+      {"float",  4}
+    };
+
+    int value_size = 1;
+
+    auto s = lookup_table.find(bin_data_format());
+    if (s != lookup_table.end())
+      value_size = s->second;
+
+    _bin_data.resize(num_values() * value_size);
+  }
+
+  static const string fname = _path + "bin_data";
+  ifstream &is = ifstream_open(fname);
+  if (is.is_open())
+  {
+    is.read(_bin_data.data(), _bin_data.size());
+    return _bin_data;
+  }
+
+  throw system_error(make_error_code(errc::no_such_device), fname);
+}
+
+//-----------------------------------------------------------------------------
 
 i2c_sensor::i2c_sensor(port_type port_) :
   sensor(port_, { nxt_i2c_sensor })
