@@ -556,7 +556,7 @@ const std::vector<char>& sensor::bin_data() const
     _bin_data.resize(num_values() * value_size);
   }
 
-  static const string fname = _path + "bin_data";
+  const string fname = _path + "bin_data";
   ifstream &is = ifstream_open(fname);
   if (is.is_open())
   {
