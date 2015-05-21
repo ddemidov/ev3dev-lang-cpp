@@ -835,10 +835,10 @@ void led::flash(unsigned interval_ms)
 
 //-----------------------------------------------------------------------------
 
-led led::red_right   { "ev3:red:right"   };
-led led::red_left    { "ev3:red:left"    };
-led led::green_right { "ev3:green:right" };
-led led::green_left  { "ev3:green:left"  };
+led led::red_right   { "ev3-right0:red:ev3dev"   };
+led led::red_left    { "ev3-left0:red:ev3dev"    };
+led led::green_right { "ev3-right1:green:ev3dev" };
+led led::green_left  { "ev3-left1:green:ev3dev"  };
 
 //-----------------------------------------------------------------------------
 
