@@ -532,16 +532,16 @@ public:
   // Sets the normal polarity of the rotary encoder.
   static const std::string encoder_polarity_normal;
 
-  // Sets the inverted polarity of the rotary encoder.
-  static const std::string encoder_polarity_inverted;
+  // Sets the inversed polarity of the rotary encoder.
+  static const std::string encoder_polarity_inversed;
 
   // With `normal` polarity, a positive duty cycle will
   // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
 
-  // With `inverted` polarity, a positive duty cycle will
+  // With `inversed` polarity, a positive duty cycle will
   // cause the motor to rotate counter-clockwise.
-  static const std::string polarity_inverted;
+  static const std::string polarity_inversed;
 
   // The motor controller will vary the power supplied to the motor
   // to try to maintain the speed specified in `speed_sp`.
@@ -627,10 +627,10 @@ public:
 
   // Encoder Polarity: read/write
   // Sets the polarity of the rotary encoder. This is an advanced feature to all
-  // use of motors that send inverted encoder signals to the EV3. This should
+  // use of motors that send inversed encoder signals to the EV3. This should
   // be set correctly by the driver of a device. It You only need to change this
   // value if you are using a unsupported device. Valid values are `normal` and
-  // `inverted`.
+  // `inversed`.
   std::string encoder_polarity() const { return get_attr_string("encoder_polarity"); }
   auto set_encoder_polarity(std::string v) -> decltype(*this) {
     set_attr_string("encoder_polarity", v);
@@ -639,9 +639,9 @@ public:
 
   // Polarity: read/write
   // Sets the polarity of the motor. With `normal` polarity, a positive duty
-  // cycle will cause the motor to rotate clockwise. With `inverted` polarity,
+  // cycle will cause the motor to rotate clockwise. With `inversed` polarity,
   // a positive duty cycle will cause the motor to rotate counter-clockwise.
-  // Valid values are `normal` and `inverted`.
+  // Valid values are `normal` and `inversed`.
   std::string polarity() const { return get_attr_string("polarity"); }
   auto set_polarity(std::string v) -> decltype(*this) {
     set_attr_string("polarity", v);
@@ -909,9 +909,9 @@ public:
   // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
 
-  // With `inverted` polarity, a positive duty cycle will
+  // With `inversed` polarity, a positive duty cycle will
   // cause the motor to rotate counter-clockwise.
-  static const std::string polarity_inverted;
+  static const std::string polarity_inversed;
 
   // Power will be removed from the motor and it will freely coast to a stop.
   static const std::string stop_command_coast;
@@ -962,7 +962,7 @@ public:
   }
 
   // Polarity: read/write
-  // Sets the polarity of the motor. Valid values are `normal` and `inverted`.
+  // Sets the polarity of the motor. Valid values are `normal` and `inversed`.
   std::string polarity() const { return get_attr_string("polarity"); }
   auto set_polarity(std::string v) -> decltype(*this) {
     set_attr_string("polarity", v);
@@ -1062,9 +1062,9 @@ public:
   // cause the motor to rotate clockwise.
   static const std::string polarity_normal;
 
-  // With `inverted` polarity, a positive duty cycle will
+  // With `inversed` polarity, a positive duty cycle will
   // cause the motor to rotate counter-clockwise.
-  static const std::string polarity_inverted;
+  static const std::string polarity_inversed;
 
 
 //~autogen
@@ -1121,9 +1121,9 @@ public:
   }
 
   // Polarity: read/write
-  // Sets the polarity of the servo. Valid values are `normal` and `inverted`.
-  // Setting the value to `inverted` will cause the position_sp value to be
-  // inverted. i.e `-100` will correspond to `max_pulse_sp`, and `100` will
+  // Sets the polarity of the servo. Valid values are `normal` and `inversed`.
+  // Setting the value to `inversed` will cause the position_sp value to be
+  // inversed. i.e `-100` will correspond to `max_pulse_sp`, and `100` will
   // correspond to `min_pulse_sp`.
   std::string polarity() const { return get_attr_string("polarity"); }
   auto set_polarity(std::string v) -> decltype(*this) {

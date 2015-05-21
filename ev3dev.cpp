@@ -716,9 +716,9 @@ const std::string motor::command_run_direct{ "run-direct" };
 const std::string motor::command_stop{ "stop" };
 const std::string motor::command_reset{ "reset" };
 const std::string motor::encoder_polarity_normal{ "normal" };
-const std::string motor::encoder_polarity_inverted{ "inverted" };
+const std::string motor::encoder_polarity_inversed{ "inversed" };
 const std::string motor::polarity_normal{ "normal" };
-const std::string motor::polarity_inverted{ "inverted" };
+const std::string motor::polarity_inversed{ "inversed" };
 const std::string motor::speed_regulation_on{ "on" };
 const std::string motor::speed_regulation_off{ "off" };
 const std::string motor::stop_command_coast{ "coast" };
@@ -787,7 +787,7 @@ const std::string dc_motor::command_run_forever{ "run-forever" };
 const std::string dc_motor::command_run_timed{ "run-timed" };
 const std::string dc_motor::command_stop{ "stop" };
 const std::string dc_motor::polarity_normal{ "normal" };
-const std::string dc_motor::polarity_inverted{ "inverted" };
+const std::string dc_motor::polarity_inversed{ "inversed" };
 const std::string dc_motor::stop_command_coast{ "coast" };
 const std::string dc_motor::stop_command_brake{ "brake" };
 
@@ -808,7 +808,7 @@ servo_motor::servo_motor(port_type port)
 const std::string servo_motor::command_run{ "run" };
 const std::string servo_motor::command_float{ "float" };
 const std::string servo_motor::polarity_normal{ "normal" };
-const std::string servo_motor::polarity_inverted{ "inverted" };
+const std::string servo_motor::polarity_inversed{ "inversed" };
 
 //~autogen
 
