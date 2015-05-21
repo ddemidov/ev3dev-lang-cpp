@@ -429,10 +429,10 @@ std::string device::get_attr_from_set(const std::string &name) const
 //-----------------------------------------------------------------------------
 
 const sensor::sensor_type sensor::ev3_touch       { "lego-ev3-touch" };
-const sensor::sensor_type sensor::ev3_color       { "lego-ev3-uart-29" };
-const sensor::sensor_type sensor::ev3_ultrasonic  { "lego-ev3-uart-30" };
-const sensor::sensor_type sensor::ev3_gyro        { "lego-ev3-uart-32" };
-const sensor::sensor_type sensor::ev3_infrared    { "lego-ev3-uart-33" };
+const sensor::sensor_type sensor::ev3_color       { "lego-ev3-color" };
+const sensor::sensor_type sensor::ev3_ultrasonic  { "lego-ev3-us" };
+const sensor::sensor_type sensor::ev3_gyro        { "lego-ev3-gyro" };
+const sensor::sensor_type sensor::ev3_infrared    { "lego-ev3-ir" };
 
 const sensor::sensor_type sensor::nxt_touch       { "lego-nxt-touch" };
 const sensor::sensor_type sensor::nxt_light       { "lego-nxt-light" };
