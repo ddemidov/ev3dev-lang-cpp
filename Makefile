@@ -1,4 +1,16 @@
 
+CC        = $(CROSS_COMPILE)gcc
+AS        = $(CROSS_COMPILE)as
+CXX       = $(CROSS_COMPILE)g++
+AR        = $(CROSS_COMPILE)ar
+LD        = $(CROSS_COMPILE)ld
+NM        = $(CROSS_COMPILE)nm
+OBJCOPY   = $(CROSS_COMPILE)objcopy
+OBJDUMP   = $(CROSS_COMPILE)objdump
+RANLIB    = $(CROSS_COMPILE)ranlib
+ELF2FLT   = $(CROSS_COMPILE)elf2flt
+STRIPTOOL = $(CROSS_COMPILE)strip
+
 CFLAGS=-O2 -march=armv5
 CCFLAGS=-std=c++11 -D_GLIBCXX_USE_NANOSLEEP
 DEPS=ev3dev.h
