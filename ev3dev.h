@@ -1299,7 +1299,17 @@ class button
 public:
   button(int bit);
 
+  // Check if the button is pressed.
   bool pressed() const;
+
+  // Gets called whenever the button state changes.
+  // The user has to call the process() function to check for state change.
+  std::function<void(bool)> onclick;
+
+  // Check if the button state has changed,
+  // call onclick function in case it has.
+  // Returns true if the state has changed, false otherwise.
+  bool process();
 
   static button back;
   static button left;
@@ -1310,6 +1320,7 @@ public:
 
 private:
   int _bit;
+  bool _state = false;
   std::vector<unsigned long> _buf;
 
   struct file_descriptor {

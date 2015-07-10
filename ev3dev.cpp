@@ -880,7 +880,6 @@ button::file_descriptor::~file_descriptor()
 
 //-----------------------------------------------------------------------------
 
-
 button::button(int bit)
   : _bit(bit),
     _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
@@ -899,6 +898,21 @@ bool button::pressed() const
 #endif
   // bit in bytes is 1 when released and 0 when pressed
   return !(_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
+}
+
+//-----------------------------------------------------------------------------
+
+bool button::process()
+{
+  bool new_state = pressed();
+
+  if (new_state != _state) {
+    _state = new_state;
+    if (onclick) onclick(new_state);
+    return true;
+  }
+
+  return false;
 }
 
 //-----------------------------------------------------------------------------
