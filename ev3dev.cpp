@@ -1172,4 +1172,4 @@ void remote_control::on_value_changed(int value)
 
 } // namespace ev3dev
 
-//-----------------------------------------------------------------------------
+// vim: sw=2
