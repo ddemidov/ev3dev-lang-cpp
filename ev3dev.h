@@ -1297,10 +1297,6 @@ class button
 {
 public:
   button(int bit);
-  ~button()
-  {
-    delete _buf;
-  }
 
   bool pressed() const;
 
@@ -1314,10 +1310,7 @@ public:
 private:
   int _bit;
   int _fd;
-  int _bits_per_long;
-  unsigned long *_buf;
-  unsigned long _buf_size;
-
+  std::vector<unsigned long> _buf;
 };
 
 //-----------------------------------------------------------------------------

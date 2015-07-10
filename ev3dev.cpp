@@ -61,6 +61,7 @@
 #else
 #define KEY_CNT 8
 #endif
+static const int bits_per_long = sizeof(long) * 8;
 
 #define SYS_SOUND  SYS_ROOT "/devices/platform/snd-legoev3/"
 
@@ -868,26 +869,23 @@ power_supply::power_supply(std::string name)
 //-----------------------------------------------------------------------------
 
 button::button(int bit)
-{
-	_bits_per_long = sizeof(long) * 8;
-	_buf_size=(KEY_CNT + _bits_per_long - 1) / _bits_per_long;
-	_buf = new unsigned long [_buf_size];
-	_bit = bit;
-	_fd = open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY);
-}
+    : _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
+      _bit(bit),
+      _fd( open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY) )
+{ }
 
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const
 {
  #ifndef NO_LINUX_HEADERS
-	if (ioctl(_fd, EVIOCGKEY(_buf_size), _buf) < 0)
+	if (ioctl(_fd, EVIOCGKEY(_buf.size()), _buf.data()) < 0)
 	{
 		// handle error
 	}
  #endif
 	// bit in bytes is 1 when released and 0 when pressed
-	return !(_buf[_bit / _bits_per_long] & 1 << (_bit % _bits_per_long));
+	return !(_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
