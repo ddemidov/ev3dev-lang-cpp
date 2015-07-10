@@ -38,6 +38,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 //-----------------------------------------------------------------------------
 
@@ -1309,8 +1310,17 @@ public:
 
 private:
   int _bit;
-  int _fd;
   std::vector<unsigned long> _buf;
+
+  struct file_descriptor {
+    int _fd;
+
+    file_descriptor(const char *path, int flags);
+    ~file_descriptor();
+    operator int() { return _fd; }
+  };
+
+  std::shared_ptr<file_descriptor> _fd;
 };
 
 //-----------------------------------------------------------------------------

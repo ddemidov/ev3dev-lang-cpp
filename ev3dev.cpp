@@ -44,6 +44,7 @@
 #include <dirent.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
 
@@ -868,24 +869,36 @@ power_supply::power_supply(std::string name)
 
 //-----------------------------------------------------------------------------
 
+button::file_descriptor::file_descriptor(const char *path, int flags)
+  : _fd(open(path, flags))
+{}
+
+button::file_descriptor::~file_descriptor()
+{
+  if (_fd != -1) close(_fd);
+}
+
+//-----------------------------------------------------------------------------
+
+
 button::button(int bit)
-    : _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
-      _bit(bit),
-      _fd( open("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY) )
+  : _bit(bit),
+    _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
+    _fd( new file_descriptor("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY) )
 { }
 
 //-----------------------------------------------------------------------------
 
 bool button::pressed() const
 {
- #ifndef NO_LINUX_HEADERS
-	if (ioctl(_fd, EVIOCGKEY(_buf.size()), _buf.data()) < 0)
-	{
-		// handle error
-	}
- #endif
-	// bit in bytes is 1 when released and 0 when pressed
-	return !(_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
+#ifndef NO_LINUX_HEADERS
+  if (ioctl(*_fd, EVIOCGKEY(_buf.size()), _buf.data()) < 0)
+  {
+    // handle error
+  }
+#endif
+  // bit in bytes is 1 when released and 0 when pressed
+  return !(_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
