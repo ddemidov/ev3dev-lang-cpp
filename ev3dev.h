@@ -1308,7 +1308,7 @@ public:
 
   // Check if the button state has changed,
   // call onclick function in case it has.
-  // Returns true if the state has changed, false otherwise.
+  // Returns true if the state has changed since the last call.
   bool process();
 
   static button back;
@@ -1317,6 +1317,10 @@ public:
   static button up;
   static button down;
   static button enter;
+
+  // Call process() for each of the EV3 buttons.
+  // Returns true if any of the states have changed since the last call.
+  static bool process_all();
 
 private:
   int _bit;

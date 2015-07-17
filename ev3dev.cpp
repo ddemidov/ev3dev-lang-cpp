@@ -35,6 +35,7 @@
 #include <fstream>
 #include <list>
 #include <map>
+#include <array>
 #include <algorithm>
 #include <system_error>
 #include <mutex>
@@ -916,6 +917,7 @@ bool button::process()
 }
 
 //-----------------------------------------------------------------------------
+
 #ifndef NO_LINUX_HEADERS
 button button::back (KEY_BACKSPACE);
 button button::left (KEY_LEFT);
@@ -924,6 +926,21 @@ button button::up   (KEY_UP);
 button button::down (KEY_DOWN);
 button button::enter(KEY_ENTER);
 #endif
+
+//-----------------------------------------------------------------------------
+
+bool button::process_all() {
+  std::array<bool, 6> changed = {
+    back. process(),
+    left. process(),
+    right.process(),
+    up.   process(),
+    down. process(),
+    enter.process()
+  };
+  return std::any_of(changed.begin(), changed.end(), [](bool c){ return c; });
+}
+
 //-----------------------------------------------------------------------------
 
 void sound::beep()
