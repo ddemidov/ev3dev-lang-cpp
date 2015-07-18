@@ -40,4 +40,4 @@ Pros: Easy to setup.
 
 Cons: Really slow.
 
-Just run `sudo apt-get build-essential` on the EV3 and you will have everything your need.
+Just run `sudo apt-get install build-essential` on the EV3 and you will have everything your need.
