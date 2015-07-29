@@ -54,17 +54,30 @@ typedef std::string         address_type;
 
 //-----------------------------------------------------------------------------
 
-const port_type INPUT_AUTO;          //!< Automatic input selection
+const port_type INPUT_AUTO;  //!< Automatic input selection
+const port_type OUTPUT_AUTO; //!< Automatic output selection
+
+#ifdef EV3DEV_RPI
+const port_type INPUT_1  { "ttyAMA0:in1" };  //!< Sensor port 1
+const port_type INPUT_2  { "ttyAMA0:in2" };  //!< Sensor port 2
+const port_type INPUT_3  { "ttyAMA0:in3" };  //!< Sensor port 3
+const port_type INPUT_4  { "ttyAMA0:in4" };  //!< Sensor port 4
+
+const port_type OUTPUT_A { "ttyAMA0:outA" }; //!< Motor port A
+const port_type OUTPUT_B { "ttyAMA0:outB" }; //!< Motor port B
+const port_type OUTPUT_C { "ttyAMA0:outC" }; //!< Motor port C
+const port_type OUTPUT_D { "ttyAMA0:outD" }; //!< Motor port D
+#else
 const port_type INPUT_1  { "in1" };  //!< Sensor port 1
 const port_type INPUT_2  { "in2" };  //!< Sensor port 2
 const port_type INPUT_3  { "in3" };  //!< Sensor port 3
 const port_type INPUT_4  { "in4" };  //!< Sensor port 4
 
-const port_type OUTPUT_AUTO;         //!< Automatic output selection
 const port_type OUTPUT_A { "outA" }; //!< Motor port A
 const port_type OUTPUT_B { "outB" }; //!< Motor port B
 const port_type OUTPUT_C { "outC" }; //!< Motor port C
 const port_type OUTPUT_D { "outD" }; //!< Motor port D
+#endif
 
 //-----------------------------------------------------------------------------
 
