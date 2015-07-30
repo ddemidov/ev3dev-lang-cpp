@@ -839,8 +839,8 @@ void led::flash(unsigned interval_ms)
     for (int i = 0; ; ++i) {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       try {
-        set_on_delay (interval_ms);
-        set_off_delay(interval_ms);
+        set_delay_on (interval_ms);
+        set_delay_off(interval_ms);
         break;
       } catch(...) {
         if (i >= 5) throw;

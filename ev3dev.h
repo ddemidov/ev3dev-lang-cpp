@@ -1239,8 +1239,18 @@ public:
   void off() { set_brightness(0); }
 
   void flash(unsigned interval_ms);
-  void set_on_delay (unsigned ms) { set_attr_int("delay_on",  ms); }
-  void set_off_delay(unsigned ms) { set_attr_int("delay_off", ms); }
+
+  int delay_on() const { return get_attr_int("delay_on"); }
+  auto set_delay_on (int ms) -> decltype(*this) {
+    set_attr_int("delay_on", ms);
+    return *this;
+  }
+
+  int delay_off() const { return get_attr_int("delay_off"); }
+  auto set_delay_off(unsigned ms) -> decltype(*this) {
+    set_attr_int("delay_off", ms);
+    return *this;
+  }
 
   static led red_right;
   static led red_left;
