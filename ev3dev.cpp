@@ -39,6 +39,8 @@
 #include <algorithm>
 #include <system_error>
 #include <mutex>
+#include <chrono>
+#include <thread>
 #include <string.h>
 #include <math.h>
 
@@ -831,8 +833,19 @@ void led::flash(unsigned interval_ms)
   set_trigger(timer);
   if (interval_ms)
   {
-    set_on_delay (interval_ms);
-    set_off_delay(interval_ms);
+    // A workaround for ev3dev/ev3dev#225.
+    // It takes some time for delay_{on,off} sysfs attributes to appear after
+    // led trigger has been set to "timer".
+    for (int i = 0; ; ++i) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      try {
+        set_on_delay (interval_ms);
+        set_off_delay(interval_ms);
+        break;
+      } catch(...) {
+        if (i >= 5) throw;
+      }
+    }
   }
 }
 
