@@ -206,7 +206,7 @@ public:
   }
 
   // Commands: read-only
-  // Returns a space separated list of the valid commands for the sensor.
+  // Returns a list of the valid commands for the sensor.
   // Returns -EOPNOTSUPP if no commands are supported.
   mode_set commands() const { return get_attr_set("commands"); }
 
@@ -230,7 +230,7 @@ public:
   }
 
   // Modes: read-only
-  // Returns a space separated list of the valid modes for the sensor.
+  // Returns a list of the valid modes for the sensor.
   mode_set modes() const { return get_attr_set("modes"); }
 
   // Num Values: read-only
@@ -592,7 +592,7 @@ public:
   }
 
   // Commands: read-only
-  // Returns a space separated list of commands that are supported by the motor
+  // Returns a list of commands that are supported by the motor
   // controller. Possible values are `run-forever`, `run-to-abs-pos`, `run-to-rel-pos`,
   // `run-timed`, `run-direct`, `stop` and `reset`. Not all commands may be supported.
   // `run-forever` will cause the motor to run until another command is sent.
@@ -789,7 +789,7 @@ public:
   }
 
   // State: read-only
-  // Reading returns a space separated list of state flags. Possible flags are
+  // Reading returns a list of state flags. Possible flags are
   // `running`, `ramping` `holding` and `stalled`.
   mode_set state() const { return get_attr_set("state"); }
 
@@ -951,7 +951,7 @@ public:
   }
 
   // Commands: read-only
-  // Returns a space separated list of commands supported by the motor
+  // Returns a list of commands supported by the motor
   // controller.
   mode_set commands() const { return get_attr_set("commands"); }
 
@@ -1006,7 +1006,7 @@ public:
   }
 
   // State: read-only
-  // Gets a space separated list of flags indicating the motor status. Possible
+  // Gets a list of flags indicating the motor status. Possible
   // flags are `running` and `ramping`. `running` indicates that the motor is
   // powered. `ramping` indicates that the motor has not yet reached the
   // `duty_cycle_sp`.
@@ -1021,7 +1021,7 @@ public:
   }
 
   // Stop Commands: read-only
-  // Gets a space separated list of stop commands. Valid values are `coast`
+  // Gets a list of stop commands. Valid values are `coast`
   // and `brake`.
   mode_set stop_commands() const { return get_attr_set("stop_commands"); }
 
@@ -1174,7 +1174,7 @@ public:
   }
 
   // State: read-only
-  // Returns a space separated list of flags indicating the state of the servo.
+  // Returns a list of flags indicating the state of the servo.
   // Possible values are:
   // * `running`: Indicates that the motor is powered.
   mode_set state() const { return get_attr_set("state"); }
@@ -1500,7 +1500,7 @@ public:
   std::string driver_name() const { return get_attr_string("driver_name"); }
 
   // Modes: read-only
-  // Returns a space separated list of the available modes of the port.
+  // Returns a list of the available modes of the port.
   mode_set modes() const { return get_attr_set("modes"); }
 
   // Mode: read/write
