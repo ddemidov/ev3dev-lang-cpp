@@ -1225,6 +1225,31 @@ void remote_control::on_value_changed(int value)
 
 //-----------------------------------------------------------------------------
 
+lego_port::lego_port(port_type port)
+{
+  connect({{ "port_name", { port } }});
+}
+
+//-----------------------------------------------------------------------------
+
+bool lego_port::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
+{
+  static const std::string _strClassDir { SYS_ROOT "/class/lego-port/" };
+  static const std::string _strPattern  { "port" };
+
+  try
+  {
+    return device::connect(_strClassDir, _strPattern, match);
+  }
+  catch (...) { }
+
+  _path.clear();
+
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
 } // namespace ev3dev
 
 // vim: sw=2
