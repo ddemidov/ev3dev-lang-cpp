@@ -805,7 +805,7 @@ public:
   }
 
   // Stop Commands: read-only
-  // Returns a space-separated list of stop modes supported by the motor controller.
+  // Returns a list of stop modes supported by the motor controller.
   // Possible values are `coast`, `brake` and `hold`. `coast` means that power will
   // be removed from the motor and it will freely coast to a stop. `brake` means
   // that power will be removed from the motor and a passive electrical load will
