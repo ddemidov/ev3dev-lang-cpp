@@ -827,11 +827,11 @@ led::led(std::string name)
 
 //-----------------------------------------------------------------------------
 
-void led::flash(unsigned interval_ms)
+void led::flash(unsigned on_ms, unsigned off_ms)
 {
   static const mode_type timer("timer");
   set_trigger(timer);
-  if (interval_ms)
+  if (on_ms)
   {
     // A workaround for ev3dev/ev3dev#225.
     // It takes some time for delay_{on,off} sysfs attributes to appear after
@@ -839,8 +839,8 @@ void led::flash(unsigned interval_ms)
     for (int i = 0; ; ++i) {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       try {
-        set_delay_on (interval_ms);
-        set_delay_off(interval_ms);
+        set_delay_on (on_ms );
+        set_delay_off(off_ms);
         break;
       } catch(...) {
         if (i >= 5) throw;

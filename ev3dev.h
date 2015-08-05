@@ -1199,6 +1199,8 @@ public:
 //~autogen cpp_generic-class-description classes.led>currentClass
 
 // Any device controlled by the generic LED driver.
+// See https://www.kernel.org/doc/Documentation/leds/leds-class.txt
+// for more details.
 
 //~autogen
 class led : protected device
@@ -1211,7 +1213,7 @@ public:
   //~autogen cpp_generic-get-set classes.led>currentClass
 
   // Max Brightness: read-only
-  // Gets the maximum allowable brightness value
+  // Returns the maximum allowable brightness value.
   int max_brightness() const { return get_attr_int("max_brightness"); }
 
   // Brightness: read/write
@@ -1222,35 +1224,58 @@ public:
     return *this;
   }
 
+  // Triggers: read-only
+  // Returns a list of available triggers.
+  mode_set triggers() const { return get_attr_set("triggers"); }
+
   // Trigger: read/write
-  // Sets the led trigger.
+  // Sets the led trigger. A trigger
+  // is a kernel based source of led events. Triggers can either be simple or
+  // complex. A simple trigger isn't configurable and is designed to slot into
+  // existing subsystems with minimal additional code. Examples are the `ide-disk` and
+  // `nand-disk` triggers.
+  // 
+  // Complex triggers whilst available to all LEDs have LED specific
+  // parameters and work on a per LED basis. The `timer` trigger is an example.
+  // The `timer` trigger will periodically change the LED brightness between
+  // 0 and the current brightness setting. The `on` and `off` time can
+  // be specified via `delay_{on,off}` attributes in milliseconds.
+  // You can change the brightness value of a LED independently of the timer
+  // trigger. However, if you set the brightness value to 0 it will
+  // also disable the `timer` trigger.
   std::string trigger() const { return get_attr_string("trigger"); }
   auto set_trigger(std::string v) -> decltype(*this) {
     set_attr_string("trigger", v);
     return *this;
   }
 
+  // Delay On: read/write
+  // The `timer` trigger will periodically change the LED brightness between
+  // 0 and the current brightness setting. The `on` time can
+  // be specified via `delay_on` attribute in milliseconds.
+  int delay_on() const { return get_attr_int("delay_on"); }
+  auto set_delay_on(int v) -> decltype(*this) {
+    set_attr_int("delay_on", v);
+    return *this;
+  }
+
+  // Delay Off: read/write
+  // The `timer` trigger will periodically change the LED brightness between
+  // 0 and the current brightness setting. The `off` time can
+  // be specified via `delay_off` attribute in milliseconds.
+  int delay_off() const { return get_attr_int("delay_off"); }
+  auto set_delay_off(int v) -> decltype(*this) {
+    set_attr_int("delay_off", v);
+    return *this;
+  }
+
 
 //~autogen
-
-  mode_set  triggers() const  { return get_attr_set     ("trigger"); }
 
   void on()  { set_brightness(max_brightness()); }
   void off() { set_brightness(0); }
 
-  void flash(unsigned interval_ms);
-
-  int delay_on() const { return get_attr_int("delay_on"); }
-  auto set_delay_on (int ms) -> decltype(*this) {
-    set_attr_int("delay_on", ms);
-    return *this;
-  }
-
-  int delay_off() const { return get_attr_int("delay_off"); }
-  auto set_delay_off(unsigned ms) -> decltype(*this) {
-    set_attr_int("delay_off", ms);
-    return *this;
-  }
+  void flash(unsigned on_ms, unsigned off_ms);
 
   static led red_right;
   static led red_left;
