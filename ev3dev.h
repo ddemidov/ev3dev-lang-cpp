@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -1272,9 +1272,24 @@ public:
 
 //~autogen
 
+  // Gets the LED's brightness as a percentage (0-1) of the maximum.
+  float brightness_pct() const {
+    return static_cast<float>(brightness()) / max_brightness();
+  }
+
+  // Sets the LED's brightness as a percentage (0-1) of the maximum.
+  auto set_brightness_pct(float v) -> decltype(*this) {
+    return set_brightness(v * max_brightness());
+  }
+
+  // Turns the led on by setting its brightness to the maximum level.
   void on()  { set_brightness(max_brightness()); }
+
+  // Turns the led off.
   void off() { set_brightness(0); }
 
+  // Enables timer trigger and sets delay_on and delay_off attributes to the
+  // provided values (in milliseconds).
   void flash(unsigned on_ms, unsigned off_ms);
 
   static led red_right;
@@ -1282,11 +1297,74 @@ public:
   static led green_right;
   static led green_left;
 
-  static void red_on   ();
-  static void red_off  ();
-  static void green_on ();
-  static void green_off();
-  static void all_on   ();
+  // Sets the EV3 LEDs to the specified percentage (0-1) of their max brightness.
+  static void mix_colors(float red, float green);
+
+  //~autogen cpp_led-color-methods
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // red, using the specified intensity percentage (0-1).
+  static void set_red(float intensity) {
+    mix_colors(1 * intensity, 0 * intensity);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // red at full intensity.
+  static void red_on() {
+    set_red(1.0f);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // green, using the specified intensity percentage (0-1).
+  static void set_green(float intensity) {
+    mix_colors(0 * intensity, 1 * intensity);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // green at full intensity.
+  static void green_on() {
+    set_green(1.0f);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // amber, using the specified intensity percentage (0-1).
+  static void set_amber(float intensity) {
+    mix_colors(1 * intensity, 1 * intensity);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // amber at full intensity.
+  static void amber_on() {
+    set_amber(1.0f);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // orange, using the specified intensity percentage (0-1).
+  static void set_orange(float intensity) {
+    mix_colors(1 * intensity, 0.5 * intensity);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // orange at full intensity.
+  static void orange_on() {
+    set_orange(1.0f);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // yellow, using the specified intensity percentage (0-1).
+  static void set_yellow(float intensity) {
+    mix_colors(0.5 * intensity, 1 * intensity);
+  }
+
+  // Sets the brightness of the built-in EV3 LEDs so that they appear
+  // yellow at full intensity.
+  static void yellow_on() {
+    set_yellow(1.0f);
+  }
+
+
+//~autogen
+
   static void all_off  ();
 
 protected:

@@ -25,7 +25,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -858,12 +858,22 @@ led led::green_left  { "ev3-left1:green:ev3dev"  };
 
 //-----------------------------------------------------------------------------
 
-void led::red_on   () { red_right  .on();  red_left  .on();  }
-void led::red_off  () { red_right  .off(); red_left  .off(); }
-void led::green_on () { green_right.on();  green_left.on();  }
-void led::green_off() { green_right.off(); green_left.off(); }
-void led::all_on   () { red_on();  green_on();  }
-void led::all_off  () { red_off(); green_off(); }
+void led::mix_colors(float red, float green) {
+  red_right.set_brightness_pct(red);
+  red_left.set_brightness_pct(red);
+
+  green_right.set_brightness_pct(green);
+  green_left.set_brightness_pct(green);
+}
+
+//-----------------------------------------------------------------------------
+
+void led::all_off  () {
+  red_right.set_brightness(0);
+  red_left.set_brightness(0);
+  green_right.set_brightness(0);
+  green_left.set_brightness(0);
+}
 
 //-----------------------------------------------------------------------------
 

@@ -520,11 +520,11 @@ void led_action(const char *name, led &l)
       l.on();
       break;
     case 'f':
-      l.flash(0);
+      l.flash(200, 200);
       break;
     case 'i':
       cout << "interval: "; cin >> interval; cout << endl;
-      l.set_on_delay(interval); l.set_off_delay(interval);
+      l.set_delay_on(interval); l.set_delay_off(interval);
       break;
     case 't':
       {
