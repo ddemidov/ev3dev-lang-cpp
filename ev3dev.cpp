@@ -279,7 +279,7 @@ int device::get_attr_int(const std::string &name) const {
       try {
         is >> result;
         return result;
-      } catch(const std::underflow_error&) {
+      } catch(...) {
         // This could mean the sysfs attribute was recreated and the
         // corresponding file handle got stale. Lets close the file and try
         // again (once):
