@@ -41,6 +41,7 @@
 #include <mutex>
 #include <chrono>
 #include <thread>
+#include <stdexcept>
 #include <string.h>
 #include <math.h>
 
@@ -264,41 +265,61 @@ int device::device_index() const
 
 //-----------------------------------------------------------------------------
 
-int device::get_attr_int(const std::string &name) const
-{
+int device::get_attr_int(const std::string &name) const {
   using namespace std;
 
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-  ifstream &is = ifstream_open(_path + name);
-  if (is.is_open())
-  {
-    int result = 0;
-    is >> result;
-    return result;
-  }
+  for(int attempt = 0; attempt < 2; ++attempt) {
+    ifstream &is = ifstream_open(_path + name);
+    if (is.is_open())
+    {
+      int result = 0;
+      try {
+        is >> result;
+        return result;
+      } catch(const std::underflow_error&) {
+        // This could mean the sysfs attribute was recreated and the
+        // corresponding file handle got stale. Lets close the file and try
+        // again (once):
+        if (attempt != 0) throw;
 
-  throw system_error(make_error_code(errc::no_such_device), _path+name);
+        is.close();
+        is.clear();
+      }
+    } else {
+      throw system_error(make_error_code(errc::no_such_device), _path+name);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------
 
-void device::set_attr_int(const std::string &name, int value)
-{
+void device::set_attr_int(const std::string &name, int value) {
   using namespace std;
 
   if (_path.empty())
     throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-  ofstream &os = ofstream_open(_path + name);
-  if (os.is_open())
-  {
-    if (!(os << value)) throw system_error(std::error_code(errno, std::system_category()));
-    return;
-  }
+  for(int attempt = 0; attempt < 2; ++attempt) {
+    ofstream &os = ofstream_open(_path + name);
+    if (os.is_open())
+    {
+      if (os << value) return;
 
-  throw system_error(make_error_code(errc::no_such_device), _path+name);
+      // An error could mean that sysfs attribute was recreated and the cached
+      // file handle is stale. Lets close the file and try again (once):
+      if (attempt == 0 && errno == ENODEV) {
+        os.close();
+        os.clear();
+      } else {
+        throw system_error(std::error_code(errno, std::system_category()));
+      }
+    } else {
+      throw system_error(make_error_code(errc::no_such_device), _path + name);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------
