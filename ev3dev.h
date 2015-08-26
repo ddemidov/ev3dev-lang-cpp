@@ -1226,7 +1226,7 @@ public:
 
   // Triggers: read-only
   // Returns a list of available triggers.
-  mode_set triggers() const { return get_attr_set("triggers"); }
+  mode_set triggers() const { return get_attr_set("trigger"); }
 
   // Trigger: read/write
   // Sets the led trigger. A trigger
@@ -1243,7 +1243,7 @@ public:
   // You can change the brightness value of a LED independently of the timer
   // trigger. However, if you set the brightness value to 0 it will
   // also disable the `timer` trigger.
-  std::string trigger() const { return get_attr_string("trigger"); }
+  std::string trigger() const { return get_attr_from_set("trigger"); }
   auto set_trigger(std::string v) -> decltype(*this) {
     set_attr_string("trigger", v);
     return *this;
