@@ -25,7 +25,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2. 
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -811,6 +811,7 @@ dc_motor::dc_motor(port_type port)
 
 const std::string dc_motor::command_run_forever{ "run-forever" };
 const std::string dc_motor::command_run_timed{ "run-timed" };
+const std::string dc_motor::command_run_direct{ "run-direct" };
 const std::string dc_motor::command_stop{ "stop" };
 const std::string dc_motor::polarity_normal{ "normal" };
 const std::string dc_motor::polarity_inversed{ "inversed" };

@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2. 
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -915,6 +915,11 @@ public:
   // and then stop the motor using the command specified by `stop_command`.
   static const std::string command_run_timed;
 
+  // Run the motor at the duty cycle specified by `duty_cycle_sp`.
+  // Unlike other run commands, changing `duty_cycle_sp` while running *will*
+  // take effect immediately.
+  static const std::string command_run_direct;
+
   // Stop any of the run commands before they are complete using the
   // command specified by `stop_command`.
   static const std::string command_stop;
@@ -1036,6 +1041,11 @@ public:
     // Run the motor for the amount of time specified in `time_sp`
     // and then stop the motor using the command specified by `stop_command`.
     void run_timed() { set_command("run-timed"); }
+
+    // Run the motor at the duty cycle specified by `duty_cycle_sp`.
+    // Unlike other run commands, changing `duty_cycle_sp` while running *will*
+    // take effect immediately.
+    void run_direct() { set_command("run-direct"); }
 
     // Stop any of the run commands before they are complete using the
     // command specified by `stop_command`.
