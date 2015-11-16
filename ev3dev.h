@@ -113,7 +113,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.sensor>currentClass
+//~autogen generic-class-description classes.sensor>currentClass
 
 // The sensor class provides a uniform interface for using most of the
 // sensors available for the EV3. The various underlying device drivers will
@@ -196,7 +196,7 @@ public:
       std::copy_n(_bin_data.data(), _bin_data.size(), static_cast<char*>(buf));
   }
 
-  //~autogen cpp_generic-get-set classes.sensor>currentClass
+  //~autogen generic-get-set classes.sensor>currentClass
 
   // Command: write-only
   // Sends a command to the sensor.
@@ -261,7 +261,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.i2cSensor>currentClass
+//~autogen generic-class-description classes.i2cSensor>currentClass
 
 // A generic interface to control I2C-type EV3 sensors.
 
@@ -272,7 +272,7 @@ public:
   i2c_sensor(port_type port = INPUT_AUTO);
   i2c_sensor(port_type port, address_type address);
 
-  //~autogen cpp_generic-get-set classes.i2cSensor>currentClass
+  //~autogen generic-get-set classes.i2cSensor>currentClass
 
   // FW Version: read-only
   // Returns the firmware version of the sensor if available. Currently only
@@ -305,7 +305,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.colorSensor>currentClass
+//~autogen generic-class-description classes.colorSensor>currentClass
 
 // LEGO EV3 color sensor.
 
@@ -315,7 +315,7 @@ class color_sensor : public sensor
 public:
   color_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.colorSensor>currentClass
+  //~autogen generic-declare-property-value classes.colorSensor>currentClass
 
   // Reflected light. Red LED on.
   static const std::string mode_col_reflect;
@@ -338,7 +338,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.ultrasonicSensor>currentClass
+//~autogen generic-class-description classes.ultrasonicSensor>currentClass
 
 // LEGO EV3 ultrasonic sensor.
 
@@ -348,7 +348,7 @@ class ultrasonic_sensor : public sensor
 public:
   ultrasonic_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.ultrasonicSensor>currentClass
+  //~autogen generic-declare-property-value classes.ultrasonicSensor>currentClass
 
   // Continuous measurement in centimeters.
   // LEDs: On, steady
@@ -375,7 +375,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.gyroSensor>currentClass
+//~autogen generic-class-description classes.gyroSensor>currentClass
 
 // LEGO EV3 gyro sensor.
 
@@ -385,7 +385,7 @@ class gyro_sensor : public sensor
 public:
   gyro_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.gyroSensor>currentClass
+  //~autogen generic-declare-property-value classes.gyroSensor>currentClass
 
   // Angle
   static const std::string mode_gyro_ang;
@@ -408,7 +408,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.infraredSensor>currentClass
+//~autogen generic-class-description classes.infraredSensor>currentClass
 
 // LEGO EV3 infrared sensor.
 
@@ -418,7 +418,7 @@ class infrared_sensor : public sensor
 public:
   infrared_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.infraredSensor>currentClass
+  //~autogen generic-declare-property-value classes.infraredSensor>currentClass
 
   // Proximity
   static const std::string mode_ir_prox;
@@ -441,7 +441,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.soundSensor>currentClass
+//~autogen generic-class-description classes.soundSensor>currentClass
 
 // LEGO NXT Sound Sensor
 
@@ -451,7 +451,7 @@ class sound_sensor : public sensor
 public:
   sound_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.soundSensor>currentClass
+  //~autogen generic-declare-property-value classes.soundSensor>currentClass
 
   // Sound pressure level. Flat weighting
   static const std::string mode_db;
@@ -465,7 +465,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.lightSensor>currentClass
+//~autogen generic-class-description classes.lightSensor>currentClass
 
 // LEGO NXT Light Sensor
 
@@ -475,7 +475,7 @@ class light_sensor : public sensor
 public:
   light_sensor(port_type port_ = INPUT_AUTO);
 
-  //~autogen cpp_generic-declare-property-value classes.lightSensor>currentClass
+  //~autogen generic-declare-property-value classes.lightSensor>currentClass
 
   // Reflected light. LED on
   static const std::string mode_reflect;
@@ -489,7 +489,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.motor>currentClass
+//~autogen generic-class-description classes.motor>currentClass
 
 // The motor class provides a uniform interface for using motors with
 // positional and directional feedback such as the EV3 and NXT motors.
@@ -511,7 +511,7 @@ public:
   using device::connected;
   using device::device_index;
 
-  //~autogen cpp_generic-declare-property-value classes.motor>currentClass
+  //~autogen generic-declare-property-value classes.motor>currentClass
 
   // Run the motor until another command is sent.
   static const std::string command_run_forever;
@@ -581,7 +581,7 @@ public:
 
 //~autogen
 
-  //~autogen cpp_generic-get-set classes.motor>currentClass
+  //~autogen generic-get-set classes.motor>currentClass
 
   // Command: write-only
   // Sends a command to the motor controller. See `commands` for a list of
@@ -830,7 +830,7 @@ public:
 
 //~autogen
 
-    //~autogen cpp_motor_commands classes.motor>currentClass
+    //~autogen motor_commands classes.motor>currentClass
 
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
@@ -891,7 +891,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.dcMotor>currentClass
+//~autogen generic-class-description classes.dcMotor>currentClass
 
 // The DC motor class provides a uniform interface for using regular DC motors
 // with no fancy controls or feedback. This includes LEGO MINDSTORMS RCX motors
@@ -906,7 +906,7 @@ public:
   using device::connected;
   using device::device_index;
 
-  //~autogen cpp_generic-declare-property-value classes.dcMotor>currentClass
+  //~autogen generic-declare-property-value classes.dcMotor>currentClass
 
   // Run the motor until another command is sent.
   static const std::string command_run_forever;
@@ -944,7 +944,7 @@ public:
 
 //~autogen
 
-  //~autogen cpp_generic-get-set classes.dcMotor>currentClass
+  //~autogen generic-get-set classes.dcMotor>currentClass
 
   // Command: write-only
   // Sets the command for the motor. Possible values are `run-forever`, `run-timed` and
@@ -1033,7 +1033,7 @@ public:
 
 //~autogen
 
-    //~autogen cpp_motor_commands classes.dcMotor>currentClass
+    //~autogen motor_commands classes.dcMotor>currentClass
 
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
@@ -1060,7 +1060,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.servoMotor>currentClass
+//~autogen generic-class-description classes.servoMotor>currentClass
 
 // The servo motor class provides a uniform interface for using hobby type
 // servo motors.
@@ -1074,7 +1074,7 @@ public:
   using device::connected;
   using device::device_index;
 
-  //~autogen cpp_generic-declare-property-value classes.servoMotor>currentClass
+  //~autogen generic-declare-property-value classes.servoMotor>currentClass
 
   // Drive servo to the position set in the `position_sp` attribute.
   static const std::string command_run;
@@ -1093,7 +1093,7 @@ public:
 
 //~autogen
 
-  //~autogen cpp_generic-get-set classes.servoMotor>currentClass
+  //~autogen generic-get-set classes.servoMotor>currentClass
 
   // Command: write-only
   // Sets the command for the servo. Valid values are `run` and `float`. Setting
@@ -1192,7 +1192,7 @@ public:
 
 //~autogen
 
-    //~autogen cpp_motor_commands classes.servoMotor>currentClass
+    //~autogen motor_commands classes.servoMotor>currentClass
 
     // Drive servo to the position set in the `position_sp` attribute.
     void run() { set_command("run"); }
@@ -1206,7 +1206,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.led>currentClass
+//~autogen generic-class-description classes.led>currentClass
 
 // Any device controlled by the generic LED driver.
 // See https://www.kernel.org/doc/Documentation/leds/leds-class.txt
@@ -1220,7 +1220,7 @@ public:
 
   using device::connected;
 
-  //~autogen cpp_generic-get-set classes.led>currentClass
+  //~autogen generic-get-set classes.led>currentClass
 
   // Max Brightness: read-only
   // Returns the maximum allowable brightness value.
@@ -1310,7 +1310,7 @@ public:
   // Sets the EV3 LEDs to the specified percentage (0-1) of their max brightness.
   static void mix_colors(float red, float green);
 
-  //~autogen cpp_led-color-methods
+  //~autogen led-color-methods
 
   // Sets the brightness of the built-in EV3 LEDs so that they appear
   // red, using the specified intensity percentage (0-1).
@@ -1383,7 +1383,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.powerSupply>currentClass
+//~autogen generic-class-description classes.powerSupply>currentClass
 
 // A generic interface to read data from the system's power_supply class.
 // Uses the built-in legoev3-battery if none is specified.
@@ -1396,7 +1396,7 @@ public:
 
   using device::connected;
 
-  //~autogen cpp_generic-get-set classes.powerSupply>currentClass
+  //~autogen generic-get-set classes.powerSupply>currentClass
 
   // Measured Current: read-only
   // The measured current that the battery is supplying (in microamps)
@@ -1568,7 +1568,7 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-class-description classes.legoPort>currentClass
+//~autogen generic-class-description classes.legoPort>currentClass
 
 // The `lego-port` class provides an interface for working with input and
 // output ports that are compatible with LEGO MINDSTORMS RCX/NXT/EV3, LEGO
@@ -1605,7 +1605,7 @@ public:
   using device::connected;
   using device::device_index;
 
-  //~autogen cpp_generic-get-set classes.legoPort>currentClass
+  //~autogen generic-get-set classes.legoPort>currentClass
 
   // Driver Name: read-only
   // Returns the name of the driver that loaded this device. You can find the

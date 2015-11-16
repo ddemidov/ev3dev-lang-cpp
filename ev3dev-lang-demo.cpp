@@ -202,7 +202,7 @@ void motor_action(motor &dev)
     {
     case 'i':
       cout << endl;
-//~autogen cpp_generic_report_status classes.motor>currentClass
+//~autogen generic_report_status classes.motor>currentClass
 
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }

@@ -1,0 +1,10 @@
+{% for prop in currentClass.propertyValues %}{%
+  assign prefix = prop.propertyName | downcase | underscore_spaces %}{%
+  for value in prop.values %}{%
+    for line in value.description %}
+  // {{ line }}{%
+    endfor %}{%
+    assign cppName = value.name | downcase | underscore_non_wc %}
+  static const std::string {{ prefix }}_{{cppName}};
+{% endfor %}{%
+endfor %}

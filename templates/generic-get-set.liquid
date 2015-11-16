@@ -1,0 +1,35 @@
+{% for prop in currentClass.systemProperties %}
+  // {{ prop.name }}:{%
+  if prop.readAccess %}{%
+    if prop.writeAccess %} read/write{%
+    else %} read-only{%
+    endif %}{%
+  else %} write-only{%
+  endif %}{%
+  for line in prop.description %}
+  // {{ line }}{%
+  endfor %}{%
+  assign cppName = prop.name | downcase | underscore_spaces %}{%
+  assign type   = prop.type %}{%
+  assign getter = prop.type %}{%
+  assign setter = prop.type %}{%
+  if prop.type == 'string' %}{%
+    assign type  = 'std::string' %}{%
+  elsif prop.type == 'string array' %}{%
+    assign type  = 'mode_set' %}{%
+    assign getter = 'set' %}{%
+  elsif prop.type == 'string selector' %}{%
+    assign type  = 'std::string' %}{%
+    assign getter = 'from_set' %}{%
+    assign setter = 'string' %}{%
+  endif %}{%
+  if prop.readAccess == true %}
+  {{ type }} {{ cppName }}() const { return get_attr_{{ getter }}("{{ prop.systemName }}"); }{%
+  endif %}{%
+  if prop.writeAccess == true %}
+  auto set_{{ cppName }}({{ type }} v) -> decltype(*this) {
+    set_attr_{{ setter }}("{{ prop.systemName }}", v);
+    return *this;
+  }{%
+  endif %}
+{%endfor %}

@@ -618,7 +618,7 @@ touch_sensor::touch_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.colorSensor>currentClass
+//~autogen generic-define-property-value classes.colorSensor>currentClass
 
 const std::string color_sensor::mode_col_reflect{ "COL-REFLECT" };
 const std::string color_sensor::mode_col_ambient{ "COL-AMBIENT" };
@@ -635,7 +635,7 @@ color_sensor::color_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.ultrasonicSensor>currentClass
+//~autogen generic-define-property-value classes.ultrasonicSensor>currentClass
 
 const std::string ultrasonic_sensor::mode_us_dist_cm{ "US-DIST-CM" };
 const std::string ultrasonic_sensor::mode_us_dist_in{ "US-DIST-IN" };
@@ -652,7 +652,7 @@ ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.gyroSensor>currentClass
+//~autogen generic-define-property-value classes.gyroSensor>currentClass
 
 const std::string gyro_sensor::mode_gyro_ang{ "GYRO-ANG" };
 const std::string gyro_sensor::mode_gyro_rate{ "GYRO-RATE" };
@@ -669,7 +669,7 @@ gyro_sensor::gyro_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.infraredSensor>currentClass
+//~autogen generic-define-property-value classes.infraredSensor>currentClass
 
 const std::string infrared_sensor::mode_ir_prox{ "IR-PROX" };
 const std::string infrared_sensor::mode_ir_seek{ "IR-SEEK" };
@@ -686,7 +686,7 @@ infrared_sensor::infrared_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.soundSensor>currentClass
+//~autogen generic-define-property-value classes.soundSensor>currentClass
 
 const std::string sound_sensor::mode_db{ "DB" };
 const std::string sound_sensor::mode_dba{ "DBA" };
@@ -715,7 +715,7 @@ sound_sensor::sound_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen cpp_generic-define-property-value classes.lightSensor>currentClass
+//~autogen generic-define-property-value classes.lightSensor>currentClass
 
 const std::string light_sensor::mode_reflect{ "REFLECT" };
 const std::string light_sensor::mode_ambient{ "AMBIENT" };
@@ -732,7 +732,7 @@ light_sensor::light_sensor(port_type port_) :
 const motor::motor_type motor::motor_large  { "lego-ev3-l-motor" };
 const motor::motor_type motor::motor_medium { "lego-ev3-m-motor" };
 
-//~autogen cpp_generic-define-property-value classes.motor>currentClass
+//~autogen generic-define-property-value classes.motor>currentClass
 
 const std::string motor::command_run_forever{ "run-forever" };
 const std::string motor::command_run_to_abs_pos{ "run-to-abs-pos" };
@@ -807,7 +807,7 @@ dc_motor::dc_motor(port_type port)
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
 
-//~autogen cpp_generic-define-property-value classes.dcMotor>currentClass
+//~autogen generic-define-property-value classes.dcMotor>currentClass
 
 const std::string dc_motor::command_run_forever{ "run-forever" };
 const std::string dc_motor::command_run_timed{ "run-timed" };
@@ -830,7 +830,7 @@ servo_motor::servo_motor(port_type port)
   connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
 }
 
-//~autogen cpp_generic-define-property-value classes.servoMotor>currentClass
+//~autogen generic-define-property-value classes.servoMotor>currentClass
 
 const std::string servo_motor::command_run{ "run" };
 const std::string servo_motor::command_float{ "float" };

@@ -1,0 +1,9 @@
+{% for prop in currentClass.systemProperties %}{%
+  assign cppName = prop.name | downcase | underscore_spaces %}{%
+  if prop.readAccess == true %}
+    cout << "    {{ prop.name }}: ";
+    try { cout << dev.{{ cppName }}() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }{%
+  endif %}{%
+endfor %}
+

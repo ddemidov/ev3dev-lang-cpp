@@ -1,0 +1,8 @@
+{% for prop in currentClass.propertyValues %}{%
+  assign className = currentClass.friendlyName | downcase | underscore_spaces %}{%
+  assign prefix = prop.propertyName | downcase | underscore_spaces %}{%
+  for value in prop.values %}{%
+    assign cppName = value.name | downcase | underscore_non_wc %}
+const std::string {{className}}::{{ prefix }}_{{cppName}}{ "{{ value.name }}" };{%
+  endfor %}{%
+endfor %}
