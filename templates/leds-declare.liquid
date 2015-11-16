@@ -1,0 +1,12 @@
+{% for instance in currentClass.instances %}{%
+    assign instanceName = instance.name | downcase | underscore_spaces %}
+    static led {{instanceName}};{%
+endfor %}
+{% for group in currentClass.groups %}{%
+    assign groupName = group.name | downcase | underscore_spaces %}
+    static std::vector<led*> {{ groupName }};{%
+endfor %}
+{% for color in currentClass.colors %}{%
+    assign colorName = color.name | downcase | underscore_spaces %}
+    static std::vector<float> {{ colorName }};{%
+endfor %}

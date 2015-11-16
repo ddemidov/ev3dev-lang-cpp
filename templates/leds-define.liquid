@@ -1,0 +1,31 @@
+{% for instance in currentClass.instances %}{%
+    assign instanceName = instance.name | downcase | underscore_spaces %}
+led led::{{instanceName}}{"{{instance.systemName}}"};{%
+endfor %}
+{% for group in currentClass.groups %}{%
+    assign groupName = group.name | downcase | underscore_spaces %}{%
+    assign ledNames = '' %}{%
+    for name in group.entries %}{%
+        capture ledNames %}{{ ledNames }}&led::{{ name | downcase | underscore_spaces }}{% unless forloop.last %}, {% endunless %}{%
+        endcapture %}{%
+    endfor %}
+std::vector<led*> led::{{ groupName }}{ {{ ledNames }} };{%
+endfor %}
+{% for color in currentClass.colors %}{%
+    assign colorName = color.name | downcase | underscore_spaces %}{%
+    assign mixValues = '' %}{%
+    for value in color.value %}{%
+        capture mixValues %}{{ mixValues }}static_cast<float>({{ value }}){% unless forloop.last %}, {% endunless %}{%
+        endcapture %}{%
+    endfor %}
+std::vector<float> led::{{ colorName }}{ {{ mixValues }} };{%
+endfor %}
+
+//-----------------------------------------------------------------------------
+void led::all_off() {
+{% for instance in currentClass.instances %}{%
+    assign instanceName = instance.name | downcase | underscore_spaces %}
+    {{instanceName}}.off();{%
+endfor %}
+
+}

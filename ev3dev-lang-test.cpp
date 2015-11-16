@@ -21,7 +21,9 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2. 
+
+// Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2.
+
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -220,6 +222,9 @@ void test_dc_motor()
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Stop Commands: ";
     try { cout << dev.stop_commands() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Time SP: ";
+    try { cout << dev.time_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
 
 

@@ -1,5 +1,15 @@
 # Compiling
 
+* EV3:
+```
+make
+```
+
+* BrickPi:
+```
+make EV3DEV_PLATFORM=BRICKPI
+```
+
 You have several options for compiling.
 
 ## Cross-compiling

@@ -28,7 +28,9 @@
 
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2. 
+
+// Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2.
+
 //~autogen
 //-----------------------------------------------------------------------------
 
@@ -57,7 +59,7 @@ typedef std::string         address_type;
 const port_type INPUT_AUTO;  //!< Automatic input selection
 const port_type OUTPUT_AUTO; //!< Automatic output selection
 
-#ifdef EV3DEV_RPI
+#ifdef EV3DEV_PLATFORM_BRICKPI
 const port_type INPUT_1  { "ttyAMA0:in1" };  //!< Sensor port 1
 const port_type INPUT_2  { "ttyAMA0:in2" };  //!< Sensor port 2
 const port_type INPUT_3  { "ttyAMA0:in3" };  //!< Sensor port 3
@@ -595,21 +597,22 @@ public:
   // Returns a list of commands that are supported by the motor
   // controller. Possible values are `run-forever`, `run-to-abs-pos`, `run-to-rel-pos`,
   // `run-timed`, `run-direct`, `stop` and `reset`. Not all commands may be supported.
-  // `run-forever` will cause the motor to run until another command is sent.
-  // `run-to-abs-pos` will run to an absolute position specified by `position_sp`
-  // and then stop using the command specified in `stop_command`.
-  // `run-to-rel-pos` will run to a position relative to the current `position` value.
-  // The new position will be current `position` + `position_sp`. When the new
-  // position is reached, the motor will stop using the command specified by `stop_command`.
-  // `run-timed` will run the motor for the amount of time specified in `time_sp`
-  // and then stop the motor using the command specified by `stop_command`.
-  // `run-direct` will run the motor at the duty cycle specified by `duty_cycle_sp`.
-  // Unlike other run commands, changing `duty_cycle_sp` while running *will*
-  // take effect immediately.
-  // `stop` will stop any of the run commands before they are complete using the
-  // command specified by `stop_command`.
-  // `reset` will reset all of the motor parameter attributes to their default value.
-  // This will also have the effect of stopping the motor.
+  // 
+  // - `run-forever` will cause the motor to run until another command is sent.
+  // - `run-to-abs-pos` will run to an absolute position specified by `position_sp`
+  //   and then stop using the command specified in `stop_command`.
+  // - `run-to-rel-pos` will run to a position relative to the current `position` value.
+  //   The new position will be current `position` + `position_sp`. When the new
+  //   position is reached, the motor will stop using the command specified by `stop_command`.
+  // - `run-timed` will run the motor for the amount of time specified in `time_sp`
+  //   and then stop the motor using the command specified by `stop_command`.
+  // - `run-direct` will run the motor at the duty cycle specified by `duty_cycle_sp`.
+  //   Unlike other run commands, changing `duty_cycle_sp` while running *will*
+  //   take effect immediately.
+  // - `stop` will stop any of the run commands before they are complete using the
+  //   command specified by `stop_command`.
+  // - `reset` will reset all of the motor parameter attributes to their default value.
+  //   This will also have the effect of stopping the motor.
   mode_set commands() const { return get_attr_set("commands"); }
 
   // Count Per Rot: read-only
@@ -1030,6 +1033,16 @@ public:
   // and `brake`.
   mode_set stop_commands() const { return get_attr_set("stop_commands"); }
 
+  // Time SP: read/write
+  // Writing specifies the amount of time the motor will run when using the
+  // `run-timed` command. Reading returns the current value. Units are in
+  // milliseconds.
+  int time_sp() const { return get_attr_int("time_sp"); }
+  auto set_time_sp(int v) -> decltype(*this) {
+    set_attr_int("time_sp", v);
+    return *this;
+  }
+
 
 //~autogen
 
@@ -1302,80 +1315,42 @@ public:
   // provided values (in milliseconds).
   void flash(unsigned on_ms, unsigned off_ms);
 
-  static led red_right;
-  static led red_left;
-  static led green_right;
-  static led green_left;
+#ifdef EV3DEV_PLATFORM_BRICKPI
+//~autogen leds-declare platforms.brickpi.led>currentClass
 
-  // Sets the EV3 LEDs to the specified percentage (0-1) of their max brightness.
-  static void mix_colors(float red, float green);
+    static led blue_one;
+    static led blue_two;
 
-  //~autogen led-color-methods
+    static std::vector<led*> one;
+    static std::vector<led*> two;
 
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // red, using the specified intensity percentage (0-1).
-  static void set_red(float intensity) {
-    mix_colors(1 * intensity, 0 * intensity);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // red at full intensity.
-  static void red_on() {
-    set_red(1.0f);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // green, using the specified intensity percentage (0-1).
-  static void set_green(float intensity) {
-    mix_colors(0 * intensity, 1 * intensity);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // green at full intensity.
-  static void green_on() {
-    set_green(1.0f);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // amber, using the specified intensity percentage (0-1).
-  static void set_amber(float intensity) {
-    mix_colors(1 * intensity, 1 * intensity);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // amber at full intensity.
-  static void amber_on() {
-    set_amber(1.0f);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // orange, using the specified intensity percentage (0-1).
-  static void set_orange(float intensity) {
-    mix_colors(1 * intensity, 0.5 * intensity);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // orange at full intensity.
-  static void orange_on() {
-    set_orange(1.0f);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // yellow, using the specified intensity percentage (0-1).
-  static void set_yellow(float intensity) {
-    mix_colors(0.5 * intensity, 1 * intensity);
-  }
-
-  // Sets the brightness of the built-in EV3 LEDs so that they appear
-  // yellow at full intensity.
-  static void yellow_on() {
-    set_yellow(1.0f);
-  }
-
+    static std::vector<float> blue;
 
 //~autogen
+#else
+//~autogen leds-declare platforms.ev3.led>currentClass
 
-  static void all_off  ();
+    static led red_left;
+    static led red_right;
+    static led green_left;
+    static led green_right;
+
+    static std::vector<led*> left;
+    static std::vector<led*> right;
+
+    static std::vector<float> red;
+    static std::vector<float> green;
+    static std::vector<float> amber;
+    static std::vector<float> orange;
+    static std::vector<float> yellow;
+
+//~autogen
+#endif
+
+  // Assigns to each led in `group` corresponding brightness percentage from `color`.
+  static void set_color(const std::vector<led*> &group, const std::vector<float> &color);
+
+  static void all_off();
 
 protected:
   int _max_brightness = 0;
