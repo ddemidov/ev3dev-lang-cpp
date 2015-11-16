@@ -37,6 +37,10 @@ bin/button-test: lib/libev3dev.a obj/button-test.o
 	mkdir -p $(@D)
 	$(CXX) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
 
+bin/sound-test: lib/libev3dev.a obj/sound-test.o
+	mkdir -p $(@D)
+	$(CXX) -o $@ $^ $(CFLAGS) $(CCFLAGS) $(LIBS)
+
 .PHONY: all clean
 
 clean:

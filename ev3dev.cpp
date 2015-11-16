@@ -34,6 +34,7 @@
 #include "ev3dev.h"
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <list>
 #include <map>
@@ -1024,77 +1025,83 @@ bool button::process_all() {
 
 //-----------------------------------------------------------------------------
 
-void sound::beep()
+void sound::beep(const std::string &args, bool bSynchronous)
 {
-  tone(1000, 100);
+  std::ostringstream cmd;
+  cmd << "/usr/bin/beep " << args;
+  if (!bSynchronous) cmd << " &";
+  std::system(cmd.str().c_str());
 }
 
 //-----------------------------------------------------------------------------
 
-void sound::tone(unsigned frequency, unsigned ms)
+void sound::tone(
+    const std::vector< std::vector<float> > &sequence,
+    bool bSynchronous
+    )
 {
-  std::ofstream os(SYS_SOUND "/tone");
-  if (os.is_open())
-  {
-    os << frequency;
-    if (ms)
-      os << " " << ms;
+  std::ostringstream args;
+  bool first = true;
+
+  for(auto v : sequence) {
+    if (first) {
+      first = false;
+    } else {
+      args << " -n";
+    }
+
+    if (v.size() > 0) {
+      args << " -f " << v[0];
+    } else {
+      continue;
+    }
+
+    if (v.size() > 1) {
+      args << " -l " << v[1];
+    } else {
+      continue;
+    }
+
+    if (v.size() > 2) {
+      args << " -D " << v[2];
+    } else {
+      continue;
+    }
   }
+
+  beep(args.str(), bSynchronous);
+}
+
+//-----------------------------------------------------------------------------
+
+void sound::tone(float frequency, float ms, bool bSynchronous) {
+  tone({{frequency, ms, 0.0f}}, bSynchronous);
 }
 
 //-----------------------------------------------------------------------------
 
 void sound::play(const std::string &soundfile, bool bSynchronous)
 {
-  std::string cmd("aplay -q ");
-  cmd.append(soundfile);
-  if (!bSynchronous)
-  {
-    cmd.append(" &");
-  }
+  std::ostringstream cmd;
+  cmd << "/usr/bin/aplay -q " << soundfile;
 
-  std::system(cmd.c_str());
+  if (!bSynchronous) cmd << " &";
+
+  std::system(cmd.str().c_str());
 }
 
 //-----------------------------------------------------------------------------
 
 void sound::speak(const std::string &text, bool bSynchronous)
 {
-  std::string cmd("espeak -a 200 --stdout \"");
-  cmd.append(text);
-  cmd.append("\" | aplay -q");
-  if (!bSynchronous)
-  {
-    cmd.append(" &");
-  }
+  std::ostringstream cmd;
 
-  std::system(cmd.c_str());
-}
+  cmd << "/usr/bin/espeak -a 200 --stdout \"" << text << "\""
+      << " | /usr/bin/aplay -q";
 
-//-----------------------------------------------------------------------------
+  if (!bSynchronous) cmd << " &";
 
-unsigned sound::volume()
-{
-  unsigned result = 0;
-
-  std::ifstream is(SYS_SOUND "/volume");
-  if (is.is_open())
-  {
-    is >> result;
-  }
-
-  return result;
-}
-
-//-----------------------------------------------------------------------------
-
-void sound::set_volume(unsigned v)
-{
-  std::ofstream os(SYS_SOUND "/volume");
-  if (os.is_open())
-  {
-    os << v;
-  }
+  std::system(cmd.str().c_str());
 }
 
 //-----------------------------------------------------------------------------

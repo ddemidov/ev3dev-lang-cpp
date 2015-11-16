@@ -704,17 +704,6 @@ void sound_menu()
         sound::speak(text, true);
       }
       break;
-    case 'v':
-      {
-        cout << endl << "current volume is " << sound::volume()
-             << endl << "new volume: ";
-
-        unsigned volume = 0;
-        cin >> volume; cout << endl;
-        if (volume)
-          sound::set_volume(volume);
-      }
-      break;
     }
   }
   while (c != 'b');
