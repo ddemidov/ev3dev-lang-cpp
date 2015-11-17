@@ -879,19 +879,19 @@ void led::flash(unsigned on_ms, unsigned off_ms)
 #ifdef EV3DEV_PLATFORM_BRICKPI
 //~autogen leds-define platforms.brickpi.led>currentClass
 
-led led::blue_one{"brickpi1:blue:ev3dev"};
-led led::blue_two{"brickpi2:blue:ev3dev"};
+led led::blue_led1{"brickpi1:blue:ev3dev"};
+led led::blue_led2{"brickpi2:blue:ev3dev"};
 
-std::vector<led*> led::one{ &led::blue_one };
-std::vector<led*> led::two{ &led::blue_two };
+std::vector<led*> led::led1{ &led::blue_led1 };
+std::vector<led*> led::led2{ &led::blue_led2 };
 
 std::vector<float> led::blue{ static_cast<float>(1) };
 
 //-----------------------------------------------------------------------------
 void led::all_off() {
 
-    blue_one.off();
-    blue_two.off();
+    blue_led1.off();
+    blue_led2.off();
 
 }
 

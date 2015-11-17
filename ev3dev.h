@@ -1318,11 +1318,11 @@ public:
 #ifdef EV3DEV_PLATFORM_BRICKPI
 //~autogen leds-declare platforms.brickpi.led>currentClass
 
-    static led blue_one;
-    static led blue_two;
+    static led blue_led1;
+    static led blue_led2;
 
-    static std::vector<led*> one;
-    static std::vector<led*> two;
+    static std::vector<led*> led1;
+    static std::vector<led*> led2;
 
     static std::vector<float> blue;
 
