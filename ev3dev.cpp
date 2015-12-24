@@ -71,8 +71,6 @@
 #endif
 static const int bits_per_long = sizeof(long) * 8;
 
-#define SYS_SOUND  SYS_ROOT "/devices/platform/snd-legoev3/"
-
 //-----------------------------------------------------------------------------
 
 namespace ev3dev {
@@ -186,10 +184,11 @@ std::ifstream &ifstream_open(const std::string &path)
 
 //-----------------------------------------------------------------------------
 
-bool device::connect(const std::string &dir,
-                     const std::string &pattern,
-                     const std::map<std::string,
-                                    std::set<std::string>> &match) noexcept
+bool device::connect(
+    const std::string &dir,
+    const std::string &pattern,
+    const std::map<std::string, std::set<std::string>> &match
+    ) noexcept
 {
   using namespace std;
 
@@ -472,16 +471,16 @@ const sensor::sensor_type sensor::nxt_analog      { "nxt-analog" };
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port)
+sensor::sensor(address_type address)
 {
-  connect({{ "port_name", { port }}});
+  connect({{ "address", { address }}});
 }
 
 //-----------------------------------------------------------------------------
 
-sensor::sensor(port_type port, const std::set<sensor_type> &types)
+sensor::sensor(address_type address, const std::set<sensor_type> &types)
 {
-  connect({{ "port_name", { port }},
+  connect({{ "address", { address }},
            { "driver_name", types }});
 }
 
@@ -598,30 +597,21 @@ const std::vector<char>& sensor::bin_data() const
 
 //-----------------------------------------------------------------------------
 
-i2c_sensor::i2c_sensor(port_type port_) :
-  sensor(port_, { nxt_i2c_sensor })
+i2c_sensor::i2c_sensor(address_type address) :
+  sensor(address, { nxt_i2c_sensor })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-i2c_sensor::i2c_sensor(port_type port_, address_type address_)
-{
-  connect({{ "port_name", { port_ }},
-           { "driver_name",      { nxt_i2c_sensor }},
-           { "address",   { address_ }}});
-}
-
-//-----------------------------------------------------------------------------
-
-touch_sensor::touch_sensor(port_type port_) :
-  sensor(port_, { ev3_touch, nxt_touch })
+touch_sensor::touch_sensor(address_type address) :
+  sensor(address, { ev3_touch, nxt_touch })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.colorSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.colorSensor>currentClass
 
 const std::string color_sensor::mode_col_reflect{ "COL-REFLECT" };
 const std::string color_sensor::mode_col_ambient{ "COL-AMBIENT" };
@@ -631,14 +621,14 @@ const std::string color_sensor::mode_rgb_raw{ "RGB-RAW" };
 
 //~autogen
 
-color_sensor::color_sensor(port_type port_) :
-  sensor(port_, { ev3_color })
+color_sensor::color_sensor(address_type address) :
+  sensor(address, { ev3_color })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.ultrasonicSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.ultrasonicSensor>currentClass
 
 const std::string ultrasonic_sensor::mode_us_dist_cm{ "US-DIST-CM" };
 const std::string ultrasonic_sensor::mode_us_dist_in{ "US-DIST-IN" };
@@ -648,14 +638,14 @@ const std::string ultrasonic_sensor::mode_us_si_in{ "US-SI-IN" };
 
 //~autogen
 
-ultrasonic_sensor::ultrasonic_sensor(port_type port_) :
-  sensor(port_, { ev3_ultrasonic, nxt_ultrasonic })
+ultrasonic_sensor::ultrasonic_sensor(address_type address) :
+  sensor(address, { ev3_ultrasonic, nxt_ultrasonic })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.gyroSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.gyroSensor>currentClass
 
 const std::string gyro_sensor::mode_gyro_ang{ "GYRO-ANG" };
 const std::string gyro_sensor::mode_gyro_rate{ "GYRO-RATE" };
@@ -665,14 +655,14 @@ const std::string gyro_sensor::mode_gyro_cal{ "GYRO-CAL" };
 
 //~autogen
 
-gyro_sensor::gyro_sensor(port_type port_) :
-  sensor(port_, { ev3_gyro })
+gyro_sensor::gyro_sensor(address_type address) :
+  sensor(address, { ev3_gyro })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.infraredSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.infraredSensor>currentClass
 
 const std::string infrared_sensor::mode_ir_prox{ "IR-PROX" };
 const std::string infrared_sensor::mode_ir_seek{ "IR-SEEK" };
@@ -682,31 +672,30 @@ const std::string infrared_sensor::mode_ir_cal{ "IR-CAL" };
 
 //~autogen
 
-infrared_sensor::infrared_sensor(port_type port_) :
-  sensor(port_, { ev3_infrared })
+infrared_sensor::infrared_sensor(address_type address) :
+  sensor(address, { ev3_infrared })
 {
 }
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.soundSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.soundSensor>currentClass
 
 const std::string sound_sensor::mode_db{ "DB" };
 const std::string sound_sensor::mode_dba{ "DBA" };
 
 //~autogen
 
-sound_sensor::sound_sensor(port_type port_) :
-  sensor(port_, { nxt_sound, nxt_analog })
+sound_sensor::sound_sensor(address_type address) :
+  sensor(address, { nxt_sound, nxt_analog })
 {
     if (connected() && driver_name() == nxt_analog) {
-        device port;
-        port.connect(SYS_ROOT "/class/lego-port/", "port", {{"port_name", {port_name()}}});
+        lego_port port(address);
 
         if (port.connected()) {
-            port.set_attr_string("set_device", nxt_sound);
+            port.set_set_device(nxt_sound);
 
-            if (port.get_attr_string("status") != nxt_sound) {
+            if (port.status() != nxt_sound) {
                 // Failed to load lego-nxt-sound friver. Wrong port?
                 _path.clear();
             }
@@ -718,15 +707,15 @@ sound_sensor::sound_sensor(port_type port_) :
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-define-property-value classes.lightSensor>currentClass
+//~autogen generic-define-property-value specialSensorTypes.lightSensor>currentClass
 
 const std::string light_sensor::mode_reflect{ "REFLECT" };
 const std::string light_sensor::mode_ambient{ "AMBIENT" };
 
 //~autogen
 
-light_sensor::light_sensor(port_type port_) :
-  sensor(port_, { nxt_light })
+light_sensor::light_sensor(address_type address) :
+  sensor(address, { nxt_light })
 {
 }
 
@@ -758,16 +747,16 @@ const std::string motor::stop_command_hold{ "hold" };
 
 //-----------------------------------------------------------------------------
 
-motor::motor(port_type port)
+motor::motor(address_type address)
 {
-  connect({{ "port_name", { port } }});
+  connect({{ "address", { address } }});
 }
 
 //-----------------------------------------------------------------------------
 
-motor::motor(port_type port, const motor_type &t)
+motor::motor(address_type address, const motor_type &t)
 {
-  connect({{ "port_name", { port } }, { "driver_name", { t }}});
+  connect({{ "address", { address } }, { "driver_name", { t }}});
 }
 
 //-----------------------------------------------------------------------------
@@ -790,24 +779,24 @@ bool motor::connect(const std::map<std::string, std::set<std::string>> &match) n
 
 //-----------------------------------------------------------------------------
 
-medium_motor::medium_motor(port_type port_) : motor(port_, motor_medium)
+medium_motor::medium_motor(address_type address) : motor(address, motor_medium)
 {
 }
 
 //-----------------------------------------------------------------------------
 
-large_motor::large_motor(port_type port_) : motor(port_, motor_large)
+large_motor::large_motor(address_type address) : motor(address, motor_large)
 {
 }
 
 //-----------------------------------------------------------------------------
 
-dc_motor::dc_motor(port_type port)
+dc_motor::dc_motor(address_type address)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/dc-motor/" };
   static const std::string _strPattern  { "motor" };
 
-  connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
+  connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
 
 //~autogen generic-define-property-value classes.dcMotor>currentClass
@@ -825,12 +814,12 @@ const std::string dc_motor::stop_command_brake{ "brake" };
 
 //-----------------------------------------------------------------------------
 
-servo_motor::servo_motor(port_type port)
+servo_motor::servo_motor(address_type address)
 {
   static const std::string _strClassDir { SYS_ROOT "/class/servo-motor/" };
   static const std::string _strPattern  { "motor" };
 
-  connect(_strClassDir, _strPattern, {{ "port_name", { port }}});
+  connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
 
 //~autogen generic-define-property-value classes.servoMotor>currentClass
@@ -1300,9 +1289,9 @@ void remote_control::on_value_changed(int value)
 
 //-----------------------------------------------------------------------------
 
-lego_port::lego_port(port_type port)
+lego_port::lego_port(address_type address)
 {
-  connect({{ "port_name", { port } }});
+  connect({{ "address", { address } }});
 }
 
 //-----------------------------------------------------------------------------

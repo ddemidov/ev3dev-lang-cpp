@@ -73,8 +73,8 @@ void test_sensor(const char *name)
     cout << "    Num Values: ";
     try { cout << dev.num_values() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Port Name: ";
-    try { cout << dev.port_name() << endl; }
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Units: ";
     try { cout << dev.units() << endl; }
@@ -120,8 +120,8 @@ void test_motor(const char *name)
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Port Name: ";
-    try { cout << dev.port_name() << endl; }
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position: ";
     try { cout << dev.position() << endl; }
@@ -208,8 +208,8 @@ void test_dc_motor()
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Port Name: ";
-    try { cout << dev.port_name() << endl; }
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Ramp Down SP: ";
     try { cout << dev.ramp_down_sp() << endl; }
@@ -260,8 +260,8 @@ void test_servo_motor()
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Port Name: ";
-    try { cout << dev.port_name() << endl; }
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position SP: ";
     try { cout << dev.position_sp() << endl; }

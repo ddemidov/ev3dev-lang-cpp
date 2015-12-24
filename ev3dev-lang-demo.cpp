@@ -142,7 +142,7 @@ void sensor_menu()
       if (s.connected())
       {
         cout << "(" << i+1 << ") " << s.type_name() << " (device " << s.driver_name()
-             << ", port " << s.port_name() << ", mode " << s.mode() << ")" << endl;
+             << ", port " << s.address() << ", mode " << s.mode() << ")" << endl;
       }
     }
     cout << endl;
@@ -174,7 +174,7 @@ void motor_action(motor &dev)
   do
   {
     cout << endl
-         << "*** " << dev.driver_name() << " motor (" << dev.port_name() << ") actions ***" << endl
+         << "*** " << dev.driver_name() << " motor (" << dev.address() << ") actions ***" << endl
          << endl
          << "(i)nfo" << endl
          << "(c)ommand" << endl
@@ -225,8 +225,8 @@ void motor_action(motor &dev)
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Port Name: ";
-    try { cout << dev.port_name() << endl; }
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position: ";
     try { cout << dev.position() << endl; }
@@ -335,7 +335,7 @@ void motor_action(dc_motor &m)
   do
   {
     cout << endl
-         << "*** dc motor (" << m.port_name() << ") actions ***" << endl
+         << "*** dc motor (" << m.address() << ") actions ***" << endl
          << endl
          << "(d)uty cycle sp(" << m.duty_cycle_sp() << ")" << endl
          << "(r)amp down sp (" << m.ramp_down_sp() << ")" << endl
@@ -379,7 +379,7 @@ void motor_action(servo_motor &m)
   do
   {
     cout << endl
-         << "*** servo motor (" << m.port_name() << ") actions ***" << endl
+         << "*** servo motor (" << m.address() << ") actions ***" << endl
          << endl
          << "(c)ommand" << endl
          << "(p)osition_sp  (" << m.position_sp()  << ")" << endl
@@ -456,15 +456,15 @@ void motor_menu()
       motor &m = arrMotors[i];
       if (m.connected())
       {
-        cout << "(" << 1+i << ") " << m.driver_name() << " motor on port " << m.port_name() << endl;
+        cout << "(" << 1+i << ") " << m.driver_name() << " motor on port " << m.address() << endl;
       }
       else if (arrDCMotors[i].connected())
       {
-        cout << "(" << 1+i << ") dc motor on port " << arrDCMotors[i].port_name() << endl;
+        cout << "(" << 1+i << ") dc motor on port " << arrDCMotors[i].address() << endl;
       }
       else if (arrServoMotors[i].connected())
       {
-        cout << "(" << 1+i << ") servo motor on port " << arrServoMotors[i].port_name() << endl;
+        cout << "(" << 1+i << ") servo motor on port " << arrServoMotors[i].address() << endl;
       }
     }
     cout << endl;

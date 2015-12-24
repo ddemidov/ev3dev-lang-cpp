@@ -1,0 +1,40 @@
+{%
+assign className = currentClass.friendlyName | downcase | underscore_spaces %}{%
+assign parentName = currentClass.inheritance | downcase | underscore_spaces %}{%
+for line in currentClass.description %}
+// {{ line }}{%
+endfor %}
+class {{ className }} : public {{ parentName }}
+{
+public:
+  {{className}}(address_type address = INPUT_AUTO);
+{% for prop in currentClass.propertyValues %}{%
+  assign prefix = prop.propertyName | downcase | underscore_spaces %}{%
+  for value in prop.values %}{%
+    for line in value.description %}
+  // {{ line }}{%
+    endfor %}{%
+    assign cppName = value.name | downcase | underscore_non_wc %}
+  static const std::string {{ prefix }}_{{cppName}};
+{% endfor %}{%
+endfor %}
+{% for mapping in currentClass.sensorValueMappings %}{%
+  assign name = mapping.name | downcase | underscore_spaces %}{%
+  assign mode = mapping.requiredMode | downcase | underscore_non_wc %}{%
+  assign value_index = mapping.sourceValue %}{%
+  assign type = mapping.type %}{%
+  assign reader = 'value' %}{%
+  if type == 'float' %}{%
+    assign reader = 'float_value' %}{%
+  elsif type == 'boolean' %}{%
+    assign type = 'bool' %}{%
+  endif %}{%
+    for line in mapping.description %}
+  // {{ line }}{%
+    endfor %}
+  {{ type }} {{ name }}() {
+    set_mode(mode_{{ mode }});
+    return {{ reader }}({{ value_index }});
+  }
+{% endfor %}
+};

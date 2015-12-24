@@ -49,36 +49,35 @@ namespace ev3dev {
 //-----------------------------------------------------------------------------
 
 typedef std::string         device_type;
-typedef std::string         port_type;
 typedef std::string         mode_type;
 typedef std::set<mode_type> mode_set;
 typedef std::string         address_type;
 
 //-----------------------------------------------------------------------------
 
-const port_type INPUT_AUTO;  //!< Automatic input selection
-const port_type OUTPUT_AUTO; //!< Automatic output selection
+const address_type INPUT_AUTO;  //!< Automatic input selection
+const address_type OUTPUT_AUTO; //!< Automatic output selection
 
 #ifdef EV3DEV_PLATFORM_BRICKPI
-const port_type INPUT_1  { "ttyAMA0:in1" };  //!< Sensor port 1
-const port_type INPUT_2  { "ttyAMA0:in2" };  //!< Sensor port 2
-const port_type INPUT_3  { "ttyAMA0:in3" };  //!< Sensor port 3
-const port_type INPUT_4  { "ttyAMA0:in4" };  //!< Sensor port 4
+const address_type INPUT_1  { "ttyAMA0:in1" };  //!< Sensor port 1
+const address_type INPUT_2  { "ttyAMA0:in2" };  //!< Sensor port 2
+const address_type INPUT_3  { "ttyAMA0:in3" };  //!< Sensor port 3
+const address_type INPUT_4  { "ttyAMA0:in4" };  //!< Sensor port 4
 
-const port_type OUTPUT_A { "ttyAMA0:outA" }; //!< Motor port A
-const port_type OUTPUT_B { "ttyAMA0:outB" }; //!< Motor port B
-const port_type OUTPUT_C { "ttyAMA0:outC" }; //!< Motor port C
-const port_type OUTPUT_D { "ttyAMA0:outD" }; //!< Motor port D
+const address_type OUTPUT_A { "ttyAMA0:outA" }; //!< Motor port A
+const address_type OUTPUT_B { "ttyAMA0:outB" }; //!< Motor port B
+const address_type OUTPUT_C { "ttyAMA0:outC" }; //!< Motor port C
+const address_type OUTPUT_D { "ttyAMA0:outD" }; //!< Motor port D
 #else
-const port_type INPUT_1  { "in1" };  //!< Sensor port 1
-const port_type INPUT_2  { "in2" };  //!< Sensor port 2
-const port_type INPUT_3  { "in3" };  //!< Sensor port 3
-const port_type INPUT_4  { "in4" };  //!< Sensor port 4
+const address_type INPUT_1  { "in1" };  //!< Sensor port 1
+const address_type INPUT_2  { "in2" };  //!< Sensor port 2
+const address_type INPUT_3  { "in3" };  //!< Sensor port 3
+const address_type INPUT_4  { "in4" };  //!< Sensor port 4
 
-const port_type OUTPUT_A { "outA" }; //!< Motor port A
-const port_type OUTPUT_B { "outB" }; //!< Motor port B
-const port_type OUTPUT_C { "outC" }; //!< Motor port C
-const port_type OUTPUT_D { "outD" }; //!< Motor port D
+const address_type OUTPUT_A { "outA" }; //!< Motor port A
+const address_type OUTPUT_B { "outB" }; //!< Motor port B
+const address_type OUTPUT_C { "outC" }; //!< Motor port C
+const address_type OUTPUT_D { "outD" }; //!< Motor port D
 #endif
 
 //-----------------------------------------------------------------------------
@@ -89,8 +88,8 @@ class device
 public:
   bool connect(const std::string &dir,
                const std::string &pattern,
-               const std::map<std::string,
-                              std::set<std::string>> &match) noexcept;
+               const std::map<std::string, std::set<std::string>> &match) noexcept;
+
   inline bool connected() const { return !_path.empty(); }
 
   int         device_index() const;
@@ -126,7 +125,7 @@ protected:
 // if needed by `value<N>` / 10.0 ^ `decimals`.
 // 
 // Since the name of the `sensor<N>` device node does not correspond to the port
-// that a sensor is plugged in to, you must look at the `port_name` attribute if
+// that a sensor is plugged in to, you must look at the `address` attribute if
 // you need to know which port a sensor is plugged in to. However, if you don't
 // have more than one sensor of each type, you can just look for a matching
 // `driver_name`. Then it will not matter which port a sensor is plugged in to - your
@@ -151,8 +150,8 @@ public:
   static const sensor_type nxt_i2c_sensor;
   static const sensor_type nxt_analog;
 
-  sensor(port_type);
-  sensor(port_type, const std::set<sensor_type>&);
+  sensor(address_type);
+  sensor(address_type, const std::set<sensor_type>&);
 
   using device::connected;
   using device::device_index;
@@ -198,7 +197,7 @@ public:
       std::copy_n(_bin_data.data(), _bin_data.size(), static_cast<char*>(buf));
   }
 
-  //~autogen generic-get-set classes.sensor>currentClass
+//~autogen generic-get-set classes.sensor>currentClass
 
   // Command: write-only
   // Sends a command to the sensor.
@@ -240,10 +239,10 @@ public:
   // for the current mode.
   int num_values() const { return get_attr_int("num_values"); }
 
-  // Port Name: read-only
+  // Address: read-only
   // Returns the name of the port that the sensor is connected to, e.g. `ev3:in1`.
   // I2C sensors also include the I2C address (decimal), e.g. `ev3:in1:i2c8`.
-  std::string port_name() const { return get_attr_string("port_name"); }
+  std::string address() const { return get_attr_string("address"); }
 
   // Units: read-only
   // Returns the units of the measured value for the current mode. May return
@@ -271,10 +270,9 @@ protected:
 class i2c_sensor : public sensor
 {
 public:
-  i2c_sensor(port_type port = INPUT_AUTO);
-  i2c_sensor(port_type port, address_type address);
+  i2c_sensor(address_type address = INPUT_AUTO);
 
-  //~autogen generic-get-set classes.i2cSensor>currentClass
+//~autogen generic-get-set classes.i2cSensor>currentClass
 
   // FW Version: read-only
   // Returns the firmware version of the sensor if available. Currently only
@@ -298,26 +296,38 @@ public:
 
 //-----------------------------------------------------------------------------
 
-// Touch sensor
+//~autogen special-sensor-declaration specialSensorTypes.touchSensor>currentClass
+
+// Touch Sensor
 class touch_sensor : public sensor
 {
 public:
-  touch_sensor(port_type port_ = INPUT_AUTO);
+  touch_sensor(address_type address = INPUT_AUTO);
+
+  // Button state
+  static const std::string mode_touch;
+
+
+  // A boolean indicating whether the current touch sensor is being
+  // pressed.
+  bool is_pressed() {
+    set_mode(mode_touch);
+    return value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.colorSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.colorSensor>currentClass
 
 // LEGO EV3 color sensor.
-
-//~autogen
 class color_sensor : public sensor
 {
 public:
-  color_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.colorSensor>currentClass
+  color_sensor(address_type address = INPUT_AUTO);
 
   // Reflected light. Red LED on.
   static const std::string mode_col_reflect;
@@ -335,59 +345,114 @@ public:
   static const std::string mode_rgb_raw;
 
 
-//~autogen
+  // Reflected light intensity as a percentage. Light on sensor is red.
+  int reflected_light_intensity() {
+    set_mode(mode_col_reflect);
+    return value(0);
+  }
+
+  // Ambient light intensity. Light on sensor is dimly lit blue.
+  int ambient_light_intensity() {
+    set_mode(mode_col_ambient);
+    return value(0);
+  }
+
+  // Color detected by the sensor, categorized by overall value.
+  //   - 0: No color
+  //   - 1: Black
+  //   - 2: Blue
+  //   - 3: Green
+  //   - 4: Yellow
+  //   - 5: Red
+  //   - 6: White
+  //   - 7: Brown
+  int color() {
+    set_mode(mode_col_color);
+    return value(0);
+  }
+
+  // Red component of the detected color, in the range 0-1020.
+  int red() {
+    set_mode(mode_rgb_raw);
+    return value(0);
+  }
+
+  // Green component of the detected color, in the range 0-1020.
+  int green() {
+    set_mode(mode_rgb_raw);
+    return value(1);
+  }
+
+  // Blue component of the detected color, in the range 0-1020.
+  int blue() {
+    set_mode(mode_rgb_raw);
+    return value(2);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.ultrasonicSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.ultrasonicSensor>currentClass
 
 // LEGO EV3 ultrasonic sensor.
-
-//~autogen
 class ultrasonic_sensor : public sensor
 {
 public:
-  ultrasonic_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.ultrasonicSensor>currentClass
+  ultrasonic_sensor(address_type address = INPUT_AUTO);
 
   // Continuous measurement in centimeters.
-  // LEDs: On, steady
   static const std::string mode_us_dist_cm;
 
   // Continuous measurement in inches.
-  // LEDs: On, steady
   static const std::string mode_us_dist_in;
 
-  // Listen.  LEDs: On, blinking
+  // Listen.
   static const std::string mode_us_listen;
 
   // Single measurement in centimeters.
-  // LEDs: On momentarily when mode is set, then off
   static const std::string mode_us_si_cm;
 
   // Single measurement in inches.
-  // LEDs: On momentarily when mode is set, then off
   static const std::string mode_us_si_in;
 
 
-//~autogen
+  // Measurement of the distance detected by the sensor,
+  // in centimeters.
+  float distance_centimeters() {
+    set_mode(mode_us_dist_cm);
+    return float_value(0);
+  }
+
+  // Measurement of the distance detected by the sensor,
+  // in inches.
+  float distance_inches() {
+    set_mode(mode_us_dist_in);
+    return float_value(0);
+  }
+
+  // Value indicating whether another ultrasonic sensor could
+  // be heard nearby.
+  bool other_sensor_present() {
+    set_mode(mode_us_listen);
+    return value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.gyroSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.gyroSensor>currentClass
 
 // LEGO EV3 gyro sensor.
-
-//~autogen
 class gyro_sensor : public sensor
 {
 public:
-  gyro_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.gyroSensor>currentClass
+  gyro_sensor(address_type address = INPUT_AUTO);
 
   // Angle
   static const std::string mode_gyro_ang;
@@ -405,22 +470,32 @@ public:
   static const std::string mode_gyro_cal;
 
 
-//~autogen
+  // The number of degrees that the sensor has been rotated
+  // since it was put into this mode.
+  int angle() {
+    set_mode(mode_gyro_ang);
+    return value(0);
+  }
+
+  // The rate at which the sensor is rotating, in degrees/second.
+  int rate() {
+    set_mode(mode_gyro_rate);
+    return value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.infraredSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.infraredSensor>currentClass
 
 // LEGO EV3 infrared sensor.
-
-//~autogen
 class infrared_sensor : public sensor
 {
 public:
-  infrared_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.infraredSensor>currentClass
+  infrared_sensor(address_type address = INPUT_AUTO);
 
   // Proximity
   static const std::string mode_ir_prox;
@@ -438,22 +513,26 @@ public:
   static const std::string mode_ir_cal;
 
 
-//~autogen
+  // A measurement of the distance between the sensor and the remote,
+  // as a percentage. 100% is approximately 70cm/27in.
+  int proximity() {
+    set_mode(mode_ir_prox);
+    return value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.soundSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.soundSensor>currentClass
 
 // LEGO NXT Sound Sensor
-
-//~autogen
 class sound_sensor : public sensor
 {
 public:
-  sound_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.soundSensor>currentClass
+  sound_sensor(address_type address = INPUT_AUTO);
 
   // Sound pressure level. Flat weighting
   static const std::string mode_db;
@@ -462,22 +541,33 @@ public:
   static const std::string mode_dba;
 
 
-//~autogen
+  // A measurement of the measured sound pressure level, as a
+  // percent. Uses a flat weighting.
+  float sound_pressure() {
+    set_mode(mode_db);
+    return float_value(0);
+  }
+
+  // A measurement of the measured sound pressure level, as a
+  // percent. Uses A-weighting, which focuses on levels up to 55 dB.
+  float sound_pressure_low() {
+    set_mode(mode_dba);
+    return float_value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
-//~autogen generic-class-description classes.lightSensor>currentClass
+//~autogen special-sensor-declaration specialSensorTypes.lightSensor>currentClass
 
 // LEGO NXT Light Sensor
-
-//~autogen
 class light_sensor : public sensor
 {
 public:
-  light_sensor(port_type port_ = INPUT_AUTO);
-
-  //~autogen generic-declare-property-value classes.lightSensor>currentClass
+  light_sensor(address_type address = INPUT_AUTO);
 
   // Reflected light. LED on
   static const std::string mode_reflect;
@@ -486,8 +576,21 @@ public:
   static const std::string mode_ambient;
 
 
-//~autogen
+  // A measurement of the reflected light intensity, as a percentage.
+  float reflected_light_intensity() {
+    set_mode(mode_reflect);
+    return float_value(0);
+  }
+
+  // A measurement of the ambient light intensity, as a percentage.
+  float ambient_light_intensity() {
+    set_mode(mode_ambient);
+    return float_value(0);
+  }
+
 };
+
+//~autogen
 
 //-----------------------------------------------------------------------------
 
@@ -504,8 +607,8 @@ class motor : protected device
 public:
   typedef device_type motor_type;
 
-  motor(port_type);
-  motor(port_type, const motor_type&);
+  motor(address_type);
+  motor(address_type, const motor_type&);
 
   static const motor_type motor_large;
   static const motor_type motor_medium;
@@ -513,7 +616,7 @@ public:
   using device::connected;
   using device::device_index;
 
-  //~autogen generic-declare-property-value classes.motor>currentClass
+//~autogen generic-declare-property-value classes.motor>currentClass
 
   // Run the motor until another command is sent.
   static const std::string command_run_forever;
@@ -583,7 +686,7 @@ public:
 
 //~autogen
 
-  //~autogen generic-get-set classes.motor>currentClass
+//~autogen generic-get-set classes.motor>currentClass
 
   // Command: write-only
   // Sends a command to the motor controller. See `commands` for a list of
@@ -665,9 +768,9 @@ public:
     return *this;
   }
 
-  // Port Name: read-only
-  // Returns the name of the port that the motor is connected to.
-  std::string port_name() const { return get_attr_string("port_name"); }
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
 
   // Position: read/write
   // Returns the current position of the motor in pulses of the rotary
@@ -833,7 +936,7 @@ public:
 
 //~autogen
 
-    //~autogen motor_commands classes.motor>currentClass
+//~autogen motor_commands classes.motor>currentClass
 
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
@@ -880,7 +983,7 @@ protected:
 class medium_motor : public motor
 {
 public:
-  medium_motor(port_type port_ = OUTPUT_AUTO);
+  medium_motor(address_type address = OUTPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
@@ -889,7 +992,7 @@ public:
 class large_motor : public motor
 {
 public:
-  large_motor(port_type port_ = OUTPUT_AUTO);
+  large_motor(address_type address = OUTPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
@@ -904,12 +1007,12 @@ public:
 class dc_motor : protected device
 {
 public:
-  dc_motor(port_type port_ = OUTPUT_AUTO);
+  dc_motor(address_type address = OUTPUT_AUTO);
 
   using device::connected;
   using device::device_index;
 
-  //~autogen generic-declare-property-value classes.dcMotor>currentClass
+//~autogen generic-declare-property-value classes.dcMotor>currentClass
 
   // Run the motor until another command is sent.
   static const std::string command_run_forever;
@@ -947,7 +1050,7 @@ public:
 
 //~autogen
 
-  //~autogen generic-get-set classes.dcMotor>currentClass
+//~autogen generic-get-set classes.dcMotor>currentClass
 
   // Command: write-only
   // Sets the command for the motor. Possible values are `run-forever`, `run-timed` and
@@ -991,9 +1094,9 @@ public:
     return *this;
   }
 
-  // Port Name: read-only
-  // Returns the name of the port that the motor is connected to.
-  std::string port_name() const { return get_attr_string("port_name"); }
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
 
   // Ramp Down SP: read/write
   // Sets the time in milliseconds that it take the motor to ramp down from 100%
@@ -1046,7 +1149,7 @@ public:
 
 //~autogen
 
-    //~autogen motor_commands classes.dcMotor>currentClass
+//~autogen motor_commands classes.dcMotor>currentClass
 
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
@@ -1082,12 +1185,12 @@ protected:
 class servo_motor : protected device
 {
 public:
-  servo_motor(port_type port_ = OUTPUT_AUTO);
+  servo_motor(address_type address = OUTPUT_AUTO);
 
   using device::connected;
   using device::device_index;
 
-  //~autogen generic-declare-property-value classes.servoMotor>currentClass
+//~autogen generic-declare-property-value classes.servoMotor>currentClass
 
   // Drive servo to the position set in the `position_sp` attribute.
   static const std::string command_run;
@@ -1106,7 +1209,7 @@ public:
 
 //~autogen
 
-  //~autogen generic-get-set classes.servoMotor>currentClass
+//~autogen generic-get-set classes.servoMotor>currentClass
 
   // Command: write-only
   // Sets the command for the servo. Valid values are `run` and `float`. Setting
@@ -1168,9 +1271,9 @@ public:
     return *this;
   }
 
-  // Port Name: read-only
-  // Returns the name of the port that the motor is connected to.
-  std::string port_name() const { return get_attr_string("port_name"); }
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
 
   // Position SP: read/write
   // Reading returns the current position_sp of the servo. Writing instructs the
@@ -1205,7 +1308,7 @@ public:
 
 //~autogen
 
-    //~autogen motor_commands classes.servoMotor>currentClass
+//~autogen motor_commands classes.servoMotor>currentClass
 
     // Drive servo to the position set in the `position_sp` attribute.
     void run() { set_command("run"); }
@@ -1233,7 +1336,7 @@ public:
 
   using device::connected;
 
-  //~autogen generic-get-set classes.led>currentClass
+//~autogen generic-get-set classes.led>currentClass
 
   // Max Brightness: read-only
   // Returns the maximum allowable brightness value.
@@ -1371,7 +1474,7 @@ public:
 
   using device::connected;
 
-  //~autogen generic-get-set classes.powerSupply>currentClass
+//~autogen generic-get-set classes.powerSupply>currentClass
 
   // Measured Current: read-only
   // The measured current that the battery is supplying (in microamps)
@@ -1565,19 +1668,19 @@ protected:
 // 
 // Ports can be found at `/sys/class/lego-port/port<N>` where `<N>` is
 // incremented each time a new port is registered. Note: The number is not
-// related to the actual port at all - use the `port_name` attribute to find
+// related to the actual port at all - use the `address` attribute to find
 // a specific port.
 
 //~autogen
 class lego_port : protected device
 {
 public:
-  lego_port(port_type);
+  lego_port(address_type);
 
   using device::connected;
   using device::device_index;
 
-  //~autogen generic-get-set classes.legoPort>currentClass
+//~autogen generic-get-set classes.legoPort>currentClass
 
   // Driver Name: read-only
   // Returns the name of the driver that loaded this device. You can find the
@@ -1599,10 +1702,10 @@ public:
     return *this;
   }
 
-  // Port Name: read-only
+  // Address: read-only
   // Returns the name of the port. See individual driver documentation for
   // the name that will be returned.
-  std::string port_name() const { return get_attr_string("port_name"); }
+  std::string address() const { return get_attr_string("address"); }
 
   // Set Device: write-only
   // For modes that support it, writing the name of a driver will cause a new
