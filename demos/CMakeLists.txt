@@ -1,0 +1,7 @@
+add_ev3_executable(button-test         button-test.cpp)
+add_ev3_executable(drive-test          drive-test.cpp)
+add_ev3_executable(ev3dev-lang-demo    ev3dev-lang-demo.cpp)
+add_ev3_executable(ev3dev-lang-test    ev3dev-lang-test.cpp)
+add_ev3_executable(remote-control      remote-control.cpp)
+add_ev3_executable(remote_control-test remote_control-test.cpp)
+add_ev3_executable(sound-test          sound-test.cpp)

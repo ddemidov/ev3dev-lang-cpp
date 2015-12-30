@@ -56,7 +56,7 @@
 #include <errno.h>
 
 #ifndef SYS_ROOT
-#define SYS_ROOT "/sys"
+#define SYS_ROOT "/sys/class"
 #endif
 
 #ifndef FSTREAM_CACHE_SIZE
@@ -488,7 +488,7 @@ sensor::sensor(address_type address, const std::set<sensor_type> &types)
 
 bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/lego-sensor/" };
+  static const std::string _strClassDir { SYS_ROOT "/lego-sensor/" };
   static const std::string _strPattern  { "sensor" };
 
   try
@@ -769,7 +769,7 @@ motor::motor(address_type address, const motor_type &t)
 
 bool motor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/tacho-motor/" };
+  static const std::string _strClassDir { SYS_ROOT "/tacho-motor/" };
   static const std::string _strPattern  { "motor" };
 
   try
@@ -799,7 +799,7 @@ large_motor::large_motor(address_type address) : motor(address, motor_large)
 
 dc_motor::dc_motor(address_type address)
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/dc-motor/" };
+  static const std::string _strClassDir { SYS_ROOT "/dc-motor/" };
   static const std::string _strPattern  { "motor" };
 
   connect(_strClassDir, _strPattern, {{ "address", { address }}});
@@ -822,7 +822,7 @@ const std::string dc_motor::stop_command_brake{ "brake" };
 
 servo_motor::servo_motor(address_type address)
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/servo-motor/" };
+  static const std::string _strClassDir { SYS_ROOT "/servo-motor/" };
   static const std::string _strPattern  { "motor" };
 
   connect(_strClassDir, _strPattern, {{ "address", { address }}});
@@ -841,7 +841,7 @@ const std::string servo_motor::polarity_inversed{ "inversed" };
 
 led::led(std::string name)
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/leds/" };
+  static const std::string _strClassDir { SYS_ROOT "/leds/" };
   connect(_strClassDir, name, std::map<std::string, std::set<std::string>>());
 }
 
@@ -937,7 +937,7 @@ power_supply power_supply::battery { "" };
 
 power_supply::power_supply(std::string name)
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/power_supply/" };
+  static const std::string _strClassDir { SYS_ROOT "/power_supply/" };
 
   if (name.empty())
     name = "legoev3-battery";
@@ -1304,7 +1304,7 @@ lego_port::lego_port(address_type address)
 
 bool lego_port::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
-  static const std::string _strClassDir { SYS_ROOT "/class/lego-port/" };
+  static const std::string _strClassDir { SYS_ROOT "/lego-port/" };
   static const std::string _strPattern  { "port" };
 
   try
