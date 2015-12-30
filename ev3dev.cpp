@@ -604,6 +604,12 @@ i2c_sensor::i2c_sensor(address_type address) :
 
 //-----------------------------------------------------------------------------
 
+//~autogen generic-define-property-value specialSensorTypes.touchSensor>currentClass
+
+const std::string touch_sensor::mode_touch{ "TOUCH" };
+
+//~autogen
+
 touch_sensor::touch_sensor(address_type address) :
   sensor(address, { ev3_touch, nxt_touch })
 {
