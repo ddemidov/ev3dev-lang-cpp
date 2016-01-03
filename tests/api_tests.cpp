@@ -1,10 +1,24 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
+#include <vector>
+#include <sstream>
+#include <cstdlib>
 #include <ev3dev.h>
 
 namespace ev3 = ev3dev;
 
+void populate_arena(const std::vector<const char*> &devices) {
+    std::ostringstream command;
+    command << FAKE_SYS "/populate_arena.py";
+    for (auto d : devices) command << " " << d;
+
+    system(FAKE_SYS "/clean_arena.py");
+    system(command.str().c_str());
+}
+
 TEST_CASE( "Device" ) {
+    populate_arena({"medium_motor:0", "infrared_sensor:0"});
+
     ev3::device d;
 
     SECTION("connect any motor") {
@@ -42,6 +56,8 @@ TEST_CASE( "Device" ) {
 }
 
 TEST_CASE("Medium Motor") {
+    populate_arena({"medium_motor:0"});
+
     ev3::medium_motor m;
 
     REQUIRE(m.connected());
@@ -81,6 +97,7 @@ TEST_CASE("Medium Motor") {
 }
 
 TEST_CASE("Infrared Sensor") {
+    populate_arena({"infrared_sensor:0"});
     ev3::infrared_sensor s;
 
     REQUIRE(s.connected());
