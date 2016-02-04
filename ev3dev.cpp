@@ -290,10 +290,9 @@ int device::get_attr_int(const std::string &name) const {
         is.close();
         is.clear();
       }
-    } else {
-      throw system_error(make_error_code(errc::no_such_device), _path+name);
-    }
+    } else break;
   }
+  throw system_error(make_error_code(errc::no_such_device), _path+name);
 }
 
 //-----------------------------------------------------------------------------
@@ -1007,14 +1006,14 @@ button button::enter(KEY_ENTER);
 //-----------------------------------------------------------------------------
 
 bool button::process_all() {
-  std::array<bool, 6> changed = {
+  std::array<bool, 6> changed{{
     back. process(),
     left. process(),
     right.process(),
     up.   process(),
     down. process(),
     enter.process()
-  };
+  }};
   return std::any_of(changed.begin(), changed.end(), [](bool c){ return c; });
 }
 
