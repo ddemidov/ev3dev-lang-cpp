@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
 
-// Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2.
+// Sections of the following code were auto-generated based on spec v1.2.0.
 
 //~autogen
 //-----------------------------------------------------------------------------
@@ -199,6 +199,11 @@ public:
 
 //~autogen generic-get-set classes.sensor>currentClass
 
+  // Address: read-only
+  // Returns the name of the port that the sensor is connected to, e.g. `ev3:in1`.
+  // I2C sensors also include the I2C address (decimal), e.g. `ev3:in1:i2c8`.
+  std::string address() const { return get_attr_string("address"); }
+
   // Command: write-only
   // Sends a command to the sensor.
   auto set_command(std::string v) -> decltype(*this) {
@@ -238,11 +243,6 @@ public:
   // Returns the number of `value<N>` attributes that will return a valid value
   // for the current mode.
   int num_values() const { return get_attr_int("num_values"); }
-
-  // Address: read-only
-  // Returns the name of the port that the sensor is connected to, e.g. `ev3:in1`.
-  // I2C sensors also include the I2C address (decimal), e.g. `ev3:in1:i2c8`.
-  std::string address() const { return get_attr_string("address"); }
 
   // Units: read-only
   // Returns the units of the measured value for the current mode. May return
@@ -600,6 +600,11 @@ public:
 // positional and directional feedback such as the EV3 and NXT motors.
 // This feedback allows for precise control of the motors. This is the
 // most common type of motor, so we just call it `motor`.
+// 
+// The way to configure a motor is to set the '_sp' attributes when
+// calling a command or before. Only in 'run_direct' mode attribute
+// changes are processed immediately, in the other modes they only
+// take place when a new command is issued.
 
 //~autogen
 class motor : protected device
@@ -662,13 +667,6 @@ public:
   // cause the motor to rotate counter-clockwise.
   static const std::string polarity_inversed;
 
-  // The motor controller will vary the power supplied to the motor
-  // to try to maintain the speed specified in `speed_sp`.
-  static const std::string speed_regulation_on;
-
-  // The motor controller will use the power specified in `duty_cycle_sp`.
-  static const std::string speed_regulation_off;
-
   // Power will be removed from the motor and it will freely coast to a stop.
   static const std::string stop_command_coast;
 
@@ -687,6 +685,10 @@ public:
 //~autogen
 
 //~autogen generic-get-set classes.motor>currentClass
+
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
 
   // Command: write-only
   // Sends a command to the motor controller. See `commands` for a list of
@@ -721,9 +723,14 @@ public:
   // Count Per Rot: read-only
   // Returns the number of tacho counts in one rotation of the motor. Tacho counts
   // are used by the position and speed attributes, so you can use this value
-  // to convert rotations or degrees to tacho counts. In the case of linear
-  // actuators, the units here will be counts per centimeter.
+  // to convert rotations or degrees to tacho counts. (rotation motors only)
   int count_per_rot() const { return get_attr_int("count_per_rot"); }
+
+  // Count Per M: read-only
+  // Returns the number of tacho counts in one meter of travel of the motor. Tacho
+  // counts are used by the position and speed attributes, so you can use this
+  // value to convert from distance to tacho counts. (linear motors only)
+  int count_per_m() const { return get_attr_int("count_per_m"); }
 
   // Driver Name: read-only
   // Returns the name of the driver that provides this tacho motor device.
@@ -737,25 +744,18 @@ public:
   // Duty Cycle SP: read/write
   // Writing sets the duty cycle setpoint. Reading returns the current value.
   // Units are in percent. Valid values are -100 to 100. A negative value causes
-  // the motor to rotate in reverse. This value is only used when `speed_regulation`
-  // is off.
+  // the motor to rotate in reverse.
   int duty_cycle_sp() const { return get_attr_int("duty_cycle_sp"); }
   auto set_duty_cycle_sp(int v) -> decltype(*this) {
     set_attr_int("duty_cycle_sp", v);
     return *this;
   }
 
-  // Encoder Polarity: read/write
-  // Sets the polarity of the rotary encoder. This is an advanced feature to all
-  // use of motors that send inversed encoder signals to the EV3. This should
-  // be set correctly by the driver of a device. It You only need to change this
-  // value if you are using a unsupported device. Valid values are `normal` and
-  // `inversed`.
-  std::string encoder_polarity() const { return get_attr_string("encoder_polarity"); }
-  auto set_encoder_polarity(std::string v) -> decltype(*this) {
-    set_attr_string("encoder_polarity", v);
-    return *this;
-  }
+  // Full Travel Count: read-only
+  // Returns the number of tacho counts in the full travel of the motor. When
+  // combined with the `count_per_m` atribute, you can use this value to
+  // calculate the maximum travel distance of the motor. (linear motors only)
+  int full_travel_count() const { return get_attr_int("full_travel_count"); }
 
   // Polarity: read/write
   // Sets the polarity of the motor. With `normal` polarity, a positive duty
@@ -767,10 +767,6 @@ public:
     set_attr_string("polarity", v);
     return *this;
   }
-
-  // Address: read-only
-  // Returns the name of the port that this motor is connected to.
-  std::string address() const { return get_attr_string("address"); }
 
   // Position: read/write
   // Returns the current position of the motor in pulses of the rotary
@@ -818,16 +814,25 @@ public:
     return *this;
   }
 
+  // Max Speed: read-only
+  // Returns the maximum value that is accepted by the `speed_sp` attribute. This
+  // may be slightly different than the maximum speed that a particular motor can
+  // reach - it's the maximum theoretical speed.
+  int max_speed() const { return get_attr_int("max_speed"); }
+
   // Speed: read-only
-  // Returns the current motor speed in tacho counts per second. Not, this is
+  // Returns the current motor speed in tacho counts per second. Note, this is
   // not necessarily degrees (although it is for LEGO motors). Use the `count_per_rot`
   // attribute to convert this value to RPM or deg/sec.
   int speed() const { return get_attr_int("speed"); }
 
   // Speed SP: read/write
-  // Writing sets the target speed in tacho counts per second used when `speed_regulation`
-  // is on. Reading returns the current value.  Use the `count_per_rot` attribute
-  // to convert RPM or deg/sec to tacho counts per second.
+  // Writing sets the target speed in tacho counts per second used for all `run-*`
+  // commands except `run-direct`. Reading returns the current value. A negative
+  // value causes the motor to rotate in reverse with the exception of `run-to-*-pos`
+  // commands where the sign is ignored. Use the `count_per_rot` attribute to convert
+  // RPM or deg/sec to tacho counts per second. Use the `count_per_m` attribute to
+  // convert m/s to tacho counts per second.
   int speed_sp() const { return get_attr_int("speed_sp"); }
   auto set_speed_sp(int v) -> decltype(*this) {
     set_attr_int("speed_sp", v);
@@ -836,10 +841,10 @@ public:
 
   // Ramp Up SP: read/write
   // Writing sets the ramp up setpoint. Reading returns the current value. Units
-  // are in milliseconds. When set to a value > 0, the motor will ramp the power
-  // sent to the motor from 0 to 100% duty cycle over the span of this setpoint
-  // when starting the motor. If the maximum duty cycle is limited by `duty_cycle_sp`
-  // or speed regulation, the actual ramp time duration will be less than the setpoint.
+  // are in milliseconds and must be positive. When set to a non-zero value, the
+  // motor speed will increase from 0 to 100% of `max_speed` over the span of this
+  // setpoint. The actual ramp time is the ratio of the difference between the
+  // `speed_sp` and the current `speed` and max_speed multiplied by `ramp_up_sp`.
   int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
   auto set_ramp_up_sp(int v) -> decltype(*this) {
     set_attr_int("ramp_up_sp", v);
@@ -848,48 +853,36 @@ public:
 
   // Ramp Down SP: read/write
   // Writing sets the ramp down setpoint. Reading returns the current value. Units
-  // are in milliseconds. When set to a value > 0, the motor will ramp the power
-  // sent to the motor from 100% duty cycle down to 0 over the span of this setpoint
-  // when stopping the motor. If the starting duty cycle is less than 100%, the
-  // ramp time duration will be less than the full span of the setpoint.
+  // are in milliseconds and must be positive. When set to a non-zero value, the
+  // motor speed will decrease from 0 to 100% of `max_speed` over the span of this
+  // setpoint. The actual ramp time is the ratio of the difference between the
+  // `speed_sp` and the current `speed` and max_speed multiplied by `ramp_down_sp`.
   int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
   auto set_ramp_down_sp(int v) -> decltype(*this) {
     set_attr_int("ramp_down_sp", v);
     return *this;
   }
 
-  // Speed Regulation Enabled: read/write
-  // Turns speed regulation on or off. If speed regulation is on, the motor
-  // controller will vary the power supplied to the motor to try to maintain the
-  // speed specified in `speed_sp`. If speed regulation is off, the controller
-  // will use the power specified in `duty_cycle_sp`. Valid values are `on` and
-  // `off`.
-  std::string speed_regulation_enabled() const { return get_attr_string("speed_regulation"); }
-  auto set_speed_regulation_enabled(std::string v) -> decltype(*this) {
-    set_attr_string("speed_regulation", v);
-    return *this;
-  }
-
-  // Speed Regulation P: read/write
+  // Speed P: read/write
   // The proportional constant for the speed regulation PID.
-  int speed_regulation_p() const { return get_attr_int("speed_pid/Kp"); }
-  auto set_speed_regulation_p(int v) -> decltype(*this) {
+  int speed_p() const { return get_attr_int("speed_pid/Kp"); }
+  auto set_speed_p(int v) -> decltype(*this) {
     set_attr_int("speed_pid/Kp", v);
     return *this;
   }
 
-  // Speed Regulation I: read/write
+  // Speed I: read/write
   // The integral constant for the speed regulation PID.
-  int speed_regulation_i() const { return get_attr_int("speed_pid/Ki"); }
-  auto set_speed_regulation_i(int v) -> decltype(*this) {
+  int speed_i() const { return get_attr_int("speed_pid/Ki"); }
+  auto set_speed_i(int v) -> decltype(*this) {
     set_attr_int("speed_pid/Ki", v);
     return *this;
   }
 
-  // Speed Regulation D: read/write
+  // Speed D: read/write
   // The derivative constant for the speed regulation PID.
-  int speed_regulation_d() const { return get_attr_int("speed_pid/Kd"); }
-  auto set_speed_regulation_d(int v) -> decltype(*this) {
+  int speed_d() const { return get_attr_int("speed_pid/Kd"); }
+  auto set_speed_d(int v) -> decltype(*this) {
     set_attr_int("speed_pid/Kd", v);
     return *this;
   }
@@ -899,29 +892,29 @@ public:
   // `running`, `ramping` `holding` and `stalled`.
   mode_set state() const { return get_attr_set("state"); }
 
-  // Stop Command: read/write
-  // Reading returns the current stop command. Writing sets the stop command.
+  // Stop Action: read/write
+  // Reading returns the current stop action. Writing sets the stop action.
   // The value determines the motors behavior when `command` is set to `stop`.
   // Also, it determines the motors behavior when a run command completes. See
-  // `stop_commands` for a list of possible values.
-  std::string stop_command() const { return get_attr_string("stop_command"); }
-  auto set_stop_command(std::string v) -> decltype(*this) {
-    set_attr_string("stop_command", v);
+  // `stop_actions` for a list of possible values.
+  std::string stop_action() const { return get_attr_string("stop_action"); }
+  auto set_stop_action(std::string v) -> decltype(*this) {
+    set_attr_string("stop_action", v);
     return *this;
   }
 
-  // Stop Commands: read-only
-  // Returns a list of stop modes supported by the motor controller.
+  // Stop Actions: read-only
+  // Returns a list of stop actions supported by the motor controller.
   // Possible values are `coast`, `brake` and `hold`. `coast` means that power will
   // be removed from the motor and it will freely coast to a stop. `brake` means
   // that power will be removed from the motor and a passive electrical load will
   // be placed on the motor. This is usually done by shorting the motor terminals
   // together. This load will absorb the energy from the rotation of the motors and
   // cause the motor to stop more quickly than coasting. `hold` does not remove
-  // power from the motor. Instead it actively try to hold the motor at the current
+  // power from the motor. Instead it actively tries to hold the motor at the current
   // position. If an external force tries to turn the motor, the motor will 'push
   // back' to maintain its position.
-  mode_set stop_commands() const { return get_attr_set("stop_commands"); }
+  mode_set stop_actions() const { return get_attr_set("stop_actions"); }
 
   // Time SP: read/write
   // Writing specifies the amount of time the motor will run when using the
@@ -1052,6 +1045,10 @@ public:
 
 //~autogen generic-get-set classes.dcMotor>currentClass
 
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
+
   // Command: write-only
   // Sets the command for the motor. Possible values are `run-forever`, `run-timed` and
   // `stop`. Not all commands may be supported, so be sure to check the contents
@@ -1093,10 +1090,6 @@ public:
     set_attr_string("polarity", v);
     return *this;
   }
-
-  // Address: read-only
-  // Returns the name of the port that this motor is connected to.
-  std::string address() const { return get_attr_string("address"); }
 
   // Ramp Down SP: read/write
   // Sets the time in milliseconds that it take the motor to ramp down from 100%
@@ -1211,6 +1204,10 @@ public:
 
 //~autogen generic-get-set classes.servoMotor>currentClass
 
+  // Address: read-only
+  // Returns the name of the port that this motor is connected to.
+  std::string address() const { return get_attr_string("address"); }
+
   // Command: write-only
   // Sets the command for the servo. Valid values are `run` and `float`. Setting
   // to `run` will cause the servo to be driven to the position_sp set in the
@@ -1270,10 +1267,6 @@ public:
     set_attr_string("polarity", v);
     return *this;
   }
-
-  // Address: read-only
-  // Returns the name of the port that this motor is connected to.
-  std::string address() const { return get_attr_string("address"); }
 
   // Position SP: read/write
   // Reading returns the current position_sp of the servo. Writing instructs the
@@ -1427,6 +1420,7 @@ public:
     static std::vector<led*> led1;
     static std::vector<led*> led2;
 
+    static std::vector<float> black;
     static std::vector<float> blue;
 
 //~autogen
@@ -1441,6 +1435,7 @@ public:
     static std::vector<led*> left;
     static std::vector<led*> right;
 
+    static std::vector<float> black;
     static std::vector<float> red;
     static std::vector<float> green;
     static std::vector<float> amber;
@@ -1682,6 +1677,11 @@ public:
 
 //~autogen generic-get-set classes.legoPort>currentClass
 
+  // Address: read-only
+  // Returns the name of the port. See individual driver documentation for
+  // the name that will be returned.
+  std::string address() const { return get_attr_string("address"); }
+
   // Driver Name: read-only
   // Returns the name of the driver that loaded this device. You can find the
   // complete list of drivers in the [list of port drivers].
@@ -1701,11 +1701,6 @@ public:
     set_attr_string("mode", v);
     return *this;
   }
-
-  // Address: read-only
-  // Returns the name of the port. See individual driver documentation for
-  // the name that will be returned.
-  std::string address() const { return get_attr_string("address"); }
 
   // Set Device: write-only
   // For modes that support it, writing the name of a driver will cause a new

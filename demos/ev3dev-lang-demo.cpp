@@ -178,13 +178,8 @@ void motor_action(motor &dev)
          << endl
          << "(i)nfo" << endl
          << "(c)ommand" << endl
-         << "st(o)p command      [" << dev.stop_command()             << "]" << endl
-         << "speed r(e)gulation  [" << dev.speed_regulation_enabled() << "]" << endl;
-
-    if (dev.speed_regulation_enabled()==dev.speed_regulation_on)
-      cout << "speed (s)etpoint (" << dev.speed_sp() << ")" << endl;
-    else
-      cout << "duty cycle (s)etpoint (" << dev.duty_cycle_sp() << ")" << endl;
+         << "st(o)p command      [" << dev.stop_action()              << "]" << endl
+         << "speed (s)etpoint (" << dev.speed_sp() << ")" << endl;
 
     cout << "(p)osition setpoint  (" << dev.position_sp()   << ")" << endl
          << "ramp (u)p setpoint   (" << dev.ramp_up_sp()    << ")" << endl
@@ -204,11 +199,17 @@ void motor_action(motor &dev)
       cout << endl;
 //~autogen generic_report_status classes.motor>currentClass
 
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Count Per Rot: ";
     try { cout << dev.count_per_rot() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Count Per M: ";
+    try { cout << dev.count_per_m() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Driver Name: ";
     try { cout << dev.driver_name() << endl; }
@@ -219,14 +220,11 @@ void motor_action(motor &dev)
     cout << "    Duty Cycle SP: ";
     try { cout << dev.duty_cycle_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Encoder Polarity: ";
-    try { cout << dev.encoder_polarity() << endl; }
+    cout << "    Full Travel Count: ";
+    try { cout << dev.full_travel_count() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Address: ";
-    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position: ";
     try { cout << dev.position() << endl; }
@@ -243,6 +241,9 @@ void motor_action(motor &dev)
     cout << "    Position SP: ";
     try { cout << dev.position_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Max Speed: ";
+    try { cout << dev.max_speed() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed: ";
     try { cout << dev.speed() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -255,26 +256,23 @@ void motor_action(motor &dev)
     cout << "    Ramp Down SP: ";
     try { cout << dev.ramp_down_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation Enabled: ";
-    try { cout << dev.speed_regulation_enabled() << endl; }
+    cout << "    Speed P: ";
+    try { cout << dev.speed_p() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation P: ";
-    try { cout << dev.speed_regulation_p() << endl; }
+    cout << "    Speed I: ";
+    try { cout << dev.speed_i() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation I: ";
-    try { cout << dev.speed_regulation_i() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation D: ";
-    try { cout << dev.speed_regulation_d() << endl; }
+    cout << "    Speed D: ";
+    try { cout << dev.speed_d() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    State: ";
     try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Command: ";
-    try { cout << dev.stop_command() << endl; }
+    cout << "    Stop Action: ";
+    try { cout << dev.stop_action() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Commands: ";
-    try { cout << dev.stop_commands() << endl; }
+    cout << "    Stop Actions: ";
+    try { cout << dev.stop_actions() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
@@ -289,22 +287,11 @@ void motor_action(motor &dev)
       cin >> answer; dev.set_command(answer); cout << endl;
       break;
     case 'o':
-      cout << "stop command " << dev.stop_commands() << ": ";
-      cin >> answer; dev.set_stop_command(answer); cout << endl;
-      break;
-    case 'e':
-      cout << "speed regulation (off, on): ";
-      cin >> answer; dev.set_speed_regulation_enabled(answer); cout << endl;
+      cout << "stop command " << dev.stop_actions() << ": ";
+      cin >> answer; dev.set_stop_action(answer); cout << endl;
       break;
     case 's':
-      if (dev.speed_regulation_enabled()==dev.speed_regulation_on)
-      {
-        cout << "speed: "; cin >> new_value; dev.set_speed_sp(new_value); cout << endl;
-      }
-      else
-      {
-        cout << "duty cycle: "; cin >> new_value; dev.set_duty_cycle_sp(new_value); cout << endl;
-      }
+      cout << "speed: "; cin >> new_value; dev.set_speed_sp(new_value); cout << endl;
       break;
     case 'p':
       cout << "position: "; cin >> new_value; dev.set_position_sp(new_value); cout << endl;
