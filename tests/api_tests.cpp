@@ -17,7 +17,7 @@ void populate_arena(const std::vector<const char*> &devices) {
 }
 
 TEST_CASE( "Device" ) {
-    populate_arena({"medium_motor:0", "infrared_sensor:0"});
+    populate_arena({"medium_motor:0@outA", "infrared_sensor:0@in1"});
 
     ev3::device d;
 
@@ -56,7 +56,7 @@ TEST_CASE( "Device" ) {
 }
 
 TEST_CASE("Medium Motor") {
-    populate_arena({"medium_motor:0"});
+    populate_arena({"medium_motor:0@outA"});
 
     ev3::medium_motor m;
 
@@ -95,7 +95,7 @@ TEST_CASE("Medium Motor") {
 }
 
 TEST_CASE("Infrared Sensor") {
-    populate_arena({"infrared_sensor:0"});
+    populate_arena({"infrared_sensor:0@in1"});
     ev3::infrared_sensor s;
 
     REQUIRE(s.connected());
