@@ -742,9 +742,9 @@ const std::string motor::encoder_polarity_normal{ "normal" };
 const std::string motor::encoder_polarity_inversed{ "inversed" };
 const std::string motor::polarity_normal{ "normal" };
 const std::string motor::polarity_inversed{ "inversed" };
-const std::string motor::stop_command_coast{ "coast" };
-const std::string motor::stop_command_brake{ "brake" };
-const std::string motor::stop_command_hold{ "hold" };
+const std::string motor::stop_action_coast{ "coast" };
+const std::string motor::stop_action_brake{ "brake" };
+const std::string motor::stop_action_hold{ "hold" };
 
 //~autogen
 
@@ -810,8 +810,8 @@ const std::string dc_motor::command_run_direct{ "run-direct" };
 const std::string dc_motor::command_stop{ "stop" };
 const std::string dc_motor::polarity_normal{ "normal" };
 const std::string dc_motor::polarity_inversed{ "inversed" };
-const std::string dc_motor::stop_command_coast{ "coast" };
-const std::string dc_motor::stop_command_brake{ "brake" };
+const std::string dc_motor::stop_action_coast{ "coast" };
+const std::string dc_motor::stop_action_brake{ "brake" };
 
 //~autogen
 

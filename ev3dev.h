@@ -627,17 +627,17 @@ public:
   static const std::string command_run_forever;
 
   // Run to an absolute position specified by `position_sp` and then
-  // stop using the command specified in `stop_command`.
+  // stop using the action specified in `stop_action`.
   static const std::string command_run_to_abs_pos;
 
   // Run to a position relative to the current `position` value.
   // The new position will be current `position` + `position_sp`.
   // When the new position is reached, the motor will stop using
-  // the command specified by `stop_command`.
+  // the action specified by `stop_action`.
   static const std::string command_run_to_rel_pos;
 
   // Run the motor for the amount of time specified in `time_sp`
-  // and then stop the motor using the command specified by `stop_command`.
+  // and then stop the motor using the action specified by `stop_action`.
   static const std::string command_run_timed;
 
   // Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -646,7 +646,7 @@ public:
   static const std::string command_run_direct;
 
   // Stop any of the run commands before they are complete using the
-  // command specified by `stop_command`.
+  // action specified by `stop_action`.
   static const std::string command_stop;
 
   // Reset all of the motor parameter attributes to their default value.
@@ -668,18 +668,18 @@ public:
   static const std::string polarity_inversed;
 
   // Power will be removed from the motor and it will freely coast to a stop.
-  static const std::string stop_command_coast;
+  static const std::string stop_action_coast;
 
   // Power will be removed from the motor and a passive electrical load will
   // be placed on the motor. This is usually done by shorting the motor terminals
   // together. This load will absorb the energy from the rotation of the motors and
   // cause the motor to stop more quickly than coasting.
-  static const std::string stop_command_brake;
+  static const std::string stop_action_brake;
 
   // Does not remove power from the motor. Instead it actively try to hold the motor
   // at the current position. If an external force tries to turn the motor, the motor
   // will ``push back`` to maintain its position.
-  static const std::string stop_command_hold;
+  static const std::string stop_action_hold;
 
 
 //~autogen
@@ -705,17 +705,17 @@ public:
   // 
   // - `run-forever` will cause the motor to run until another command is sent.
   // - `run-to-abs-pos` will run to an absolute position specified by `position_sp`
-  //   and then stop using the command specified in `stop_command`.
+  //   and then stop using the action specified in `stop_action`.
   // - `run-to-rel-pos` will run to a position relative to the current `position` value.
   //   The new position will be current `position` + `position_sp`. When the new
-  //   position is reached, the motor will stop using the command specified by `stop_command`.
+  //   position is reached, the motor will stop using the action specified by `stop_action`.
   // - `run-timed` will run the motor for the amount of time specified in `time_sp`
-  //   and then stop the motor using the command specified by `stop_command`.
+  //   and then stop the motor using the action specified by `stop_action`.
   // - `run-direct` will run the motor at the duty cycle specified by `duty_cycle_sp`.
   //   Unlike other run commands, changing `duty_cycle_sp` while running *will*
   //   take effect immediately.
   // - `stop` will stop any of the run commands before they are complete using the
-  //   command specified by `stop_command`.
+  //   action specified by `stop_action`.
   // - `reset` will reset all of the motor parameter attributes to their default value.
   //   This will also have the effect of stopping the motor.
   mode_set commands() const { return get_attr_set("commands"); }
@@ -935,17 +935,17 @@ public:
     void run_forever() { set_command("run-forever"); }
 
     // Run to an absolute position specified by `position_sp` and then
-    // stop using the command specified in `stop_command`.
+    // stop using the action specified in `stop_action`.
     void run_to_abs_pos() { set_command("run-to-abs-pos"); }
 
     // Run to a position relative to the current `position` value.
     // The new position will be current `position` + `position_sp`.
     // When the new position is reached, the motor will stop using
-    // the command specified by `stop_command`.
+    // the action specified by `stop_action`.
     void run_to_rel_pos() { set_command("run-to-rel-pos"); }
 
     // Run the motor for the amount of time specified in `time_sp`
-    // and then stop the motor using the command specified by `stop_command`.
+    // and then stop the motor using the action specified by `stop_action`.
     void run_timed() { set_command("run-timed"); }
 
     // Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -954,7 +954,7 @@ public:
     void run_direct() { set_command("run-direct"); }
 
     // Stop any of the run commands before they are complete using the
-    // command specified by `stop_command`.
+    // action specified by `stop_action`.
     void stop() { set_command("stop"); }
 
     // Reset all of the motor parameter attributes to their default value.
@@ -1011,7 +1011,7 @@ public:
   static const std::string command_run_forever;
 
   // Run the motor for the amount of time specified in `time_sp`
-  // and then stop the motor using the command specified by `stop_command`.
+  // and then stop the motor using the action specified by `stop_action`.
   static const std::string command_run_timed;
 
   // Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -1020,7 +1020,7 @@ public:
   static const std::string command_run_direct;
 
   // Stop any of the run commands before they are complete using the
-  // command specified by `stop_command`.
+  // action specified by `stop_action`.
   static const std::string command_stop;
 
   // With `normal` polarity, a positive duty cycle will
@@ -1032,13 +1032,13 @@ public:
   static const std::string polarity_inversed;
 
   // Power will be removed from the motor and it will freely coast to a stop.
-  static const std::string stop_command_coast;
+  static const std::string stop_action_coast;
 
   // Power will be removed from the motor and a passive electrical load will
   // be placed on the motor. This is usually done by shorting the motor terminals
   // together. This load will absorb the energy from the rotation of the motors and
   // cause the motor to stop more quickly than coasting.
-  static const std::string stop_command_brake;
+  static const std::string stop_action_brake;
 
 
 //~autogen
@@ -1116,18 +1116,18 @@ public:
   // `duty_cycle_sp`.
   mode_set state() const { return get_attr_set("state"); }
 
-  // Stop Command: write-only
-  // Sets the stop command that will be used when the motor stops. Read
-  // `stop_commands` to get the list of valid values.
-  auto set_stop_command(std::string v) -> decltype(*this) {
-    set_attr_string("stop_command", v);
+  // Stop Action: write-only
+  // Sets the stop action that will be used when the motor stops. Read
+  // `stop_actions` to get the list of valid values.
+  auto set_stop_action(std::string v) -> decltype(*this) {
+    set_attr_string("stop_action", v);
     return *this;
   }
 
-  // Stop Commands: read-only
-  // Gets a list of stop commands. Valid values are `coast`
+  // Stop Actions: read-only
+  // Gets a list of stop actions. Valid values are `coast`
   // and `brake`.
-  mode_set stop_commands() const { return get_attr_set("stop_commands"); }
+  mode_set stop_actions() const { return get_attr_set("stop_actions"); }
 
   // Time SP: read/write
   // Writing specifies the amount of time the motor will run when using the
@@ -1148,7 +1148,7 @@ public:
     void run_forever() { set_command("run-forever"); }
 
     // Run the motor for the amount of time specified in `time_sp`
-    // and then stop the motor using the command specified by `stop_command`.
+    // and then stop the motor using the action specified by `stop_action`.
     void run_timed() { set_command("run-timed"); }
 
     // Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -1157,7 +1157,7 @@ public:
     void run_direct() { set_command("run-direct"); }
 
     // Stop any of the run commands before they are complete using the
-    // command specified by `stop_command`.
+    // action specified by `stop_action`.
     void stop() { set_command("stop"); }
 
 

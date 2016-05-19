@@ -223,8 +223,8 @@ void test_dc_motor()
     cout << "    State: ";
     try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Commands: ";
-    try { cout << dev.stop_commands() << endl; }
+    cout << "    Stop Actions: ";
+    try { cout << dev.stop_actions() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
