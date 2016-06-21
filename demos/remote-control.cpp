@@ -50,7 +50,7 @@ std::function<void(bool)> roll(Motor &motor, Leds &leds, int dir) {
             motor.set_duty_cycle_sp(90 * dir).run_forever();
             ev3::led::set_color(leds, dir > 0 ? ev3::led::green : ev3::led::red);
         } else {
-            motor.set_stop_command("brake").stop();
+            motor.set_stop_action("brake").stop();
             for(auto led : leds) led->off();
         }
     };
@@ -81,8 +81,8 @@ int main() {
         if (ts.is_pressed()) {
             ev3::sound::speak("Oops, excuse me!");
 
-            lmotor.set_stop_command("brake").stop();
-            rmotor.set_stop_command("brake").stop();
+            lmotor.set_stop_action("brake").stop();
+            rmotor.set_stop_action("brake").stop();
 
             // Turn red lights on
             ev3::led::set_color(ev3::led::left,  ev3::led::red);

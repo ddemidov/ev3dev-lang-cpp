@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
 
-// Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2.
+// Sections of the following code were auto-generated based on spec v1.2.0.
 
 //~autogen
 //-----------------------------------------------------------------------------
@@ -751,11 +751,9 @@ const std::string motor::encoder_polarity_normal{ "normal" };
 const std::string motor::encoder_polarity_inversed{ "inversed" };
 const std::string motor::polarity_normal{ "normal" };
 const std::string motor::polarity_inversed{ "inversed" };
-const std::string motor::speed_regulation_on{ "on" };
-const std::string motor::speed_regulation_off{ "off" };
-const std::string motor::stop_command_coast{ "coast" };
-const std::string motor::stop_command_brake{ "brake" };
-const std::string motor::stop_command_hold{ "hold" };
+const std::string motor::stop_action_coast{ "coast" };
+const std::string motor::stop_action_brake{ "brake" };
+const std::string motor::stop_action_hold{ "hold" };
 
 //~autogen
 
@@ -821,8 +819,8 @@ const std::string dc_motor::command_run_direct{ "run-direct" };
 const std::string dc_motor::command_stop{ "stop" };
 const std::string dc_motor::polarity_normal{ "normal" };
 const std::string dc_motor::polarity_inversed{ "inversed" };
-const std::string dc_motor::stop_command_coast{ "coast" };
-const std::string dc_motor::stop_command_brake{ "brake" };
+const std::string dc_motor::stop_action_coast{ "coast" };
+const std::string dc_motor::stop_action_brake{ "brake" };
 
 //~autogen
 
@@ -882,12 +880,13 @@ void led::flash(unsigned on_ms, unsigned off_ms)
 #ifdef EV3DEV_PLATFORM_BRICKPI
 //~autogen leds-define platforms.brickpi.led>currentClass
 
-led led::blue_led1{"brickpi1:blue:ev3dev"};
-led led::blue_led2{"brickpi2:blue:ev3dev"};
+led led::blue_led1{"brickpi:led1:blue:ev3dev"};
+led led::blue_led2{"brickpi:led2:blue:ev3dev"};
 
 std::vector<led*> led::led1{ &led::blue_led1 };
 std::vector<led*> led::led2{ &led::blue_led2 };
 
+std::vector<float> led::black{ static_cast<float>(0) };
 std::vector<float> led::blue{ static_cast<float>(1) };
 
 //-----------------------------------------------------------------------------
@@ -910,11 +909,12 @@ led led::green_right{"ev3:right:green:ev3dev"};
 std::vector<led*> led::left{ &led::red_left, &led::green_left };
 std::vector<led*> led::right{ &led::red_right, &led::green_right };
 
+std::vector<float> led::black{ static_cast<float>(0), static_cast<float>(0) };
 std::vector<float> led::red{ static_cast<float>(1), static_cast<float>(0) };
 std::vector<float> led::green{ static_cast<float>(0), static_cast<float>(1) };
 std::vector<float> led::amber{ static_cast<float>(1), static_cast<float>(1) };
 std::vector<float> led::orange{ static_cast<float>(1), static_cast<float>(0.5) };
-std::vector<float> led::yellow{ static_cast<float>(0.5), static_cast<float>(1) };
+std::vector<float> led::yellow{ static_cast<float>(0.1), static_cast<float>(1) };
 
 //-----------------------------------------------------------------------------
 void led::all_off() {

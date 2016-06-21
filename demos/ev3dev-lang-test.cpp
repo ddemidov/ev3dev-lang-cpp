@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 //~autogen autogen-header
 
-// Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2.
+// Sections of the following code were auto-generated based on spec v1.2.0.
 
 //~autogen
 //-----------------------------------------------------------------------------
@@ -55,6 +55,9 @@ void test_sensor(const char *name)
          << "  Current properties are:" << endl;
 //~autogen generic_report_status classes.sensor>currentClass
 
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -72,9 +75,6 @@ void test_sensor(const char *name)
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Num Values: ";
     try { cout << dev.num_values() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Address: ";
-    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Units: ";
     try { cout << dev.units() << endl; }
@@ -99,11 +99,17 @@ void test_motor(const char *name)
          << "  Current properties are:" << endl;
 //~autogen generic_report_status classes.motor>currentClass
 
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Count Per Rot: ";
     try { cout << dev.count_per_rot() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Count Per M: ";
+    try { cout << dev.count_per_m() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Driver Name: ";
     try { cout << dev.driver_name() << endl; }
@@ -114,14 +120,11 @@ void test_motor(const char *name)
     cout << "    Duty Cycle SP: ";
     try { cout << dev.duty_cycle_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Encoder Polarity: ";
-    try { cout << dev.encoder_polarity() << endl; }
+    cout << "    Full Travel Count: ";
+    try { cout << dev.full_travel_count() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Address: ";
-    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position: ";
     try { cout << dev.position() << endl; }
@@ -138,6 +141,9 @@ void test_motor(const char *name)
     cout << "    Position SP: ";
     try { cout << dev.position_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
+    cout << "    Max Speed: ";
+    try { cout << dev.max_speed() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Speed: ";
     try { cout << dev.speed() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -150,26 +156,23 @@ void test_motor(const char *name)
     cout << "    Ramp Down SP: ";
     try { cout << dev.ramp_down_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation Enabled: ";
-    try { cout << dev.speed_regulation_enabled() << endl; }
+    cout << "    Speed P: ";
+    try { cout << dev.speed_p() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation P: ";
-    try { cout << dev.speed_regulation_p() << endl; }
+    cout << "    Speed I: ";
+    try { cout << dev.speed_i() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation I: ";
-    try { cout << dev.speed_regulation_i() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Speed Regulation D: ";
-    try { cout << dev.speed_regulation_d() << endl; }
+    cout << "    Speed D: ";
+    try { cout << dev.speed_d() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    State: ";
     try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Command: ";
-    try { cout << dev.stop_command() << endl; }
+    cout << "    Stop Action: ";
+    try { cout << dev.stop_action() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Commands: ";
-    try { cout << dev.stop_commands() << endl; }
+    cout << "    Stop Actions: ";
+    try { cout << dev.stop_actions() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
@@ -193,6 +196,9 @@ void test_dc_motor()
          << "  Current properties are:" << endl;
 //~autogen generic_report_status classes.dcMotor>currentClass
 
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Commands: ";
     try { cout << dev.commands() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -208,9 +214,6 @@ void test_dc_motor()
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Address: ";
-    try { cout << dev.address() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Ramp Down SP: ";
     try { cout << dev.ramp_down_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -220,8 +223,8 @@ void test_dc_motor()
     cout << "    State: ";
     try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Stop Commands: ";
-    try { cout << dev.stop_commands() << endl; }
+    cout << "    Stop Actions: ";
+    try { cout << dev.stop_actions() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
@@ -245,6 +248,9 @@ void test_servo_motor()
          << "  Current properties are:" << endl;
 //~autogen generic_report_status classes.servoMotor>currentClass
 
+    cout << "    Address: ";
+    try { cout << dev.address() << endl; }
+    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Driver Name: ";
     try { cout << dev.driver_name() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -259,9 +265,6 @@ void test_servo_motor()
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Polarity: ";
     try { cout << dev.polarity() << endl; }
-    catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-    cout << "    Address: ";
-    try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
     cout << "    Position SP: ";
     try { cout << dev.position_sp() << endl; }

@@ -17,7 +17,7 @@ void populate_arena(const std::vector<const char*> &devices) {
 }
 
 TEST_CASE( "Device" ) {
-    populate_arena({"medium_motor:0", "infrared_sensor:0"});
+    populate_arena({"medium_motor:0@outA", "infrared_sensor:0@in1"});
 
     ev3::device d;
 
@@ -56,7 +56,7 @@ TEST_CASE( "Device" ) {
 }
 
 TEST_CASE("Medium Motor") {
-    populate_arena({"medium_motor:0"});
+    populate_arena({"medium_motor:0@outA"});
 
     ev3::medium_motor m;
 
@@ -76,28 +76,26 @@ TEST_CASE("Medium Motor") {
 
         std::set<std::string> state = {"running"};
 
-        REQUIRE(m.count_per_rot()            == 360);
-        REQUIRE(m.commands()                 == commands);
-        REQUIRE(m.duty_cycle()               == 0);
-        REQUIRE(m.duty_cycle_sp()            == 42);
-        REQUIRE(m.encoder_polarity()         == "normal");
-        REQUIRE(m.polarity()                 == "normal");
-        REQUIRE(m.address()                  == "outA");
-        REQUIRE(m.position()                 == 42);
-        REQUIRE(m.position_sp()              == 42);
-        REQUIRE(m.ramp_down_sp()             == 0);
-        REQUIRE(m.ramp_up_sp()               == 0);
-        REQUIRE(m.speed()                    == 0);
-        REQUIRE(m.speed_regulation_enabled() == "off");
-        REQUIRE(m.speed_sp()                 == 0);
-        REQUIRE(m.state()                    == state);
-        REQUIRE(m.stop_command()             == "coast");
-        REQUIRE(m.time_sp()                  == 1000);
+        REQUIRE(m.count_per_rot() == 360);
+        REQUIRE(m.commands()      == commands);
+        REQUIRE(m.duty_cycle()    == 0);
+        REQUIRE(m.duty_cycle_sp() == 42);
+        REQUIRE(m.polarity()      == "normal");
+        REQUIRE(m.address()       == "outA");
+        REQUIRE(m.position()      == 42);
+        REQUIRE(m.position_sp()   == 42);
+        REQUIRE(m.ramp_down_sp()  == 0);
+        REQUIRE(m.ramp_up_sp()    == 0);
+        REQUIRE(m.speed()         == 0);
+        REQUIRE(m.speed_sp()      == 0);
+        REQUIRE(m.state()         == state);
+        REQUIRE(m.stop_action()   == "coast");
+        REQUIRE(m.time_sp()       == 1000);
     }
 }
 
 TEST_CASE("Infrared Sensor") {
-    populate_arena({"infrared_sensor:0"});
+    populate_arena({"infrared_sensor:0@in1"});
     ev3::infrared_sensor s;
 
     REQUIRE(s.connected());
