@@ -138,17 +138,27 @@ private:
 };
 
 // A global cache of files.
-lru_cache<std::string, std::ifstream> ifstream_cache(FSTREAM_CACHE_SIZE);
-lru_cache<std::string, std::ofstream> ofstream_cache(FSTREAM_CACHE_SIZE);
-std::mutex ofstream_cache_lock;
-std::mutex ifstream_cache_lock;
+std::ifstream& ifstream_cache(const std::string &path) {
+  static lru_cache<std::string, std::ifstream> cache(FSTREAM_CACHE_SIZE);
+  static std::mutex mx;
+
+  std::lock_guard<std::mutex> lock(mx);
+  return cache[path];
+}
+
+std::ofstream& ofstream_cache(const std::string &path) {
+  static lru_cache<std::string, std::ofstream> cache(FSTREAM_CACHE_SIZE);
+  static std::mutex mx;
+
+  std::lock_guard<std::mutex> lock(mx);
+  return cache[path];
+}
 
 //-----------------------------------------------------------------------------
 
 std::ofstream &ofstream_open(const std::string &path)
 {
-  std::lock_guard<std::mutex> lock(ofstream_cache_lock);
-  std::ofstream &file = ofstream_cache[path];
+  std::ofstream &file = ofstream_cache(path);
   if (!file.is_open())
   {
     // Don't buffer writes to avoid latency. Also saves a bit of memory.
@@ -165,8 +175,7 @@ std::ofstream &ofstream_open(const std::string &path)
 
 std::ifstream &ifstream_open(const std::string &path)
 {
-  std::lock_guard<std::mutex> lock(ifstream_cache_lock);
-  std::ifstream &file = ifstream_cache[path];
+  std::ifstream &file = ifstream_cache(path);
   if (!file.is_open())
   {
     file.open(path);
