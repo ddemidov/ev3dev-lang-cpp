@@ -15,7 +15,7 @@ public:
   // {{ line }}{%
     endfor %}{%
     assign cppName = value.name | downcase | underscore_non_wc %}
-  static const std::string {{ prefix }}_{{cppName}};
+  static constexpr char {{ prefix }}_{{cppName}}[] = "{{ value.name }}";
 {% endfor %}{%
 endfor %}
 {% for mapping in currentClass.sensorValueMappings %}{%

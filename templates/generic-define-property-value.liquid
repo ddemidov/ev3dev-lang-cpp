@@ -3,6 +3,6 @@
   assign prefix = prop.propertyName | downcase | underscore_spaces %}{%
   for value in prop.values %}{%
     assign cppName = value.name | downcase | underscore_non_wc %}
-const std::string {{className}}::{{ prefix }}_{{cppName}}{ "{{ value.name }}" };{%
+constexpr char {{className}}::{{ prefix }}_{{cppName}}[];{%
   endfor %}{%
 endfor %}
