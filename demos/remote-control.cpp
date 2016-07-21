@@ -47,7 +47,7 @@ template <class Motor, class Leds>
 std::function<void(bool)> roll(Motor &motor, Leds &leds, int dir) {
     return [&motor, &leds, dir](bool state) {
         if (state) {
-            motor.set_duty_cycle_sp(90 * dir).run_forever();
+            motor.set_speed_sp(900 * dir).run_forever();
             ev3::led::set_color(leds, dir > 0 ? ev3::led::green : ev3::led::red);
         } else {
             motor.set_stop_action("brake").stop();
@@ -89,8 +89,8 @@ int main() {
             ev3::led::set_color(ev3::led::right, ev3::led::red);
 
             // Run both motors backwards for 0.5 seconds
-            lmotor.set_time_sp(500).set_duty_cycle_sp(-90).run_timed();
-            rmotor.set_time_sp(500).set_duty_cycle_sp(-90).run_timed();
+            lmotor.set_time_sp(500).set_speed_sp(-900).run_timed();
+            rmotor.set_time_sp(500).set_speed_sp(-900).run_timed();
 
             // Wait 0.5 seconds while motors are rolling
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
