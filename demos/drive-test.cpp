@@ -90,9 +90,9 @@ control::~control()
 
 void control::drive(int speed, int time)
 {
-  _motor_left.set_duty_cycle_sp(-speed);
+  _motor_left.set_speed_sp(-speed);
 
-  _motor_right.set_duty_cycle_sp(-speed);
+  _motor_right.set_speed_sp(-speed);
 
   _state = state_driving;
 
@@ -123,8 +123,8 @@ void control::turn(int direction)
 
   _state = state_turning;
 
-  _motor_left. set_position_sp( direction).set_duty_cycle_sp(50).run_to_rel_pos();
-  _motor_right.set_position_sp(-direction).set_duty_cycle_sp(50).run_to_rel_pos();
+  _motor_left. set_position_sp( direction).set_speed_sp(500).run_to_rel_pos();
+  _motor_right.set_position_sp(-direction).set_speed_sp(500).run_to_rel_pos();
 
   while (_motor_left.state().count("running") || _motor_right.state().count("running"))
     this_thread::sleep_for(chrono::milliseconds(10));
@@ -220,7 +220,7 @@ void control::remote_loop()
     return;
   }
 
-  const int speed = 70;
+  const int speed = 700;
   const int ninety_degrees = 260;
 
   r.on_red_up = [&] (bool state)
@@ -303,7 +303,7 @@ void control::drive_autonomously()
     else if (distance >= 20)
     {
       if (_state != state_driving)
-        drive(75);
+        drive(750);
       this_thread::sleep_for(chrono::milliseconds(10));
     }
     else
@@ -322,7 +322,7 @@ void control::drive_autonomously()
         {
           if (direction < 0)
           {
-            drive(-70, 1000);
+            drive(-700, 1000);
           }
           else
           {
