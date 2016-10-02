@@ -32,8 +32,8 @@ endfor %}
     for line in mapping.description %}
   // {{ line }}{%
     endfor %}
-  {{ type }} {{ name }}() {
-    set_mode(mode_{{ mode }});
+  {{ type }} {{ name }}(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_{{ mode }});
     return {{ reader }}({{ value_index }});
   }
 {% endfor %}
