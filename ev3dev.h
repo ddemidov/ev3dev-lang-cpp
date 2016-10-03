@@ -310,8 +310,8 @@ public:
 
   // A boolean indicating whether the current touch sensor is being
   // pressed.
-  bool is_pressed() {
-    set_mode(mode_touch);
+  bool is_pressed(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_touch);
     return value(0);
   }
 
@@ -346,14 +346,14 @@ public:
 
 
   // Reflected light intensity as a percentage. Light on sensor is red.
-  int reflected_light_intensity() {
-    set_mode(mode_col_reflect);
+  int reflected_light_intensity(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_col_reflect);
     return value(0);
   }
 
   // Ambient light intensity. Light on sensor is dimly lit blue.
-  int ambient_light_intensity() {
-    set_mode(mode_col_ambient);
+  int ambient_light_intensity(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_col_ambient);
     return value(0);
   }
 
@@ -366,26 +366,26 @@ public:
   //   - 5: Red
   //   - 6: White
   //   - 7: Brown
-  int color() {
-    set_mode(mode_col_color);
+  int color(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_col_color);
     return value(0);
   }
 
   // Red component of the detected color, in the range 0-1020.
-  int red() {
-    set_mode(mode_rgb_raw);
+  int red(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_rgb_raw);
     return value(0);
   }
 
   // Green component of the detected color, in the range 0-1020.
-  int green() {
-    set_mode(mode_rgb_raw);
+  int green(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_rgb_raw);
     return value(1);
   }
 
   // Blue component of the detected color, in the range 0-1020.
-  int blue() {
-    set_mode(mode_rgb_raw);
+  int blue(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_rgb_raw);
     return value(2);
   }
 
@@ -421,22 +421,22 @@ public:
 
   // Measurement of the distance detected by the sensor,
   // in centimeters.
-  float distance_centimeters() {
-    set_mode(mode_us_dist_cm);
+  float distance_centimeters(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_us_dist_cm);
     return float_value(0);
   }
 
   // Measurement of the distance detected by the sensor,
   // in inches.
-  float distance_inches() {
-    set_mode(mode_us_dist_in);
+  float distance_inches(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_us_dist_in);
     return float_value(0);
   }
 
   // Value indicating whether another ultrasonic sensor could
   // be heard nearby.
-  bool other_sensor_present() {
-    set_mode(mode_us_listen);
+  bool other_sensor_present(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_us_listen);
     return value(0);
   }
 
@@ -472,14 +472,14 @@ public:
 
   // The number of degrees that the sensor has been rotated
   // since it was put into this mode.
-  int angle() {
-    set_mode(mode_gyro_ang);
+  int angle(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_gyro_ang);
     return value(0);
   }
 
   // The rate at which the sensor is rotating, in degrees/second.
-  int rate() {
-    set_mode(mode_gyro_rate);
+  int rate(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_gyro_rate);
     return value(0);
   }
 
@@ -515,8 +515,8 @@ public:
 
   // A measurement of the distance between the sensor and the remote,
   // as a percentage. 100% is approximately 70cm/27in.
-  int proximity() {
-    set_mode(mode_ir_prox);
+  int proximity(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_ir_prox);
     return value(0);
   }
 
@@ -543,15 +543,15 @@ public:
 
   // A measurement of the measured sound pressure level, as a
   // percent. Uses a flat weighting.
-  float sound_pressure() {
-    set_mode(mode_db);
+  float sound_pressure(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_db);
     return float_value(0);
   }
 
   // A measurement of the measured sound pressure level, as a
   // percent. Uses A-weighting, which focuses on levels up to 55 dB.
-  float sound_pressure_low() {
-    set_mode(mode_dba);
+  float sound_pressure_low(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_dba);
     return float_value(0);
   }
 
@@ -577,14 +577,14 @@ public:
 
 
   // A measurement of the reflected light intensity, as a percentage.
-  float reflected_light_intensity() {
-    set_mode(mode_reflect);
+  float reflected_light_intensity(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_reflect);
     return float_value(0);
   }
 
   // A measurement of the ambient light intensity, as a percentage.
-  float ambient_light_intensity() {
-    set_mode(mode_ambient);
+  float ambient_light_intensity(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_ambient);
     return float_value(0);
   }
 
