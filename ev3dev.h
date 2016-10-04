@@ -372,6 +372,12 @@ public:
     return value(0);
   }
 
+  // Red, green, and blue components of the detected color, in the range 0-1020.
+  std::tuple<int, int, int> raw(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_rgb_raw);
+    return std::make_tuple( value(0), value(1), value(2) );
+  }
+
   // Red component of the detected color, in the range 0-1020.
   int red(bool do_set_mode = true) {
     if (do_set_mode) set_mode(mode_rgb_raw);
