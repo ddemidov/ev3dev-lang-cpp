@@ -20,21 +20,42 @@ public:
 endfor %}
 {% for mapping in currentClass.sensorValueMappings %}{%
   assign name = mapping.name | downcase | underscore_spaces %}{%
-  assign mode = mapping.requiredMode | downcase | underscore_non_wc %}{%
-  assign value_index = mapping.sourceValue %}{%
-  assign type = mapping.type %}{%
-  assign reader = 'value' %}{%
-  if type == 'float' %}{%
-    assign reader = 'float_value' %}{%
-  elsif type == 'boolean' %}{%
-    assign type = 'bool' %}{%
-  endif %}{%
-    for line in mapping.description %}
+  for line in mapping.description %}
   // {{ line }}{%
-    endfor %}
+  endfor %}{%
+  assign mode = mapping.requiredMode | downcase | underscore_non_wc %}{%
+  assign num_values = mapping.type | size %}{%
+  if num_values == 1 %}{%
+    assign type = mapping.type[0] %}{%
+    assign reader = 'value' %}{%
+    if type == 'float' %}{%
+      assign reader = 'float_value' %}{%
+    elsif type == 'boolean' %}{%
+      assign type = 'bool' %}{%
+    endif %}
   {{ type }} {{ name }}(bool do_set_mode = true) {
     if (do_set_mode) set_mode(mode_{{ mode }});
-    return {{ reader }}({{ value_index }});
+    return {{ reader }}({{ mapping.sourceValue[0] }});
   }
-{% endfor %}
+{% else %}
+  std::tuple<{%
+    for cur_type in mapping.type %}{%
+      assign type = cur_type %}{%
+      if type == 'boolean' %}{%
+        assign type = 'bool' %}{%
+      endif %}{{ type }}{%
+      unless forloop.last %}, {% endunless %}{%
+    endfor %}> {{ name }}(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_{{ mode }});
+    return std::make_tuple( {%
+    for value_index in mapping.sourceValue %}{%
+      assign reader = 'value' %}{%
+      if mapping.type[forloop.index] == 'float' %}{%
+        assign reader = 'float_value' %}{%
+      endif %}{{ reader }}({{ value_index }}){%
+      unless forloop.last %}, {% endunless %}{%
+    endfor %} );
+  }
+{% endif %}{%
+endfor %}
 };

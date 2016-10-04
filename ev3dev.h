@@ -37,6 +37,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -481,6 +482,12 @@ public:
   int rate(bool do_set_mode = true) {
     if (do_set_mode) set_mode(mode_gyro_rate);
     return value(0);
+  }
+
+  // Angle (degrees) and Rotational Speed (degrees/second).
+  std::tuple<int, int> rate_and_angle(bool do_set_mode = true) {
+    if (do_set_mode) set_mode(mode_gyro_g_a);
+    return std::make_tuple( value(0), value(1) );
   }
 
 };
