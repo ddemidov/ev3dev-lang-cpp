@@ -195,7 +195,7 @@ public:
   template <class T>
   void bin_data(T *buf) const {
       bin_data(); // fills _bin_data
-      std::copy_n(_bin_data.data(), _bin_data.size(), static_cast<char*>(buf));
+      std::copy_n(_bin_data.data(), _bin_data.size(), reinterpret_cast<char*>(buf));
   }
 
 //~autogen generic-get-set classes.sensor>currentClass
