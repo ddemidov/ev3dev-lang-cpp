@@ -271,7 +271,10 @@ protected:
 class i2c_sensor : public sensor
 {
 public:
-  i2c_sensor(address_type address = INPUT_AUTO);
+  i2c_sensor(
+      address_type address = INPUT_AUTO,
+      const std::set<sensor_type> &types = {}
+      );
 
 //~autogen generic-get-set classes.i2cSensor>currentClass
 

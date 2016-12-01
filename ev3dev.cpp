@@ -604,8 +604,8 @@ const std::vector<char>& sensor::bin_data() const
 
 //-----------------------------------------------------------------------------
 
-i2c_sensor::i2c_sensor(address_type address) :
-  sensor(address, { nxt_i2c_sensor })
+i2c_sensor::i2c_sensor(address_type address, const std::set<sensor_type> &types) :
+  sensor(address, types)
 {
 }
 
