@@ -263,6 +263,8 @@ int device::device_index() const
     _device_index = 0;
     for (auto it=_path.rbegin(); it!=_path.rend(); ++it)
     {
+      if(*it =='/')
+        continue;		
       if ((*it < '0') || (*it > '9'))
         break;
 
