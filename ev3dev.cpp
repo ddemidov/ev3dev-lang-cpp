@@ -988,8 +988,7 @@ bool button::pressed() const
     // handle error
   }
 #endif
-  // bit in bytes is 1 when released and 0 when pressed
-  return !(_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
+  return (_buf[_bit / bits_per_long] & 1 << (_bit % bits_per_long));
 }
 
 //-----------------------------------------------------------------------------
