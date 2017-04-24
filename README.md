@@ -36,6 +36,33 @@ Cons: Only includes standard libraries - no Debian `-dev` packages.
 
 [MentorGraphics toolchain](http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2014.05-29-arm-none-linux-gnueabi.exe) (formerly known as CodeSourcery).
 
+### Windows 10
+
+Windows 10 supports the Ubuntu Subsystem for Windows which allows us to install and execute the entire compiler toolchain. The steps required to compile native-mode EV3 applications on Windows 10 is as follows:
+
+1. Be sure that your Windows 10 installation has Ubuntu Subsystem for Windows installed. To install it, go to Control Panel --> Programs and Features --> Turn Windows Feature On/Off and check the box next to Windows Subsystem for Linux (Beta).
+
+2. Fire up the bash shell by pressing Start Key and typing Bash. This will open up Bash on Ubuntu on Windows.
+
+3. Install the ARM compiler by typing `sudo apt-get install arm-linux-gnueabi-gcc`.
+
+4. You need to make some changes to the top-level `CMakeLists.txt` file. First of all, set the C/C++ compilers with
+
+```
+set(CMAKE_CC_COMPILER "arm-linux-gnueabi-gcc")
+set(CMAKE_CC_COMPILER "arm-linux-gnueabi-g++")
+```
+
+5. You also need the following define, without which the nanosleep-using demos won't compile:
+
+```
+add_definitions(-D_GLIBCXX_USE_NANOSLEEP)
+```
+
+6. Now compile your programs and the generated binaries will be ready for EV3. Copy them to the EV3 brick, but there's one more step!
+
+7. Be sure to `chmod u+x myprogram` for every copied program before running the program, otherwise you'll get an `Access Denied` in SSH or some really weird error if executing from the brick.
+
 ### Mac
 
 [Carlson-Minot toolchain](http://www.carlson-minot.com/available-arm-gnu-linux-g-lite-builds-for-mac-os-x/mac-os-x-arm-gnu-linux-g-lite-201405-29-toolchain)
