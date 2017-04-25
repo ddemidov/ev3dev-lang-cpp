@@ -6,8 +6,8 @@ endif()
 
 project(ev3dev-lang-cpp)
 
-set(EV3DEV_PLATFORM "EV3" CACHE STRING "Target ev3dev platform (EV3/RPI)")
-set_property(CACHE EV3DEV_PLATFORM PROPERTY STRINGS "EV3" "RPI")
+set(EV3DEV_PLATFORM "EV3" CACHE STRING "Target ev3dev platform (EV3/BRICKPI/PISTORMS)")
+set_property(CACHE EV3DEV_PLATFORM PROPERTY STRINGS "EV3" "BRICKPI" "PISTORMS")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
