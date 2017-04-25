@@ -82,7 +82,7 @@ add_definitions(-D_GLIBCXX_USE_NANOSLEEP)
 
 This line can be added immediately after the previous `set(...)` instructions.
 
-7. Now compile your programs and the generated binaries will be ready for EV3. This assumes that you have build tools such as `make` and `cmake` installed - if not, install them with `sudo apt-get install build-essential`. You can perform compilation by invoking the following commands:
+7. Now compile your programs and the generated binaries will be ready for EV3. This assumes that you have build tools such as `make` and `cmake` installed - if not, install them with `sudo apt-get install build-essential` (for make) and `sudo apt-get install cmake` for cmake. You can then perform compilation by invoking the following commands:
 
 ```sh
 mkdir build && cd build
@@ -90,7 +90,7 @@ cmake .. -DEV3DEV_PLATFORM=EV3
 make
 ```
 
-If your did not set the variables in the `CMakeLists.txt` file, use the following commands instead:
+If you did not set the variables in the `CMakeLists.txt` file, use the following commands instead:
 
 ```sh
 mkdir build && cd build
@@ -98,7 +98,11 @@ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++ cmake ..
 make
 ```
 
-8. The `build` directory will now contain folders with binary files ready to be executed on the EV3 brick. The easiest way to copy files is to use a program that supports SFTP, like Filezilla. Remember that, by default, the username of the host system is `robot` and password is `maker`.
+8. The `build` directory will now contain folders with binary files ready to be executed on the EV3 brick. The easiest way to copy files is to use a program that supports SFTP, such as Filezilla. Remember that, by default, the username of the host system is `robot` and password is `maker`. The location of the path where the files are kept on disk is likely the following:
+
+```
+c:\users\<YOUR USERNAME>\appdata\local\lxss\home\<YOUR USERNAME>\ev3dev-lang-cpp\build\
+```
 
 9. Be sure to `chmod u+x myprogram` for every copied program before running the program, otherwise you'll get an `Access Denied` in SSH or some really weird error if executing from the brick.
 
