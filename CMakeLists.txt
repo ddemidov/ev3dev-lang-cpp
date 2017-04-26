@@ -6,20 +6,74 @@ endif()
 
 project(ev3dev-lang-cpp)
 
+# Is this used directly or via add_subdirectory()
+set(EV3DEV_LANG_CPP_MASTER_PROJECT OFF)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(EV3DEV_LANG_CPP_MASTER_PROJECT ON)
+endif()
+
 set(EV3DEV_PLATFORM "EV3" CACHE STRING "Target ev3dev platform (EV3/BRICKPI/PISTORMS)")
 set_property(CACHE EV3DEV_PLATFORM PROPERTY STRINGS "EV3" "BRICKPI" "PISTORMS")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-
 add_library(ev3dev STATIC ev3dev.cpp)
+add_library(ev3dev::ev3dev ALIAS ev3dev) # to match exported target
+
+target_include_directories(ev3dev PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
+    )
+
+target_compile_options(ev3dev PUBLIC -std=c++0x)
+target_compile_definitions(ev3dev PUBLIC
+    _GLIBCXX_USE_NANOSLEEP
+    EV3DEV_PLATFORM_${EV3DEV_PLATFORM}
+    )
+target_link_libraries(ev3dev PUBLIC pthread)
 
 function(add_ev3_executable target sources)
     add_executable(${target} ${sources})
-    target_link_libraries(${target} ev3dev pthread)
+    target_link_libraries(${target} ev3dev)
 endfunction()
 
-enable_testing()
+if (EV3DEV_LANG_CPP_MASTER_PROJECT)
+    enable_testing()
+    add_subdirectory(tests)
 
-add_subdirectory(demos)
-add_subdirectory(tests)
+    add_subdirectory(demos)
+
+    #----------------------------------------------------------------------
+    # Install the library, header, and cmake configuration
+    #----------------------------------------------------------------------
+    install(FILES ev3dev.h DESTINATION include)
+    install(TARGETS ev3dev EXPORT ev3devTargets
+        LIBRARY DESTINATION  lib
+        ARCHIVE DESTINATION  lib
+        INCLUDES DESTINATION include
+        )
+
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ev3dev-config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake/ev3dev-config.cmake"
+        COPYONLY
+        )
+
+    export(EXPORT ev3devTargets
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/ev3dev-targets.cmake"
+        NAMESPACE ev3dev::
+        )
+
+    export(PACKAGE ev3dev)
+
+    install(EXPORT ev3devTargets
+        FILE ev3dev-targets.cmake
+        NAMESPACE ev3dev::
+        DESTINATION share/ev3dev/cmake
+        )
+
+    install(
+        FILES cmake/ev3dev-config.cmake
+        DESTINATION share/ev3dev/cmake
+        )
+endif()
+
+

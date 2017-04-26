@@ -1,3 +1,8 @@
+dist: trusty
+language: cpp
+compiler:
+- gcc
+
 addons:
   apt:
     sources:
@@ -5,10 +10,6 @@ addons:
     packages:
     - gcc-5
     - g++-5
-
-language: cpp
-compiler:
-- gcc
 
 script:
 - mkdir -p build && cd build
