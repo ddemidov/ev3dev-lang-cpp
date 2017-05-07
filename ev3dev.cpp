@@ -891,7 +891,7 @@ void led::flash(unsigned on_ms, unsigned off_ms)
 
 //-----------------------------------------------------------------------------
 
-#ifdef EV3DEV_PLATFORM_BRICKPI
+#if defined(EV3DEV_PLATFORM_BRICKPI)
 //~autogen leds-define platforms.brickpi.led>currentClass
 
 led led::blue_led1{"brickpi:led1:blue:ev3dev"};
@@ -908,6 +908,42 @@ void led::all_off() {
 
     blue_led1.off();
     blue_led2.off();
+
+}
+
+//~autogen
+#elif defined(EV3DEV_PLATFORM_PISTORMS)
+//~autogen leds-define platforms.pistorms.led>currentClass
+
+led led::red_left{"pistorms:BB:red:ev3dev"};
+led led::red_right{"pistorms:BA:red:ev3dev"};
+led led::green_left{"pistorms:BB:green:ev3dev"};
+led led::green_right{"pistorms:BA:green:ev3dev"};
+led led::blue_left{"pistorms:BB:blue:ev3dev"};
+led led::blue_right{"pistorms:BA:blue:ev3dev"};
+
+std::vector<led*> led::left{ &led::red_left, &led::green_left, &led::blue_left };
+std::vector<led*> led::right{ &led::red_right, &led::green_right, &led::blue_right };
+
+std::vector<float> led::black{ static_cast<float>(0), static_cast<float>(0), static_cast<float>(0) };
+std::vector<float> led::red{ static_cast<float>(1), static_cast<float>(0), static_cast<float>(0) };
+std::vector<float> led::green{ static_cast<float>(0), static_cast<float>(1), static_cast<float>(0) };
+std::vector<float> led::blue{ static_cast<float>(0), static_cast<float>(0), static_cast<float>(1) };
+std::vector<float> led::yellow{ static_cast<float>(1), static_cast<float>(1), static_cast<float>(0) };
+std::vector<float> led::purple{ static_cast<float>(1), static_cast<float>(0), static_cast<float>(1) };
+std::vector<float> led::cyan{ static_cast<float>(0), static_cast<float>(1), static_cast<float>(1) };
+std::vector<float> led::white{ static_cast<float>(1), static_cast<float>(1), static_cast<float>(1) };
+std::vector<float> led::orange{ static_cast<float>(1), static_cast<float>(0.5), static_cast<float>(0) };
+
+//-----------------------------------------------------------------------------
+void led::all_off() {
+
+    red_left.off();
+    red_right.off();
+    green_left.off();
+    green_right.off();
+    blue_left.off();
+    blue_right.off();
 
 }
 
