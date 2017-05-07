@@ -1476,7 +1476,7 @@ public:
   // provided values (in milliseconds).
   void flash(unsigned on_ms, unsigned off_ms);
 
-#ifdef EV3DEV_PLATFORM_BRICKPI
+#if defined(EV3DEV_PLATFORM_BRICKPI)
 //~autogen leds-declare platforms.brickpi.led>currentClass
 
     static led blue_led1;
@@ -1487,6 +1487,30 @@ public:
 
     static std::vector<float> black;
     static std::vector<float> blue;
+
+//~autogen
+#elif defined(EV3DEV_PLATFORM_PISTORMS)
+//~autogen leds-declare platforms.pistorms.led>currentClass
+
+    static led red_left;
+    static led red_right;
+    static led green_left;
+    static led green_right;
+    static led blue_left;
+    static led blue_right;
+
+    static std::vector<led*> left;
+    static std::vector<led*> right;
+
+    static std::vector<float> black;
+    static std::vector<float> red;
+    static std::vector<float> green;
+    static std::vector<float> blue;
+    static std::vector<float> yellow;
+    static std::vector<float> purple;
+    static std::vector<float> cyan;
+    static std::vector<float> white;
+    static std::vector<float> orange;
 
 //~autogen
 #else
