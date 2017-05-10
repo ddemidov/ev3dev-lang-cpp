@@ -633,6 +633,14 @@ constexpr char color_sensor::mode_col_ambient[];
 constexpr char color_sensor::mode_col_color[];
 constexpr char color_sensor::mode_ref_raw[];
 constexpr char color_sensor::mode_rgb_raw[];
+constexpr char color_sensor::color_nocolor[];
+constexpr char color_sensor::color_black[];
+constexpr char color_sensor::color_blue[];
+constexpr char color_sensor::color_green[];
+constexpr char color_sensor::color_yellow[];
+constexpr char color_sensor::color_red[];
+constexpr char color_sensor::color_white[];
+constexpr char color_sensor::color_brown[];
 
 //~autogen
 

@@ -358,6 +358,30 @@ public:
   // Raw Color Components. All LEDs rapidly cycling, appears white.
   static constexpr char mode_rgb_raw[] = "RGB-RAW";
 
+  // No color.
+  static constexpr char color_nocolor[] = "NoColor";
+
+  // Black color.
+  static constexpr char color_black[] = "Black";
+
+  // Blue color.
+  static constexpr char color_blue[] = "Blue";
+
+  // Green color.
+  static constexpr char color_green[] = "Green";
+
+  // Yellow color.
+  static constexpr char color_yellow[] = "Yellow";
+
+  // Red color.
+  static constexpr char color_red[] = "Red";
+
+  // White color.
+  static constexpr char color_white[] = "White";
+
+  // Brown color.
+  static constexpr char color_brown[] = "Brown";
+
 
   // Reflected light intensity as a percentage. Light on sensor is red.
   int reflected_light_intensity(bool do_set_mode = true) {
