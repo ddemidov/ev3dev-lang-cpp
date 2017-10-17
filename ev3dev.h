@@ -80,15 +80,15 @@ constexpr char OUTPUT_B[] = "pistorms:BAM2"; //!< Motor port B
 constexpr char OUTPUT_C[] = "pistorms:BBM1"; //!< Motor port C
 constexpr char OUTPUT_D[] = "pistorms:BBM2"; //!< Motor port D
 #else // assume EV3DEV_PLATFORM_EV3
-constexpr char INPUT_1[]  = "in1";  //!< Sensor port 1
-constexpr char INPUT_2[]  = "in2";  //!< Sensor port 2
-constexpr char INPUT_3[]  = "in3";  //!< Sensor port 3
-constexpr char INPUT_4[]  = "in4";  //!< Sensor port 4
+constexpr char INPUT_1[]  = "ev3-ports:in1";  //!< Sensor port 1
+constexpr char INPUT_2[]  = "ev3-ports:in2";  //!< Sensor port 2
+constexpr char INPUT_3[]  = "ev3-ports:in3";  //!< Sensor port 3
+constexpr char INPUT_4[]  = "ev3-ports:in4";  //!< Sensor port 4
 
-constexpr char OUTPUT_A[] = "outA"; //!< Motor port A
-constexpr char OUTPUT_B[] = "outB"; //!< Motor port B
-constexpr char OUTPUT_C[] = "outC"; //!< Motor port C
-constexpr char OUTPUT_D[] = "outD"; //!< Motor port D
+constexpr char OUTPUT_A[] = "ev3-ports:outA"; //!< Motor port A
+constexpr char OUTPUT_B[] = "ev3-ports:outB"; //!< Motor port B
+constexpr char OUTPUT_C[] = "ev3-ports:outC"; //!< Motor port C
+constexpr char OUTPUT_D[] = "ev3-ports:outD"; //!< Motor port D
 #endif
 
 //-----------------------------------------------------------------------------
