@@ -951,10 +951,10 @@ void led::all_off() {
 #else
 //~autogen leds-define platforms.ev3.led>currentClass
 
-led led::red_left{"ev3:left:red:ev3dev"};
-led led::red_right{"ev3:right:red:ev3dev"};
-led led::green_left{"ev3:left:green:ev3dev"};
-led led::green_right{"ev3:right:green:ev3dev"};
+led led::red_left{"led0:red:brick-status"};
+led led::red_right{"led1:red:brick-status"};
+led led::green_left{"led0:green:brick-status"};
+led led::green_right{"led1:green:brick-status"};
 
 std::vector<led*> led::left{ &led::red_left, &led::green_left };
 std::vector<led*> led::right{ &led::red_right, &led::green_right };
@@ -1019,7 +1019,7 @@ button::file_descriptor::~file_descriptor()
 button::button(int bit)
   : _bit(bit),
     _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
-    _fd( new file_descriptor("/dev/input/by-path/platform-gpio-keys.0-event", O_RDONLY) )
+    _fd( new file_descriptor("/dev/input/by-path/platform-gpio_keys-event", O_RDONLY) )
 { }
 
 //-----------------------------------------------------------------------------
