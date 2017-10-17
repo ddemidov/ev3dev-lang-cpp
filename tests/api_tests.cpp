@@ -81,7 +81,7 @@ TEST_CASE("Medium Motor") {
         REQUIRE(m.duty_cycle()    == 0);
         REQUIRE(m.duty_cycle_sp() == 42);
         REQUIRE(m.polarity()      == "normal");
-        REQUIRE(m.address()       == "outA");
+        REQUIRE(m.address()       == "ev3-ports:outA");
         REQUIRE(m.position()      == 42);
         REQUIRE(m.position_sp()   == 42);
         REQUIRE(m.ramp_down_sp()  == 0);
@@ -103,7 +103,7 @@ TEST_CASE("Infrared Sensor") {
     REQUIRE(s.device_index()    == 0);
     REQUIRE(s.bin_data_format() == "s8");
     REQUIRE(s.num_values()      == 1);
-    REQUIRE(s.address()         == "in1");
+    REQUIRE(s.address()         == "ev3-ports:in1");
     REQUIRE(s.value(0)          == 16);
 
     std::vector<char> v(1);
