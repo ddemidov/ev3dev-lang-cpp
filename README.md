@@ -40,11 +40,11 @@ Cons: Only includes standard libraries - no Debian `-dev` packages.
 
 Windows 10 supports the Windows Subsystem for Linux which allows us to install and execute the entire compiler toolchain. The steps required to compile native-mode EV3 applications on Windows 10 is as follows:
 
-1. Be sure that your Windows 10 installation has Windows Subsystem for Linux installed. To install it, go to Control Panel --> Programs and Features --> Turn Windows Feature On/Off and check the box next to Windows Subsystem for Linux (Beta).
+1. Be sure that your Windows 10 installation has Windows Subsystem for Linux installed. First make sure Developer Mode is enabled under Settings --> Update & Security --> For developers. Then, go to Control Panel --> Programs and Features --> Turn Windows Feature On/Off and check the box next to Windows Subsystem for Linux (Beta).
 
 2. Fire up the bash shell by pressing Start Key, type `bash` and press `Enter`. This will open up Bash on Ubuntu on Windows.
 
-3. Install the ARM compiler by typing `sudo apt-get install arm-linux-gnueabi-gcc`.
+3. Install the ARM compiler by typing `sudo apt-get install gcc-arm-linux-gnueabi g++-arm-linux-gnueabi`.
 
 4. Use `git clone` to clone this repository to the directory of your choice, e.g.,
 
@@ -90,13 +90,25 @@ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++ cmake ..
 make
 ```
 
-7. The `build` directory will now contain folders with binary files ready to be executed on the EV3 brick. The easiest way to copy files is to use a program that supports SFTP, such as Filezilla. Remember that, by default, the username of the host system is `robot` and password is `maker`. The location of the path where the files are kept on disk is likely the following:
+7. Install `gcc-5` from unstable on your EV3, or else files compiled in Windows will not execute:
+
+```
+sudo apt-get install gcc-5/unstable
+```
+
+8. The `build` directory will now contain folders with binary files ready to be executed on the EV3 brick. The easiest way to copy files is to use a program that supports SFTP, such as Filezilla. Remember that, by default, the username of the host system is `robot` and password is `maker`. The location of the path where the files are kept on disk is likely the following:
 
 ```
 c:\users\<YOUR USERNAME>\appdata\local\lxss\home\<YOUR USERNAME>\ev3dev-lang-cpp\build\
 ```
 
-8. Be sure to `chmod u+x myprogram` for every copied program before running the program, otherwise you'll get an `Access Denied` in SSH or some really weird error if executing from the brick.
+Alternatively, Secure Copy may be used to quickly transfer a few files without having to leave the shell:
+
+```
+scp file.txt <EV3 USERNAME>@<IP>:/destination/directory
+```
+
+9. Be sure to `chmod u+x myprogram` for every copied program before running the program, otherwise you'll get an `Access Denied` in SSH or some really weird error if executing from the brick.
 
 ### Mac
 
