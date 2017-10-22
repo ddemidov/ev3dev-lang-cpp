@@ -666,6 +666,11 @@ ultrasonic_sensor::ultrasonic_sensor(address_type address) :
 {
 }
 
+ultrasonic_sensor::ultrasonic_sensor(address_type address, const std::set<sensor_type>& sensorTypes) :
+  sensor(address, sensorTypes)
+{
+}
+
 //-----------------------------------------------------------------------------
 
 //~autogen generic-define-property-value specialSensorTypes.gyroSensor>currentClass

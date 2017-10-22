@@ -447,6 +447,8 @@ class ultrasonic_sensor : public sensor
 public:
   ultrasonic_sensor(address_type address = INPUT_AUTO);
 
+  ultrasonic_sensor(address_type address, const std::set<sensor_type>& sensorTypes);
+
   // Continuous measurement in centimeters.
   static constexpr char mode_us_dist_cm[] = "US-DIST-CM";
 
