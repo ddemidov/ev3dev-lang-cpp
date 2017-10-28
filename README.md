@@ -90,7 +90,12 @@ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++ cmake ..
 make
 ```
 
-7. Install `gcc-5` from unstable on your EV3, or else files compiled in Windows will not execute:
+7. Install `gcc-5` from `unstable` on your EV3, or else files compiled in Windows will not execute. First, on the EV3, edit `/etc/apt/sources.list` to allow searching for packages in `unstable`:
+
+```
+sudo vim /etc/apt/sources.list
+```
+Copy the existing text in the file and paste it at the end of the file, changing, in only the pasted text, all occurences of `jessie` to `unstable`. Save and exit. Afterwards, run `sudo apt-get update`, which will update the packages searched for. Finally, install the new gcc compiler:
 
 ```
 sudo apt-get install gcc-5/unstable
