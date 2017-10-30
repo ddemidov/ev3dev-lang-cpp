@@ -95,27 +95,11 @@ make
 ```
 sudo vim /etc/apt/sources.list
 ```
-Copy the existing text in the file and paste it at the end of the file, changing, in only the pasted text, all occurences of `jessie` to `unstable`. At this point, the file should look something like this:
-
+Append the following lines to the end of the file:
 ```
-deb http://httpredir.debian.org/debian jessie main contrib non-free
-#deb-src http://httpredir.debian.org/debian jessie main contrib non-free
-
-deb http://security.debian.org/ jessie/updates main contrib non-free
-#deb-src http://security.debian.org/ jessie/updates main contrib non-free
-
-deb http://archive.ev3dev.org/debian jessie main
-#deb-src http://archive.ev3dev.org/debian jessie main
-
 deb http://httpredir.debian.org/debian unstable main contrib non-free
-#deb-src http://httpredir.debian.org/debian unstable main contrib non-free
-
 deb http://security.debian.org/ unstable/updates main contrib non-free
-#deb-src http://security.debian.org/ unstable/updates main contrib non-free
-
 deb http://archive.ev3dev.org/debian unstable main
-#deb-src http://archive.ev3dev.org/debian unstable main
-
 ```
 
 Save and exit. Afterwards, run `sudo apt-get update`, which will update the packages searched for. Finally, install the new gcc compiler:
