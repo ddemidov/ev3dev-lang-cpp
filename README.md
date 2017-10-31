@@ -90,7 +90,19 @@ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++ cmake ..
 make
 ```
 
-7. Install `gcc-5` from unstable on your EV3, or else files compiled in Windows will not execute:
+7. Install `gcc-5` from `unstable` on your EV3, or else files compiled in Windows will not execute. First, on the EV3, edit `/etc/apt/sources.list` to allow searching for packages in `unstable`:
+
+```
+sudo vim /etc/apt/sources.list
+```
+Append the following lines to the end of the file:
+```
+deb http://httpredir.debian.org/debian unstable main contrib non-free
+deb http://security.debian.org/ unstable/updates main contrib non-free
+deb http://archive.ev3dev.org/debian unstable main
+```
+
+Save and exit. Afterwards, run `sudo apt-get update`, which will update the packages searched for. Finally, install the new gcc compiler:
 
 ```
 sudo apt-get install gcc-5/unstable
