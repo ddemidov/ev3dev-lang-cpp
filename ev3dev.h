@@ -1499,6 +1499,15 @@ public:
     static std::vector<float> blue;
 
 //~autogen
+#elif defined(EV3DEV_PLATFORM_BRICKPI3)
+
+    static led amber_led1;
+
+    static std::vector<led*> led1;
+
+    static std::vector<float> black;
+    static std::vector<float> blue;
+
 #elif defined(EV3DEV_PLATFORM_PISTORMS)
 //~autogen leds-declare platforms.pistorms.led>currentClass
 

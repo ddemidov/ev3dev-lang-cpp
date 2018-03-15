@@ -912,6 +912,20 @@ void led::all_off() {
 }
 
 //~autogen
+#elif defined(EV3DEV_PLATFORM_BRICKPI3)
+led led::amber_led1{"brickpi3:amber:ev3dev"};
+
+std::vector<led*> led::led1{ &led::amber_led1 };
+
+std::vector<float> led::black{ static_cast<float>(0) };
+std::vector<float> led::blue{ static_cast<float>(1) };
+
+//-----------------------------------------------------------------------------
+void led::all_off() {
+
+    amber_led1.off();
+
+}
 #elif defined(EV3DEV_PLATFORM_PISTORMS)
 //~autogen leds-define platforms.pistorms.led>currentClass
 
