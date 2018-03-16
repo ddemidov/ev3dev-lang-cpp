@@ -75,10 +75,10 @@ constexpr char INPUT_2[]  = "spi0.1:S2";  //!< Sensor port 2
 constexpr char INPUT_3[]  = "spi0.1:S3";  //!< Sensor port 3
 constexpr char INPUT_4[]  = "spi0.1:S4";  //!< Sensor port 4
 
-constexpr char OUTPUT_A[] = "spi0.1:M1"; //!< Motor port A
-constexpr char OUTPUT_B[] = "spi0.1:M2"; //!< Motor port B
-constexpr char OUTPUT_C[] = "spi0.1:M3"; //!< Motor port C
-constexpr char OUTPUT_D[] = "spi0.1:M4"; //!< Motor port D
+constexpr char OUTPUT_A[] = "spi0.1:MA"; //!< Motor port A
+constexpr char OUTPUT_B[] = "spi0.1:MB"; //!< Motor port B
+constexpr char OUTPUT_C[] = "spi0.1:MC"; //!< Motor port C
+constexpr char OUTPUT_D[] = "spi0.1:MD"; //!< Motor port D
 #elif defined(EV3DEV_PLATFORM_PISTORMS)
 constexpr char INPUT_1[]  = "pistorms:BAS1"; //!< Sensor port 1
 constexpr char INPUT_2[]  = "pistorms:BAS2"; //!< Sensor port 2
