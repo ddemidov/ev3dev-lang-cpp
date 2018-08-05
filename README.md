@@ -124,8 +124,17 @@ scp file.txt <EV3 USERNAME>@<IP>:/destination/directory
 
 ### Mac
 
+The
 [Carlson-Minot toolchain](http://www.carlson-minot.com/available-arm-gnu-linux-g-lite-builds-for-mac-os-x/mac-os-x-arm-gnu-linux-g-lite-201405-29-toolchain)
+provides a complete toolchain for cross-compilation on the Mac. Download the "ARM GNU/Linux G++ Lite 2014.05-29 Easy Installer" and run it.
 
+To get the cross-compilation working, use (replace EV3 by RPI for the BrickPi)
+```
+mkdir build
+cd build
+CC=arm-none-linux-gnueabi-gcc CXX=arm-none-linux-gnueabi-g++  cmake -DCMAKE_SYSTEM_NAME=Linux -DEV3DEV_PLATFORM=EV3 ..
+make
+```
 
 ## Brickstrap
 
