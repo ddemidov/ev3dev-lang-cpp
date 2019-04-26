@@ -1,8 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type")
 endif()
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(ev3dev-lang-cpp)
 
@@ -23,7 +26,6 @@ target_include_directories(ev3dev PUBLIC
     $<INSTALL_INTERFACE:include>
     )
 
-target_compile_options(ev3dev PUBLIC -std=c++0x)
 target_compile_definitions(ev3dev PUBLIC
     _GLIBCXX_USE_NANOSLEEP
     EV3DEV_PLATFORM_${EV3DEV_PLATFORM}
