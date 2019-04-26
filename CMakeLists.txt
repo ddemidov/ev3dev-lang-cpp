@@ -26,7 +26,6 @@ target_include_directories(ev3dev PUBLIC
     $<INSTALL_INTERFACE:include>
     )
 
-target_compile_options(ev3dev PUBLIC -std=c++0x)
 target_compile_definitions(ev3dev PUBLIC
     _GLIBCXX_USE_NANOSLEEP
     EV3DEV_PLATFORM_${EV3DEV_PLATFORM}
