@@ -679,6 +679,7 @@ public:
 
   static constexpr char motor_large[]  = "lego-ev3-l-motor";
   static constexpr char motor_medium[] = "lego-ev3-m-motor";
+  static constexpr char motor_nxt[] = "lego-nxt-motor";
 
   using device::connected;
   using device::device_index;
@@ -1063,6 +1064,15 @@ class large_motor : public motor
 {
 public:
   large_motor(address_type address = OUTPUT_AUTO);
+};
+
+//-----------------------------------------------------------------------------
+
+// NXT motor
+class nxt_motor : public motor
+{
+public:
+  nxt_motor(address_type address = OUTPUT_AUTO);
 };
 
 //-----------------------------------------------------------------------------
