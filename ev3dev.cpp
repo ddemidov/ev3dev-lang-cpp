@@ -751,6 +751,7 @@ light_sensor::light_sensor(address_type address) :
 
 constexpr char motor::motor_large[];
 constexpr char motor::motor_medium[];
+constexpr char motor::motor_nxt[];
 
 //~autogen generic-define-property-value classes.motor>currentClass
 
@@ -817,6 +818,11 @@ medium_motor::medium_motor(address_type address) : motor(address, motor_medium)
 //-----------------------------------------------------------------------------
 
 large_motor::large_motor(address_type address) : motor(address, motor_large)
+{
+}
+
+//-----------------------------------------------------------------------------
+nxt_motor::nxt_motor(address_type address) : motor(address, motor_nxt)
 {
 }
 
