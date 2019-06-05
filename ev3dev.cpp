@@ -264,7 +264,7 @@ int device::device_index() const
     for (auto it=_path.rbegin(); it!=_path.rend(); ++it)
     {
       if(*it =='/')
-        continue;		
+        continue;
       if ((*it < '0') || (*it > '9'))
         break;
 
@@ -495,6 +495,27 @@ sensor::sensor(address_type address, const std::set<sensor_type> &types)
 
 //-----------------------------------------------------------------------------
 
+/*
+ * Constructs a sensor, setting the device explicitly. We need to do this on
+ * BrickPis as they cannot autodetect the sensor type.
+ */
+sensor::sensor(address_type address,
+               const std::set<sensor_type> &types,
+               const std::string &mode,
+               const std::string &device)
+{
+  {
+    lego_port port(address);
+    port.set_mode(mode);
+    port.set_set_device(device);
+  }
+
+  connect({{"address", {address}},
+           {"driver_name", types}});
+}
+
+//-----------------------------------------------------------------------------
+
 bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
   static const std::string _strClassDir { SYS_ROOT "/lego-sensor/" };
@@ -684,7 +705,11 @@ constexpr char gyro_sensor::mode_gyro_cal[];
 //~autogen
 
 gyro_sensor::gyro_sensor(address_type address) :
+#if defined(EV3DEV_PLATFORM_BRICKPI) || defined(EV3DEV_PLATFORM_BRICKPI3)
+  sensor(address, { ev3_gyro }, "ev3-uart", ev3_gyro)
+#else
   sensor(address, { ev3_gyro })
+#endif
 {
 }
 

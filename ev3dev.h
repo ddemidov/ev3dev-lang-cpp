@@ -173,6 +173,10 @@ public:
 
   sensor(address_type);
   sensor(address_type, const std::set<sensor_type>&);
+  sensor(address_type,
+         const std::set<sensor_type> &,
+         const std::string &mode,
+         const std::string &device);
 
   using device::connected;
   using device::device_index;
