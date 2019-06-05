@@ -701,7 +701,11 @@ constexpr char gyro_sensor::mode_gyro_cal[];
 //~autogen
 
 gyro_sensor::gyro_sensor(address_type address) :
+#if defined(EV3DEV_PLATFORM_BRICKPI) || defined(EV3DEV_PLATFORM_BRICKPI3)
   sensor(address, { ev3_gyro }, "ev3-uart", ev3_gyro)
+#else
+  sensor(address, { ev3_gyro })
+#endif
 {
 }
 
