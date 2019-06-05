@@ -495,6 +495,10 @@ sensor::sensor(address_type address, const std::set<sensor_type> &types)
 
 //-----------------------------------------------------------------------------
 
+/*
+ * Constructs a sensor, setting the device explicitly. We need to do this on
+ * BrickPis as they cannot autodetect the sensor type.
+ */
 sensor::sensor(address_type address,
                const std::set<sensor_type> &types,
                const std::string &mode,
