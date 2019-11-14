@@ -27,7 +27,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <list>
 #include <map>
 #include <array>
@@ -38,7 +37,8 @@
 #include <thread>
 #include <stdexcept>
 #include <string.h>
-#include <math.h>
+#include <cmath>
+#include <cstdio>
 
 #include <dirent.h>
 #include <sys/mman.h>
@@ -65,6 +65,154 @@ static const int bits_per_long = sizeof(long) * 8;
 
 namespace ev3dev {
 namespace {
+
+//-----------------------------------------------------------------------------
+class file_reader {
+    public:
+        file_reader() : f(0) {}
+
+        file_reader(file_reader &&other)
+            : fname(std::move(other.fname)), f(other.f)
+        {
+            other.f = 0;
+        }
+
+        ~file_reader() {
+            if (f) fclose(f);
+        }
+
+        bool is_open() const {
+            return f != 0;
+        }
+
+        void open(const std::string &_fname) {
+            fname = _fname;
+            f = fopen(fname.c_str(), "r");
+
+            if (!f) {
+                throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)),
+                        std::string("Failed to open \"") + fname + "\"");
+            }
+        }
+
+        std::string get_string() {
+            char buf[256];
+            try_read([this, &buf](){ return 1 == fscanf(f, "%255s", buf); });
+            return buf;
+        }
+
+        std::string get_line() {
+            char buf[256];
+            try_read([this, &buf](){
+                    if (!fgets(buf, 255, f)) return false;
+                    char *pos;
+                    if ((pos=strchr(buf, '\n')) != NULL) *pos = '\0';
+                    return true;
+                    });
+            return buf;
+        }
+
+        int get_int() {
+            int v;
+            try_read([this, &v](){return 1 == fscanf(f, "%d", &v); });
+            return v;
+        }
+
+        void get_data(char *data, size_t count) {
+            try_read([this, &data, count](){ return count == fread(data, count, count, f); });
+        }
+    private:
+        std::string fname;
+        FILE *f;
+
+        void reopen() {
+            if (f) fclose(f);
+            f = fopen(fname.c_str(), "r");
+        }
+
+        template <class Callable>
+        void try_read(Callable w) {
+            for(int attempt = 0; attempt < 2; ++attempt) {
+                fseek(f, 0, SEEK_SET);
+
+                if (w()) return;
+
+                // Failed to read the value.
+                // This could mean the sysfs attribute was recreated and the
+                // corresponding file handle got stale. Lets close the file and try
+                // again (once):
+                if (attempt != 0) {
+                    throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)), fname);
+                }
+
+                reopen();
+            }
+        }
+};
+
+//-----------------------------------------------------------------------------
+class file_writer {
+    public:
+        file_writer() : f(0) {}
+
+        file_writer(file_writer &&other)
+            : fname(std::move(other.fname)), f(other.f)
+        {
+            other.f = 0;
+        }
+
+        ~file_writer() {
+            if (f) fclose(f);
+        }
+
+        bool is_open() const {
+            return f != 0;
+        }
+
+        void open(const std::string &_fname) {
+            fname = _fname;
+            f = fopen(fname.c_str(), "w");
+
+            if (!f) {
+                throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)),
+                        std::string("Failed to open \"") + fname + "\"");
+            }
+        }
+
+        void put_string(const std::string &v) {
+            try_write([this, &v](){ return EOF != fputs(v.c_str(), f); });
+        }
+
+        void put_int(int v) {
+            try_write([this, v](){ return fprintf(f, "%d", v) >= 0; });
+        }
+
+    private:
+        std::string fname;
+        FILE *f;
+
+        void reopen() {
+            if (f) fclose(f);
+            f = fopen(fname.c_str(), "w");
+        }
+
+        template <class Callable>
+        void try_write(Callable w) {
+            for(int attempt = 0; attempt < 2; ++attempt) {
+                if (w()) return;
+
+                // Failed to write the value.
+                // This could mean the sysfs attribute was recreated and the
+                // corresponding file handle got stale. Lets close the file and try
+                // again (once):
+                if (attempt != 0) {
+                    throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)), fname);
+                }
+
+                reopen();
+            }
+        }
+};
 
 // This class implements a small LRU cache. It assumes the number of elements
 // is small, and so uses a simple linear search.
@@ -118,46 +266,24 @@ class lru_cache {
 };
 
 // A global cache of files.
-std::ifstream& ifstream_cache(const std::string &path) {
-    static lru_cache<std::string, std::ifstream> cache(FSTREAM_CACHE_SIZE);
+file_reader& reader_cache(const std::string &path) {
+    static lru_cache<std::string, file_reader> cache(FSTREAM_CACHE_SIZE);
     static std::mutex mx;
 
     std::lock_guard<std::mutex> lock(mx);
-    return cache[path];
+    file_reader &f = cache[path];
+    if (!f.is_open()) f.open(path);
+    return f;
 }
 
-std::ofstream& ofstream_cache(const std::string &path) {
-    static lru_cache<std::string, std::ofstream> cache(FSTREAM_CACHE_SIZE);
+file_writer& writer_cache(const std::string &path) {
+    static lru_cache<std::string, file_writer> cache(FSTREAM_CACHE_SIZE);
     static std::mutex mx;
 
     std::lock_guard<std::mutex> lock(mx);
-    return cache[path];
-}
-
-//-----------------------------------------------------------------------------
-std::ofstream &ofstream_open(const std::string &path) {
-    std::ofstream &file = ofstream_cache(path);
-    if (!file.is_open()) {
-        // Don't buffer writes to avoid latency. Also saves a bit of memory.
-        file.rdbuf()->pubsetbuf(NULL, 0);
-        file.open(path);
-    } else {
-        // Clear the error bits in case something happened.
-        file.clear();
-    }
-    return file;
-}
-
-std::ifstream &ifstream_open(const std::string &path) {
-    std::ifstream &file = ifstream_cache(path);
-    if (!file.is_open()) {
-        file.open(path);
-    } else {
-        // Clear the flags bits in case something happened (like reaching EOF).
-        file.clear();
-        file.seekg(0, std::ios::beg);
-    }
-    return file;
+    file_writer &f = cache[path];
+    if (!f.is_open()) f.open(path);
+    return f;
 }
 
 } // namespace
@@ -243,25 +369,7 @@ int device::get_attr_int(const std::string &name) const {
     if (_path.empty())
         throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-    for(int attempt = 0; attempt < 2; ++attempt) {
-        ifstream &is = ifstream_open(_path + name);
-        if (is.is_open()) {
-            int result = 0;
-            try {
-                is >> result;
-                return result;
-            } catch(...) {
-                // This could mean the sysfs attribute was recreated and the
-                // corresponding file handle got stale. Lets close the file and try
-                // again (once):
-                if (attempt != 0) throw;
-
-                is.close();
-                is.clear();
-            }
-        } else break;
-    }
-    throw system_error(make_error_code(errc::no_such_device), _path+name);
+    return reader_cache(_path + name).get_int();
 }
 
 //-----------------------------------------------------------------------------
@@ -271,23 +379,7 @@ void device::set_attr_int(const std::string &name, int value) {
     if (_path.empty())
         throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-    for(int attempt = 0; attempt < 2; ++attempt) {
-        ofstream &os = ofstream_open(_path + name);
-        if (os.is_open()) {
-            if (os << value) return;
-
-            // An error could mean that sysfs attribute was recreated and the cached
-            // file handle is stale. Lets close the file and try again (once):
-            if (attempt == 0 && errno == ENODEV) {
-                os.close();
-                os.clear();
-            } else {
-                throw system_error(std::error_code(errno, std::system_category()));
-            }
-        } else {
-            throw system_error(make_error_code(errc::no_such_device), _path + name);
-        }
-    }
+    writer_cache(_path + name).put_int(value);
 }
 
 //-----------------------------------------------------------------------------
@@ -297,14 +389,7 @@ std::string device::get_attr_string(const std::string &name) const {
     if (_path.empty())
         throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-    ifstream &is = ifstream_open(_path + name);
-    if (is.is_open()) {
-        string result;
-        is >> result;
-        return result;
-    }
-
-    throw system_error(make_error_code(errc::no_such_device), _path+name);
+    return reader_cache(_path + name).get_string();
 }
 
 //-----------------------------------------------------------------------------
@@ -314,13 +399,7 @@ void device::set_attr_string(const std::string &name, const std::string &value) 
     if (_path.empty())
         throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-    ofstream &os = ofstream_open(_path + name);
-    if (os.is_open()) {
-        if (!(os << value)) throw system_error(std::error_code(errno, std::system_category()));
-        return;
-    }
-
-    throw system_error(make_error_code(errc::no_such_device), _path+name);
+    writer_cache(_path + name).put_string(value);
 }
 
 //-----------------------------------------------------------------------------
@@ -330,14 +409,7 @@ std::string device::get_attr_line(const std::string &name) const {
     if (_path.empty())
         throw system_error(make_error_code(errc::function_not_supported), "no device connected");
 
-    ifstream &is = ifstream_open(_path + name);
-    if (is.is_open()) {
-        string result;
-        getline(is, result);
-        return result;
-    }
-
-    throw system_error(make_error_code(errc::no_such_device), _path+name);
+    return reader_cache(_path + name).get_line();
 }
 
 //-----------------------------------------------------------------------------
@@ -513,14 +585,8 @@ const std::vector<char>& sensor::bin_data() const {
         _bin_data.resize(num_values() * value_size);
     }
 
-    const string fname = _path + "bin_data";
-    ifstream &is = ifstream_open(fname);
-    if (is.is_open()) {
-        is.read(_bin_data.data(), _bin_data.size());
-        return _bin_data;
-    }
-
-    throw system_error(make_error_code(errc::no_such_device), fname);
+    reader_cache(_path + "bin_data").get_data(_bin_data.data(), _bin_data.size());
+    return _bin_data;
 }
 
 //-----------------------------------------------------------------------------
