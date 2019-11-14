@@ -207,7 +207,7 @@ class sensor : protected device {
 
         // Command: write-only
         // Sends a command to the sensor.
-        auto set_command(std::string v) -> decltype(*this) {
+        sensor& set_command(std::string v) {
             set_attr_string("command", v);
             return *this;
         }
@@ -231,7 +231,7 @@ class sensor : protected device {
         // Returns the current mode. Writing one of the values returned by `modes`
         // sets the sensor to that mode.
         std::string mode() const { return get_attr_string("mode"); }
-        auto set_mode(std::string v) -> decltype(*this) {
+        sensor& set_mode(std::string v) {
             set_attr_string("mode", v);
             return *this;
         }
@@ -279,7 +279,7 @@ class i2c_sensor : public sensor {
         // coded as 50 msec. Returns -EOPNOTSUPP if changing polling is not supported.
         // Currently only I2C/NXT sensors support changing the polling period.
         int poll_ms() const { return get_attr_int("poll_ms"); }
-        auto set_poll_ms(int v) -> decltype(*this) {
+        i2c_sensor& set_poll_ms(int v) {
             set_attr_int("poll_ms", v);
             return *this;
         }
@@ -684,7 +684,7 @@ class motor : protected device {
         // Command: write-only
         // Sends a command to the motor controller. See `commands` for a list of
         // possible values.
-        auto set_command(std::string v) -> decltype(*this) {
+        motor& set_command(std::string v) {
             set_attr_string("command", v);
             return *this;
         }
@@ -737,7 +737,7 @@ class motor : protected device {
         // Units are in percent. Valid values are -100 to 100. A negative value causes
         // the motor to rotate in reverse.
         int duty_cycle_sp() const { return get_attr_int("duty_cycle_sp"); }
-        auto set_duty_cycle_sp(int v) -> decltype(*this) {
+        motor& set_duty_cycle_sp(int v) {
             set_attr_int("duty_cycle_sp", v);
             return *this;
         }
@@ -754,7 +754,7 @@ class motor : protected device {
         // a positive duty cycle will cause the motor to rotate counter-clockwise.
         // Valid values are `normal` and `inversed`.
         std::string polarity() const { return get_attr_string("polarity"); }
-        auto set_polarity(std::string v) -> decltype(*this) {
+        motor& set_polarity(std::string v) {
             set_attr_string("polarity", v);
             return *this;
         }
@@ -765,7 +765,7 @@ class motor : protected device {
         // Likewise, rotating counter-clockwise causes the position to decrease.
         // Writing will set the position to that value.
         int position() const { return get_attr_int("position"); }
-        auto set_position(int v) -> decltype(*this) {
+        motor& set_position(int v) {
             set_attr_int("position", v);
             return *this;
         }
@@ -773,7 +773,7 @@ class motor : protected device {
         // Position P: read/write
         // The proportional constant for the position PID.
         int position_p() const { return get_attr_int("hold_pid/Kp"); }
-        auto set_position_p(int v) -> decltype(*this) {
+        motor& set_position_p(int v) {
             set_attr_int("hold_pid/Kp", v);
             return *this;
         }
@@ -781,7 +781,7 @@ class motor : protected device {
         // Position I: read/write
         // The integral constant for the position PID.
         int position_i() const { return get_attr_int("hold_pid/Ki"); }
-        auto set_position_i(int v) -> decltype(*this) {
+        motor& set_position_i(int v) {
             set_attr_int("hold_pid/Ki", v);
             return *this;
         }
@@ -789,7 +789,7 @@ class motor : protected device {
         // Position D: read/write
         // The derivative constant for the position PID.
         int position_d() const { return get_attr_int("hold_pid/Kd"); }
-        auto set_position_d(int v) -> decltype(*this) {
+        motor& set_position_d(int v) {
             set_attr_int("hold_pid/Kd", v);
             return *this;
         }
@@ -800,7 +800,7 @@ class motor : protected device {
         // can use the value returned by `counts_per_rot` to convert tacho counts to/from
         // rotations or degrees.
         int position_sp() const { return get_attr_int("position_sp"); }
-        auto set_position_sp(int v) -> decltype(*this) {
+        motor& set_position_sp(int v) {
             set_attr_int("position_sp", v);
             return *this;
         }
@@ -825,7 +825,7 @@ class motor : protected device {
         // RPM or deg/sec to tacho counts per second. Use the `count_per_m` attribute to
         // convert m/s to tacho counts per second.
         int speed_sp() const { return get_attr_int("speed_sp"); }
-        auto set_speed_sp(int v) -> decltype(*this) {
+        motor& set_speed_sp(int v) {
             set_attr_int("speed_sp", v);
             return *this;
         }
@@ -837,7 +837,7 @@ class motor : protected device {
         // setpoint. The actual ramp time is the ratio of the difference between the
         // `speed_sp` and the current `speed` and max_speed multiplied by `ramp_up_sp`.
         int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
-        auto set_ramp_up_sp(int v) -> decltype(*this) {
+        motor& set_ramp_up_sp(int v) {
             set_attr_int("ramp_up_sp", v);
             return *this;
         }
@@ -849,7 +849,7 @@ class motor : protected device {
         // setpoint. The actual ramp time is the ratio of the difference between the
         // `speed_sp` and the current `speed` and max_speed multiplied by `ramp_down_sp`.
         int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
-        auto set_ramp_down_sp(int v) -> decltype(*this) {
+        motor& set_ramp_down_sp(int v) {
             set_attr_int("ramp_down_sp", v);
             return *this;
         }
@@ -857,7 +857,7 @@ class motor : protected device {
         // Speed P: read/write
         // The proportional constant for the speed regulation PID.
         int speed_p() const { return get_attr_int("speed_pid/Kp"); }
-        auto set_speed_p(int v) -> decltype(*this) {
+        motor& set_speed_p(int v) {
             set_attr_int("speed_pid/Kp", v);
             return *this;
         }
@@ -865,7 +865,7 @@ class motor : protected device {
         // Speed I: read/write
         // The integral constant for the speed regulation PID.
         int speed_i() const { return get_attr_int("speed_pid/Ki"); }
-        auto set_speed_i(int v) -> decltype(*this) {
+        motor& set_speed_i(int v) {
             set_attr_int("speed_pid/Ki", v);
             return *this;
         }
@@ -873,7 +873,7 @@ class motor : protected device {
         // Speed D: read/write
         // The derivative constant for the speed regulation PID.
         int speed_d() const { return get_attr_int("speed_pid/Kd"); }
-        auto set_speed_d(int v) -> decltype(*this) {
+        motor& set_speed_d(int v) {
             set_attr_int("speed_pid/Kd", v);
             return *this;
         }
@@ -889,7 +889,7 @@ class motor : protected device {
         // Also, it determines the motors behavior when a run command completes. See
         // `stop_actions` for a list of possible values.
         std::string stop_action() const { return get_attr_string("stop_action"); }
-        auto set_stop_action(std::string v) -> decltype(*this) {
+        motor& set_stop_action(std::string v) {
             set_attr_string("stop_action", v);
             return *this;
         }
@@ -912,7 +912,7 @@ class motor : protected device {
         // `run-timed` command. Reading returns the current value. Units are in
         // milliseconds.
         int time_sp() const { return get_attr_int("time_sp"); }
-        auto set_time_sp(int v) -> decltype(*this) {
+        motor& set_time_sp(int v) {
             set_attr_int("time_sp", v);
             return *this;
         }
@@ -1030,7 +1030,7 @@ class dc_motor : protected device {
         // Sets the command for the motor. Possible values are `run-forever`, `run-timed` and
         // `stop`. Not all commands may be supported, so be sure to check the contents
         // of the `commands` attribute.
-        auto set_command(std::string v) -> decltype(*this) {
+        dc_motor& set_command(std::string v) {
             set_attr_string("command", v);
             return *this;
         }
@@ -1055,7 +1055,7 @@ class dc_motor : protected device {
         // Valid values are -100 to 100 (-100% to 100%). Reading returns the current
         // setpoint.
         int duty_cycle_sp() const { return get_attr_int("duty_cycle_sp"); }
-        auto set_duty_cycle_sp(int v) -> decltype(*this) {
+        dc_motor& set_duty_cycle_sp(int v) {
             set_attr_int("duty_cycle_sp", v);
             return *this;
         }
@@ -1063,7 +1063,7 @@ class dc_motor : protected device {
         // Polarity: read/write
         // Sets the polarity of the motor. Valid values are `normal` and `inversed`.
         std::string polarity() const { return get_attr_string("polarity"); }
-        auto set_polarity(std::string v) -> decltype(*this) {
+        dc_motor& set_polarity(std::string v) {
             set_attr_string("polarity", v);
             return *this;
         }
@@ -1072,7 +1072,7 @@ class dc_motor : protected device {
         // Sets the time in milliseconds that it take the motor to ramp down from 100%
         // to 0%. Valid values are 0 to 10000 (10 seconds). Default is 0.
         int ramp_down_sp() const { return get_attr_int("ramp_down_sp"); }
-        auto set_ramp_down_sp(int v) -> decltype(*this) {
+        dc_motor& set_ramp_down_sp(int v) {
             set_attr_int("ramp_down_sp", v);
             return *this;
         }
@@ -1081,7 +1081,7 @@ class dc_motor : protected device {
         // Sets the time in milliseconds that it take the motor to up ramp from 0% to
         // 100%. Valid values are 0 to 10000 (10 seconds). Default is 0.
         int ramp_up_sp() const { return get_attr_int("ramp_up_sp"); }
-        auto set_ramp_up_sp(int v) -> decltype(*this) {
+        dc_motor& set_ramp_up_sp(int v) {
             set_attr_int("ramp_up_sp", v);
             return *this;
         }
@@ -1096,7 +1096,7 @@ class dc_motor : protected device {
         // Stop Action: write-only
         // Sets the stop action that will be used when the motor stops. Read
         // `stop_actions` to get the list of valid values.
-        auto set_stop_action(std::string v) -> decltype(*this) {
+        dc_motor& set_stop_action(std::string v) {
             set_attr_string("stop_action", v);
             return *this;
         }
@@ -1111,7 +1111,7 @@ class dc_motor : protected device {
         // `run-timed` command. Reading returns the current value. Units are in
         // milliseconds.
         int time_sp() const { return get_attr_int("time_sp"); }
-        auto set_time_sp(int v) -> decltype(*this) {
+        dc_motor& set_time_sp(int v) {
             set_attr_int("time_sp", v);
             return *this;
         }
@@ -1171,7 +1171,7 @@ class servo_motor : protected device {
         // Sets the command for the servo. Valid values are `run` and `float`. Setting
         // to `run` will cause the servo to be driven to the position_sp set in the
         // `position_sp` attribute. Setting to `float` will remove power from the motor.
-        auto set_command(std::string v) -> decltype(*this) {
+        servo_motor& set_command(std::string v) {
             set_attr_string("command", v);
             return *this;
         }
@@ -1187,7 +1187,7 @@ class servo_motor : protected device {
         // Valid values are 2300 to 2700. You must write to the position_sp attribute for
         // changes to this attribute to take effect.
         int max_pulse_sp() const { return get_attr_int("max_pulse_sp"); }
-        auto set_max_pulse_sp(int v) -> decltype(*this) {
+        servo_motor& set_max_pulse_sp(int v) {
             set_attr_int("max_pulse_sp", v);
             return *this;
         }
@@ -1200,7 +1200,7 @@ class servo_motor : protected device {
         // where the motor does not turn. You must write to the position_sp attribute for
         // changes to this attribute to take effect.
         int mid_pulse_sp() const { return get_attr_int("mid_pulse_sp"); }
-        auto set_mid_pulse_sp(int v) -> decltype(*this) {
+        servo_motor& set_mid_pulse_sp(int v) {
             set_attr_int("mid_pulse_sp", v);
             return *this;
         }
@@ -1211,7 +1211,7 @@ class servo_motor : protected device {
         // is 600. Valid values are 300 to 700. You must write to the position_sp
         // attribute for changes to this attribute to take effect.
         int min_pulse_sp() const { return get_attr_int("min_pulse_sp"); }
-        auto set_min_pulse_sp(int v) -> decltype(*this) {
+        servo_motor& set_min_pulse_sp(int v) {
             set_attr_int("min_pulse_sp", v);
             return *this;
         }
@@ -1222,7 +1222,7 @@ class servo_motor : protected device {
         // inversed. i.e `-100` will correspond to `max_pulse_sp`, and `100` will
         // correspond to `min_pulse_sp`.
         std::string polarity() const { return get_attr_string("polarity"); }
-        auto set_polarity(std::string v) -> decltype(*this) {
+        servo_motor& set_polarity(std::string v) {
             set_attr_string("polarity", v);
             return *this;
         }
@@ -1233,7 +1233,7 @@ class servo_motor : protected device {
         // are -100 to 100 (-100% to 100%) where `-100` corresponds to `min_pulse_sp`,
         // `0` corresponds to `mid_pulse_sp` and `100` corresponds to `max_pulse_sp`.
         int position_sp() const { return get_attr_int("position_sp"); }
-        auto set_position_sp(int v) -> decltype(*this) {
+        servo_motor& set_position_sp(int v) {
             set_attr_int("position_sp", v);
             return *this;
         }
@@ -1246,7 +1246,7 @@ class servo_motor : protected device {
         // case reading and writing will fail with `-EOPNOTSUPP`. In continuous rotation
         // servos, this value will affect the rate_sp at which the speed ramps up or down.
         int rate_sp() const { return get_attr_int("rate_sp"); }
-        auto set_rate_sp(int v) -> decltype(*this) {
+        servo_motor& set_rate_sp(int v) {
             set_attr_int("rate_sp", v);
             return *this;
         }
@@ -1283,7 +1283,7 @@ class led : protected device {
         // Brightness: read/write
         // Sets the brightness level. Possible values are from 0 to `max_brightness`.
         int brightness() const { return get_attr_int("brightness"); }
-        auto set_brightness(int v) -> decltype(*this) {
+        led set_brightness(int v) {
             set_attr_int("brightness", v);
             return *this;
         }
@@ -1308,7 +1308,7 @@ class led : protected device {
         // trigger. However, if you set the brightness value to 0 it will
         // also disable the `timer` trigger.
         std::string trigger() const { return get_attr_from_set("trigger"); }
-        auto set_trigger(std::string v) -> decltype(*this) {
+        led set_trigger(std::string v) {
             set_attr_string("trigger", v);
             return *this;
         }
@@ -1318,7 +1318,7 @@ class led : protected device {
         // 0 and the current brightness setting. The `on` time can
         // be specified via `delay_on` attribute in milliseconds.
         int delay_on() const { return get_attr_int("delay_on"); }
-        auto set_delay_on(int v) -> decltype(*this) {
+        led set_delay_on(int v) {
             set_attr_int("delay_on", v);
             return *this;
         }
@@ -1328,7 +1328,7 @@ class led : protected device {
         // 0 and the current brightness setting. The `off` time can
         // be specified via `delay_off` attribute in milliseconds.
         int delay_off() const { return get_attr_int("delay_off"); }
-        auto set_delay_off(int v) -> decltype(*this) {
+        led set_delay_off(int v) {
             set_attr_int("delay_off", v);
             return *this;
         }
@@ -1340,7 +1340,7 @@ class led : protected device {
         }
 
         // Sets the LED's brightness as a percentage (0-1) of the maximum.
-        auto set_brightness_pct(float v) -> decltype(*this) {
+        led set_brightness_pct(float v) {
             return set_brightness(v * max_brightness());
         }
 
@@ -1640,7 +1640,7 @@ class lego_port : protected device {
         // associated with the port will be removed new ones loaded, however this
         // this will depend on the individual driver implementing this class.
         std::string mode() const { return get_attr_string("mode"); }
-        auto set_mode(std::string v) -> decltype(*this) {
+        lego_port set_mode(std::string v) {
             set_attr_string("mode", v);
             return *this;
         }
@@ -1651,7 +1651,7 @@ class lego_port : protected device {
         // example, since NXT/Analog sensors cannot be auto-detected, you must use
         // this attribute to load the correct driver. Returns -EOPNOTSUPP if setting a
         // device is not supported.
-        auto set_set_device(std::string v) -> decltype(*this) {
+        lego_port set_set_device(std::string v) {
             set_attr_string("set_device", v);
             return *this;
         }
