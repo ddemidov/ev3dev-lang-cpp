@@ -197,8 +197,6 @@ void motor_action(motor &dev)
     {
     case 'i':
       cout << endl;
-//~autogen generic_report_status classes.motor>currentClass
-
     cout << "    Address: ";
     try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -277,9 +275,6 @@ void motor_action(motor &dev)
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-
-
-//~autogen
       cout << endl;
       break;
     case 'c':

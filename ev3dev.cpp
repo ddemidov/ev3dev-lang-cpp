@@ -23,14 +23,6 @@
  *
  */
 
-//-----------------------------------------------------------------------------
-//~autogen autogen-header
-
-// Sections of the following code were auto-generated based on spec v1.2.0.
-
-//~autogen
-//-----------------------------------------------------------------------------
-
 #include "ev3dev.h"
 
 #include <iostream>
@@ -71,10 +63,7 @@
 #endif
 static const int bits_per_long = sizeof(long) * 8;
 
-//-----------------------------------------------------------------------------
-
 namespace ev3dev {
-
 namespace {
 
 // This class implements a small LRU cache. It assumes the number of elements
@@ -155,7 +144,6 @@ std::ofstream& ofstream_cache(const std::string &path) {
 }
 
 //-----------------------------------------------------------------------------
-
 std::ofstream &ofstream_open(const std::string &path)
 {
   std::ofstream &file = ofstream_cache(path);
@@ -192,7 +180,6 @@ std::ifstream &ifstream_open(const std::string &path)
 } // namespace
 
 //-----------------------------------------------------------------------------
-
 bool device::connect(
     const std::string &dir,
     const std::string &pattern,
@@ -249,7 +236,6 @@ bool device::connect(
 }
 
 //-----------------------------------------------------------------------------
-
 int device::device_index() const
 {
   using namespace std;
@@ -277,7 +263,6 @@ int device::device_index() const
 }
 
 //-----------------------------------------------------------------------------
-
 int device::get_attr_int(const std::string &name) const {
   using namespace std;
 
@@ -307,7 +292,6 @@ int device::get_attr_int(const std::string &name) const {
 }
 
 //-----------------------------------------------------------------------------
-
 void device::set_attr_int(const std::string &name, int value) {
   using namespace std;
 
@@ -335,7 +319,6 @@ void device::set_attr_int(const std::string &name, int value) {
 }
 
 //-----------------------------------------------------------------------------
-
 std::string device::get_attr_string(const std::string &name) const
 {
   using namespace std;
@@ -355,7 +338,6 @@ std::string device::get_attr_string(const std::string &name) const
 }
 
 //-----------------------------------------------------------------------------
-
 void device::set_attr_string(const std::string &name, const std::string &value)
 {
   using namespace std;
@@ -374,7 +356,6 @@ void device::set_attr_string(const std::string &name, const std::string &value)
 }
 
 //-----------------------------------------------------------------------------
-
 std::string device::get_attr_line(const std::string &name) const
 {
   using namespace std;
@@ -394,7 +375,6 @@ std::string device::get_attr_line(const std::string &name) const
 }
 
 //-----------------------------------------------------------------------------
-
 mode_set device::get_attr_set(const std::string &name,
                               std::string *pCur) const
 {
@@ -432,7 +412,6 @@ mode_set device::get_attr_set(const std::string &name,
 }
 
 //-----------------------------------------------------------------------------
-
 std::string device::get_attr_from_set(const std::string &name) const
 {
   using namespace std;
@@ -465,7 +444,6 @@ std::string device::get_attr_from_set(const std::string &name) const
 }
 
 //-----------------------------------------------------------------------------
-
 constexpr char sensor::ev3_touch[];
 constexpr char sensor::ev3_color[];
 constexpr char sensor::ev3_ultrasonic[];
@@ -479,14 +457,12 @@ constexpr char sensor::nxt_i2c_sensor[];
 constexpr char sensor::nxt_analog[];
 
 //-----------------------------------------------------------------------------
-
 sensor::sensor(address_type address)
 {
   connect({{ "address", { address }}});
 }
 
 //-----------------------------------------------------------------------------
-
 sensor::sensor(address_type address, const std::set<sensor_type> &types)
 {
   connect({{ "address", { address }},
@@ -494,7 +470,6 @@ sensor::sensor(address_type address, const std::set<sensor_type> &types)
 }
 
 //-----------------------------------------------------------------------------
-
 bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
   static const std::string _strClassDir { SYS_ROOT "/lego-sensor/" };
@@ -515,7 +490,6 @@ bool sensor::connect(const std::map<std::string, std::set<std::string>> &match) 
 }
 
 //-----------------------------------------------------------------------------
-
 std::string sensor::type_name() const
 {
   auto type = driver_name();
@@ -546,7 +520,6 @@ std::string sensor::type_name() const
 }
 
 //-----------------------------------------------------------------------------
-
 int sensor::value(unsigned index) const
 {
   if (static_cast<int>(index) >= num_values())
@@ -559,7 +532,6 @@ int sensor::value(unsigned index) const
 }
 
 //-----------------------------------------------------------------------------
-
 float sensor::float_value(unsigned index) const
 {
   return value(index) * powf(10, -decimals());
@@ -605,19 +577,13 @@ const std::vector<char>& sensor::bin_data() const
 }
 
 //-----------------------------------------------------------------------------
-
 i2c_sensor::i2c_sensor(address_type address, const std::set<sensor_type> &types) :
   sensor(address, types)
 {
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.touchSensor>currentClass
-
 constexpr char touch_sensor::mode_touch[];
-
-//~autogen
 
 touch_sensor::touch_sensor(address_type address) :
   sensor(address, { ev3_touch, nxt_touch })
@@ -625,9 +591,6 @@ touch_sensor::touch_sensor(address_type address) :
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.colorSensor>currentClass
-
 constexpr char color_sensor::mode_col_reflect[];
 constexpr char color_sensor::mode_col_ambient[];
 constexpr char color_sensor::mode_col_color[];
@@ -642,24 +605,17 @@ constexpr char color_sensor::color_red[];
 constexpr char color_sensor::color_white[];
 constexpr char color_sensor::color_brown[];
 
-//~autogen
-
 color_sensor::color_sensor(address_type address) :
   sensor(address, { ev3_color })
 {
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.ultrasonicSensor>currentClass
-
 constexpr char ultrasonic_sensor::mode_us_dist_cm[];
 constexpr char ultrasonic_sensor::mode_us_dist_in[];
 constexpr char ultrasonic_sensor::mode_us_listen[];
 constexpr char ultrasonic_sensor::mode_us_si_cm[];
 constexpr char ultrasonic_sensor::mode_us_si_in[];
-
-//~autogen
 
 ultrasonic_sensor::ultrasonic_sensor(address_type address) :
   sensor(address, { ev3_ultrasonic, nxt_ultrasonic })
@@ -672,16 +628,11 @@ ultrasonic_sensor::ultrasonic_sensor(address_type address, const std::set<sensor
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.gyroSensor>currentClass
-
 constexpr char gyro_sensor::mode_gyro_ang[];
 constexpr char gyro_sensor::mode_gyro_rate[];
 constexpr char gyro_sensor::mode_gyro_fas[];
 constexpr char gyro_sensor::mode_gyro_g_a[];
 constexpr char gyro_sensor::mode_gyro_cal[];
-
-//~autogen
 
 gyro_sensor::gyro_sensor(address_type address) :
   sensor(address, { ev3_gyro })
@@ -689,16 +640,11 @@ gyro_sensor::gyro_sensor(address_type address) :
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.infraredSensor>currentClass
-
 constexpr char infrared_sensor::mode_ir_prox[];
 constexpr char infrared_sensor::mode_ir_seek[];
 constexpr char infrared_sensor::mode_ir_remote[];
 constexpr char infrared_sensor::mode_ir_rem_a[];
 constexpr char infrared_sensor::mode_ir_cal[];
-
-//~autogen
 
 infrared_sensor::infrared_sensor(address_type address) :
   sensor(address, { ev3_infrared })
@@ -706,13 +652,8 @@ infrared_sensor::infrared_sensor(address_type address) :
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.soundSensor>currentClass
-
 constexpr char sound_sensor::mode_db[];
 constexpr char sound_sensor::mode_dba[];
-
-//~autogen
 
 sound_sensor::sound_sensor(address_type address) :
   sensor(address, { nxt_sound, nxt_analog })
@@ -734,13 +675,8 @@ sound_sensor::sound_sensor(address_type address) :
 }
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-define-property-value specialSensorTypes.lightSensor>currentClass
-
 constexpr char light_sensor::mode_reflect[];
 constexpr char light_sensor::mode_ambient[];
-
-//~autogen
 
 light_sensor::light_sensor(address_type address) :
   sensor(address, { nxt_light })
@@ -748,13 +684,9 @@ light_sensor::light_sensor(address_type address) :
 }
 
 //-----------------------------------------------------------------------------
-
 constexpr char motor::motor_large[];
 constexpr char motor::motor_medium[];
 constexpr char motor::motor_nxt[];
-
-//~autogen generic-define-property-value classes.motor>currentClass
-
 constexpr char motor::command_run_forever[];
 constexpr char motor::command_run_to_abs_pos[];
 constexpr char motor::command_run_to_rel_pos[];
@@ -775,24 +707,19 @@ constexpr char motor::stop_action_coast[];
 constexpr char motor::stop_action_brake[];
 constexpr char motor::stop_action_hold[];
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
 motor::motor(address_type address)
 {
   connect({{ "address", { address } }});
 }
 
 //-----------------------------------------------------------------------------
-
 motor::motor(address_type address, const motor_type &t)
 {
   connect({{ "address", { address } }, { "driver_name", { t }}});
 }
 
 //-----------------------------------------------------------------------------
-
 bool motor::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
   static const std::string _strClassDir { SYS_ROOT "/tacho-motor/" };
@@ -810,13 +737,11 @@ bool motor::connect(const std::map<std::string, std::set<std::string>> &match) n
 }
 
 //-----------------------------------------------------------------------------
-
 medium_motor::medium_motor(address_type address) : motor(address, motor_medium)
 {
 }
 
 //-----------------------------------------------------------------------------
-
 large_motor::large_motor(address_type address) : motor(address, motor_large)
 {
 }
@@ -827,7 +752,6 @@ nxt_motor::nxt_motor(address_type address) : motor(address, motor_nxt)
 }
 
 //-----------------------------------------------------------------------------
-
 dc_motor::dc_motor(address_type address)
 {
   static const std::string _strClassDir { SYS_ROOT "/dc-motor/" };
@@ -835,8 +759,6 @@ dc_motor::dc_motor(address_type address)
 
   connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
-
-//~autogen generic-define-property-value classes.dcMotor>currentClass
 
 constexpr char dc_motor::command_run_forever[];
 constexpr char dc_motor::command_run_timed[];
@@ -847,10 +769,7 @@ constexpr char dc_motor::polarity_inversed[];
 constexpr char dc_motor::stop_action_coast[];
 constexpr char dc_motor::stop_action_brake[];
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
 servo_motor::servo_motor(address_type address)
 {
   static const std::string _strClassDir { SYS_ROOT "/servo-motor/" };
@@ -859,17 +778,12 @@ servo_motor::servo_motor(address_type address)
   connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
 
-//~autogen generic-define-property-value classes.servoMotor>currentClass
-
 constexpr char servo_motor::command_run[];
 constexpr char servo_motor::command_float[];
 constexpr char servo_motor::polarity_normal[];
 constexpr char servo_motor::polarity_inversed[];
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
 led::led(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/leds/" };
@@ -877,7 +791,6 @@ led::led(std::string name)
 }
 
 //-----------------------------------------------------------------------------
-
 void led::flash(unsigned on_ms, unsigned off_ms)
 {
   static const mode_type timer("timer");
@@ -901,9 +814,7 @@ void led::flash(unsigned on_ms, unsigned off_ms)
 }
 
 //-----------------------------------------------------------------------------
-
 #if defined(EV3DEV_PLATFORM_BRICKPI)
-//~autogen leds-define platforms.brickpi.led>currentClass
 
 led led::blue_led1{"brickpi:led1:blue:ev3dev"};
 led led::blue_led2{"brickpi:led2:blue:ev3dev"};
@@ -922,7 +833,6 @@ void led::all_off() {
 
 }
 
-//~autogen
 #elif defined(EV3DEV_PLATFORM_BRICKPI3)
 led led::amber_led1{"brickpi3:amber:ev3dev"};
 
@@ -938,7 +848,6 @@ void led::all_off() {
 
 }
 #elif defined(EV3DEV_PLATFORM_PISTORMS)
-//~autogen leds-define platforms.pistorms.led>currentClass
 
 led led::red_left{"pistorms:BB:red:ev3dev"};
 led led::red_right{"pistorms:BA:red:ev3dev"};
@@ -972,9 +881,7 @@ void led::all_off() {
 
 }
 
-//~autogen
 #else
-//~autogen leds-define platforms.ev3.led>currentClass
 
 led led::red_left{"led0:red:brick-status"};
 led led::red_right{"led1:red:brick-status"};
@@ -1001,11 +908,9 @@ void led::all_off() {
 
 }
 
-//~autogen
 #endif
 
 //-----------------------------------------------------------------------------
-
 void led::set_color(const std::vector<led*> &group, const std::vector<float> &color) {
   const size_t n = std::min(group.size(), color.size());
   for(size_t i = 0; i < n; ++i)
@@ -1013,11 +918,9 @@ void led::set_color(const std::vector<led*> &group, const std::vector<float> &co
 }
 
 //-----------------------------------------------------------------------------
-
 power_supply power_supply::battery { "" };
 
 //-----------------------------------------------------------------------------
-
 power_supply::power_supply(std::string name)
 {
   static const std::string _strClassDir { SYS_ROOT "/power_supply/" };
@@ -1029,7 +932,6 @@ power_supply::power_supply(std::string name)
 }
 
 //-----------------------------------------------------------------------------
-
 button::file_descriptor::file_descriptor(const char *path, int flags)
   : _fd(open(path, flags))
 {}
@@ -1040,7 +942,6 @@ button::file_descriptor::~file_descriptor()
 }
 
 //-----------------------------------------------------------------------------
-
 button::button(int bit)
   : _bit(bit),
     _buf((KEY_CNT + bits_per_long - 1) / bits_per_long),
@@ -1048,7 +949,6 @@ button::button(int bit)
 { }
 
 //-----------------------------------------------------------------------------
-
 bool button::pressed() const
 {
 #ifndef NO_LINUX_HEADERS
@@ -1061,7 +961,6 @@ bool button::pressed() const
 }
 
 //-----------------------------------------------------------------------------
-
 bool button::process()
 {
   bool new_state = pressed();
@@ -1076,7 +975,6 @@ bool button::process()
 }
 
 //-----------------------------------------------------------------------------
-
 #ifndef NO_LINUX_HEADERS
 button button::back (KEY_BACKSPACE);
 button button::left (KEY_LEFT);
@@ -1087,7 +985,6 @@ button button::enter(KEY_ENTER);
 #endif
 
 //-----------------------------------------------------------------------------
-
 bool button::process_all() {
   std::array<bool, 6> changed{{
     back. process(),
@@ -1101,7 +998,6 @@ bool button::process_all() {
 }
 
 //-----------------------------------------------------------------------------
-
 void sound::beep(const std::string &args, bool bSynchronous)
 {
   std::ostringstream cmd;
@@ -1111,7 +1007,6 @@ void sound::beep(const std::string &args, bool bSynchronous)
 }
 
 //-----------------------------------------------------------------------------
-
 void sound::tone(
     const std::vector< std::vector<float> > &sequence,
     bool bSynchronous
@@ -1150,13 +1045,11 @@ void sound::tone(
 }
 
 //-----------------------------------------------------------------------------
-
 void sound::tone(float frequency, float ms, bool bSynchronous) {
   tone({{frequency, ms, 0.0f}}, bSynchronous);
 }
 
 //-----------------------------------------------------------------------------
-
 void sound::play(const std::string &soundfile, bool bSynchronous)
 {
   std::ostringstream cmd;
@@ -1168,7 +1061,6 @@ void sound::play(const std::string &soundfile, bool bSynchronous)
 }
 
 //-----------------------------------------------------------------------------
-
 void sound::speak(const std::string &text, bool bSynchronous)
 {
   std::ostringstream cmd;
@@ -1182,7 +1074,6 @@ void sound::speak(const std::string &text, bool bSynchronous)
 }
 
 //-----------------------------------------------------------------------------
-
 lcd::lcd() :
   _fb(nullptr),
   _fbsize(0),
@@ -1195,14 +1086,12 @@ lcd::lcd() :
 }
 
 //-----------------------------------------------------------------------------
-
 lcd::~lcd()
 {
   deinit();
 }
 
 //-----------------------------------------------------------------------------
-
 void lcd::fill(unsigned char pixel)
 {
   if (_fb && _fbsize)
@@ -1212,7 +1101,6 @@ void lcd::fill(unsigned char pixel)
 }
 
 //-----------------------------------------------------------------------------
-
 void lcd::init()
 {
   using namespace std;
@@ -1245,7 +1133,6 @@ void lcd::init()
 }
 
 //-----------------------------------------------------------------------------
-
 void lcd::deinit()
 {
   if (_fb)
@@ -1257,7 +1144,6 @@ void lcd::deinit()
 }
 
 //-----------------------------------------------------------------------------
-
 remote_control::remote_control(unsigned channel) :
   _sensor(new infrared_sensor),
   _owns_sensor(true)
@@ -1270,7 +1156,6 @@ remote_control::remote_control(unsigned channel) :
 }
 
 //-----------------------------------------------------------------------------
-
 remote_control::remote_control(infrared_sensor &ir, unsigned channel) :
   _sensor(&ir),
   _owns_sensor(false)
@@ -1283,7 +1168,6 @@ remote_control::remote_control(infrared_sensor &ir, unsigned channel) :
 }
 
 //-----------------------------------------------------------------------------
-
 remote_control::~remote_control()
 {
   if (_owns_sensor)
@@ -1291,7 +1175,6 @@ remote_control::~remote_control()
 }
 
 //-----------------------------------------------------------------------------
-
 bool remote_control::process()
 {
   int value = _sensor->value(_channel);
@@ -1306,7 +1189,6 @@ bool remote_control::process()
 }
 
 //-----------------------------------------------------------------------------
-
 void remote_control::on_value_changed(int value)
 {
   int new_state = 0;
@@ -1376,14 +1258,12 @@ void remote_control::on_value_changed(int value)
 }
 
 //-----------------------------------------------------------------------------
-
 lego_port::lego_port(address_type address)
 {
   connect({{ "address", { address } }});
 }
 
 //-----------------------------------------------------------------------------
-
 bool lego_port::connect(const std::map<std::string, std::set<std::string>> &match) noexcept
 {
   static const std::string _strClassDir { SYS_ROOT "/lego-port/" };
@@ -1400,8 +1280,4 @@ bool lego_port::connect(const std::map<std::string, std::set<std::string>> &matc
   return false;
 }
 
-//-----------------------------------------------------------------------------
-
 } // namespace ev3dev
-
-// vim: sw=2

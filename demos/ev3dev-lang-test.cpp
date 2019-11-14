@@ -19,14 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-//-----------------------------------------------------------------------------
-//~autogen autogen-header
-
-// Sections of the following code were auto-generated based on spec v1.2.0.
-
-//~autogen
-//-----------------------------------------------------------------------------
-
 #include "ev3dev.h"
 
 #include <iostream>
@@ -53,8 +45,6 @@ void test_sensor(const char *name)
     cout << endl
          << "Found " << name << " sensor" << endl
          << "  Current properties are:" << endl;
-//~autogen generic_report_status classes.sensor>currentClass
-
     cout << "    Address: ";
     try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -79,9 +69,6 @@ void test_sensor(const char *name)
     cout << "    Units: ";
     try { cout << dev.units() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-
-
-//~autogen
     cout << endl;
   }
   else
@@ -97,8 +84,6 @@ void test_motor(const char *name)
     cout << endl
          << "Found " << name << " motor" << endl
          << "  Current properties are:" << endl;
-//~autogen generic_report_status classes.motor>currentClass
-
     cout << "    Address: ";
     try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -177,9 +162,6 @@ void test_motor(const char *name)
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-
-
-//~autogen
     cout << endl;
   }
   else
@@ -194,8 +176,6 @@ void test_dc_motor()
     cout << endl
          << "Found dc motor" << endl
          << "  Current properties are:" << endl;
-//~autogen generic_report_status classes.dcMotor>currentClass
-
     cout << "    Address: ";
     try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -229,9 +209,6 @@ void test_dc_motor()
     cout << "    Time SP: ";
     try { cout << dev.time_sp() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-
-
-//~autogen
     cout << endl;
   }
   else
@@ -246,8 +223,6 @@ void test_servo_motor()
     cout << endl
          << "Found servo motor" << endl
          << "  Current properties are:" << endl;
-//~autogen generic_report_status classes.servoMotor>currentClass
-
     cout << "    Address: ";
     try { cout << dev.address() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
@@ -275,9 +250,6 @@ void test_servo_motor()
     cout << "    State: ";
     try { cout << dev.state() << endl; }
     catch(...) { cout << "[" << strerror(errno) << "]" << endl; }
-
-
-//~autogen
     cout << endl;
   }
   else

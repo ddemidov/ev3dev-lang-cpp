@@ -26,14 +26,6 @@
 
 #pragma once
 
-//-----------------------------------------------------------------------------
-//~autogen autogen-header
-
-// Sections of the following code were auto-generated based on spec v1.2.0.
-
-//~autogen
-//-----------------------------------------------------------------------------
-
 #include <map>
 #include <set>
 #include <string>
@@ -43,19 +35,15 @@
 #include <functional>
 #include <memory>
 
-//-----------------------------------------------------------------------------
-
 namespace ev3dev {
 
 //-----------------------------------------------------------------------------
-
 typedef std::string         device_type;
 typedef std::string         mode_type;
 typedef std::set<mode_type> mode_set;
 typedef std::string         address_type;
 
 //-----------------------------------------------------------------------------
-
 const address_type INPUT_AUTO;  //!< Automatic input selection
 const address_type OUTPUT_AUTO; //!< Automatic output selection
 
@@ -102,8 +90,8 @@ constexpr char OUTPUT_D[] = "ev3-ports:outD"; //!< Motor port D
 #endif
 
 //-----------------------------------------------------------------------------
-
 // Generic device class.
+//-----------------------------------------------------------------------------
 class device
 {
 public:
@@ -134,9 +122,6 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.sensor>currentClass
-
 // The sensor class provides a uniform interface for using most of the
 // sensors available for the EV3. The various underlying device drivers will
 // create a `lego-sensor` device for interacting with the sensors.
@@ -151,8 +136,7 @@ protected:
 // have more than one sensor of each type, you can just look for a matching
 // `driver_name`. Then it will not matter which port a sensor is plugged in to - your
 // program will still work.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class sensor : protected device
 {
 public:
@@ -218,8 +202,6 @@ public:
       std::copy_n(_bin_data.data(), _bin_data.size(), reinterpret_cast<char*>(buf));
   }
 
-//~autogen generic-get-set classes.sensor>currentClass
-
   // Address: read-only
   // Returns the name of the port that the sensor is connected to, e.g. `ev3:in1`.
   // I2C sensors also include the I2C address (decimal), e.g. `ev3:in1:i2c8`.
@@ -270,9 +252,6 @@ public:
   // empty string
   std::string units() const { return get_attr_string("units"); }
 
-
-//~autogen
-
 protected:
   sensor() {}
 
@@ -282,12 +261,8 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.i2cSensor>currentClass
-
 // A generic interface to control I2C-type EV3 sensors.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class i2c_sensor : public sensor
 {
 public:
@@ -295,8 +270,6 @@ public:
       address_type address = INPUT_AUTO,
       const std::set<sensor_type> &types = {}
       );
-
-//~autogen generic-get-set classes.i2cSensor>currentClass
 
   // FW Version: read-only
   // Returns the firmware version of the sensor if available. Currently only
@@ -313,16 +286,11 @@ public:
     set_attr_int("poll_ms", v);
     return *this;
   }
-
-
-//~autogen
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.touchSensor>currentClass
-
 // Touch Sensor
+//-----------------------------------------------------------------------------
 class touch_sensor : public sensor
 {
 public:
@@ -341,13 +309,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.colorSensor>currentClass
-
 // LEGO EV3 color sensor.
+//-----------------------------------------------------------------------------
 class color_sensor : public sensor
 {
 public:
@@ -445,13 +409,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.ultrasonicSensor>currentClass
-
 // LEGO EV3 ultrasonic sensor.
+//-----------------------------------------------------------------------------
 class ultrasonic_sensor : public sensor
 {
 public:
@@ -498,13 +458,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.gyroSensor>currentClass
-
 // LEGO EV3 gyro sensor.
+//-----------------------------------------------------------------------------
 class gyro_sensor : public sensor
 {
 public:
@@ -547,13 +503,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.infraredSensor>currentClass
-
 // LEGO EV3 infrared sensor.
+//-----------------------------------------------------------------------------
 class infrared_sensor : public sensor
 {
 public:
@@ -584,13 +536,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.soundSensor>currentClass
-
 // LEGO NXT Sound Sensor
+//-----------------------------------------------------------------------------
 class sound_sensor : public sensor
 {
 public:
@@ -619,13 +567,9 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen special-sensor-declaration specialSensorTypes.lightSensor>currentClass
-
 // LEGO NXT Light Sensor
+//-----------------------------------------------------------------------------
 class light_sensor : public sensor
 {
 public:
@@ -652,12 +596,7 @@ public:
 
 };
 
-//~autogen
-
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.motor>currentClass
-
 // The motor class provides a uniform interface for using motors with
 // positional and directional feedback such as the EV3 and NXT motors.
 // This feedback allows for precise control of the motors. This is the
@@ -667,8 +606,7 @@ public:
 // calling a command or before. Only in 'run_direct' mode attribute
 // changes are processed immediately, in the other modes they only
 // take place when a new command is issued.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class motor : protected device
 {
 public:
@@ -683,8 +621,6 @@ public:
 
   using device::connected;
   using device::device_index;
-
-//~autogen generic-declare-property-value classes.motor>currentClass
 
   // Run the motor until another command is sent.
   static constexpr char command_run_forever[] = "run-forever";
@@ -758,11 +694,6 @@ public:
   // at the current position. If an external force tries to turn the motor, the motor
   // will `push back` to maintain its position.
   static constexpr char stop_action_hold[] = "hold";
-
-
-//~autogen
-
-//~autogen generic-get-set classes.motor>currentClass
 
   // Address: read-only
   // Returns the name of the port that this motor is connected to.
@@ -1004,11 +935,6 @@ public:
     return *this;
   }
 
-
-//~autogen
-
-//~autogen motor_commands classes.motor>currentClass
-
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
 
@@ -1039,9 +965,6 @@ public:
     // This will also have the effect of stopping the motor.
     void reset() { set_command("reset"); }
 
-
-//~autogen
-
 protected:
   motor() {}
 
@@ -1049,8 +972,8 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 medium motor
+//-----------------------------------------------------------------------------
 class medium_motor : public motor
 {
 public:
@@ -1058,8 +981,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 large motor
+//-----------------------------------------------------------------------------
 class large_motor : public motor
 {
 public:
@@ -1067,8 +990,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
 // NXT motor
+//-----------------------------------------------------------------------------
 class nxt_motor : public motor
 {
 public:
@@ -1076,14 +999,10 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.dcMotor>currentClass
-
 // The DC motor class provides a uniform interface for using regular DC motors
 // with no fancy controls or feedback. This includes LEGO MINDSTORMS RCX motors
 // and LEGO Power Functions motors.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class dc_motor : protected device
 {
 public:
@@ -1091,8 +1010,6 @@ public:
 
   using device::connected;
   using device::device_index;
-
-//~autogen generic-declare-property-value classes.dcMotor>currentClass
 
   // Run the motor until another command is sent.
   static constexpr char command_run_forever[] = "run-forever";
@@ -1126,11 +1043,6 @@ public:
   // together. This load will absorb the energy from the rotation of the motors and
   // cause the motor to stop more quickly than coasting.
   static constexpr char stop_action_brake[] = "brake";
-
-
-//~autogen
-
-//~autogen generic-get-set classes.dcMotor>currentClass
 
   // Address: read-only
   // Returns the name of the port that this motor is connected to.
@@ -1227,10 +1139,6 @@ public:
   }
 
 
-//~autogen
-
-//~autogen motor_commands classes.dcMotor>currentClass
-
     // Run the motor until another command is sent.
     void run_forever() { set_command("run-forever"); }
 
@@ -1248,20 +1156,14 @@ public:
     void stop() { set_command("stop"); }
 
 
-//~autogen
-
 protected:
   std::string _port_name;
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.servoMotor>currentClass
-
 // The servo motor class provides a uniform interface for using hobby type
 // servo motors.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class servo_motor : protected device
 {
 public:
@@ -1269,8 +1171,6 @@ public:
 
   using device::connected;
   using device::device_index;
-
-//~autogen generic-declare-property-value classes.servoMotor>currentClass
 
   // Drive servo to the position set in the `position_sp` attribute.
   static constexpr char command_run[] = "run";
@@ -1285,11 +1185,6 @@ public:
   // With `inversed` polarity, a positive duty cycle will
   // cause the motor to rotate counter-clockwise.
   static constexpr char polarity_inversed[] = "inversed";
-
-
-//~autogen
-
-//~autogen generic-get-set classes.servoMotor>currentClass
 
   // Address: read-only
   // Returns the name of the port that this motor is connected to.
@@ -1386,37 +1281,24 @@ public:
   mode_set state() const { return get_attr_set("state"); }
 
 
-//~autogen
-
-//~autogen motor_commands classes.servoMotor>currentClass
-
     // Drive servo to the position set in the `position_sp` attribute.
     void run() { set_command("run"); }
 
     // Remove power from the motor.
     void float_() { set_command("float"); }
-
-
-//~autogen
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.led>currentClass
-
 // Any device controlled by the generic LED driver.
 // See https://www.kernel.org/doc/Documentation/leds/leds-class.txt
 // for more details.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class led : protected device
 {
 public:
   led(std::string name);
 
   using device::connected;
-
-//~autogen generic-get-set classes.led>currentClass
 
   // Max Brightness: read-only
   // Returns the maximum allowable brightness value.
@@ -1476,8 +1358,6 @@ public:
   }
 
 
-//~autogen
-
   // Gets the LED's brightness as a percentage (0-1) of the maximum.
   float brightness_pct() const {
     return static_cast<float>(brightness()) / max_brightness();
@@ -1499,8 +1379,6 @@ public:
   void flash(unsigned on_ms, unsigned off_ms);
 
 #if defined(EV3DEV_PLATFORM_BRICKPI)
-//~autogen leds-declare platforms.brickpi.led>currentClass
-
     static led blue_led1;
     static led blue_led2;
 
@@ -1509,8 +1387,6 @@ public:
 
     static std::vector<float> black;
     static std::vector<float> blue;
-
-//~autogen
 #elif defined(EV3DEV_PLATFORM_BRICKPI3)
 
     static led amber_led1;
@@ -1521,8 +1397,6 @@ public:
     static std::vector<float> blue;
 
 #elif defined(EV3DEV_PLATFORM_PISTORMS)
-//~autogen leds-declare platforms.pistorms.led>currentClass
-
     static led red_left;
     static led red_right;
     static led green_left;
@@ -1542,11 +1416,7 @@ public:
     static std::vector<float> cyan;
     static std::vector<float> white;
     static std::vector<float> orange;
-
-//~autogen
 #else
-//~autogen leds-declare platforms.ev3.led>currentClass
-
     static led red_left;
     static led red_right;
     static led green_left;
@@ -1561,8 +1431,6 @@ public:
     static std::vector<float> amber;
     static std::vector<float> orange;
     static std::vector<float> yellow;
-
-//~autogen
 #endif
 
   // Assigns to each led in `group` corresponding brightness percentage from `color`.
@@ -1575,21 +1443,15 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.powerSupply>currentClass
-
 // A generic interface to read data from the system's power_supply class.
 // Uses the built-in legoev3-battery if none is specified.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class power_supply : protected device
 {
 public:
   power_supply(std::string name);
 
   using device::connected;
-
-//~autogen generic-get-set classes.powerSupply>currentClass
 
   // Measured Current: read-only
   // The measured current that the battery is supplying (in microamps)
@@ -1611,9 +1473,6 @@ public:
   // Type: read-only
   std::string type() const { return get_attr_string("type"); }
 
-
-//~autogen
-
   float measured_amps()       const { return measured_current() / 1000000.f; }
   float measured_volts()      const { return measured_voltage() / 1000000.f; }
 
@@ -1621,8 +1480,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 buttons
+//-----------------------------------------------------------------------------
 class button
 {
 public:
@@ -1668,8 +1527,8 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 Sound
+//-----------------------------------------------------------------------------
 class sound
 {
 public:
@@ -1681,8 +1540,8 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 LCD
+//-----------------------------------------------------------------------------
 class lcd
 {
 public:
@@ -1716,8 +1575,8 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-
 // EV3 remote control
+//-----------------------------------------------------------------------------
 class remote_control
 {
 public:
@@ -1757,9 +1616,6 @@ protected:
 };
 
 //-----------------------------------------------------------------------------
-
-//~autogen generic-class-description classes.legoPort>currentClass
-
 // The `lego-port` class provides an interface for working with input and
 // output ports that are compatible with LEGO MINDSTORMS RCX/NXT/EV3, LEGO
 // WeDo and LEGO Power Functions sensors and motors. Supported devices include
@@ -1785,8 +1641,7 @@ protected:
 // incremented each time a new port is registered. Note: The number is not
 // related to the actual port at all - use the `address` attribute to find
 // a specific port.
-
-//~autogen
+//-----------------------------------------------------------------------------
 class lego_port : protected device
 {
 public:
@@ -1794,8 +1649,6 @@ public:
 
   using device::connected;
   using device::device_index;
-
-//~autogen generic-get-set classes.legoPort>currentClass
 
   // Address: read-only
   // Returns the name of the port. See individual driver documentation for
@@ -1840,17 +1693,10 @@ public:
   // for the full list of possible values.
   std::string status() const { return get_attr_string("status"); }
 
-
-//~autogen
-
 protected:
   lego_port() {}
 
   bool connect(const std::map<std::string, std::set<std::string>>&) noexcept;
 };
 
-//-----------------------------------------------------------------------------
-
 } // namespace ev3dev
-
-// vim: sw=2
