@@ -199,6 +199,8 @@ class file_writer {
         template <class Callable>
         void try_write(Callable w) {
             for(int attempt = 0; attempt < 2; ++attempt) {
+                fseek(f, 0, SEEK_SET);
+
                 if (w()) return;
 
                 // Failed to write the value.
