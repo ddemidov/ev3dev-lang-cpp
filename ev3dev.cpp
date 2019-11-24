@@ -88,6 +88,7 @@ class file_reader {
         void open(const std::string &_fname) {
             fname = _fname;
             f = fopen(fname.c_str(), "r");
+            setbuf(f, NULL);
 
             if (!f) {
                 throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)),
@@ -128,6 +129,7 @@ class file_reader {
         void reopen() {
             if (f) fclose(f);
             f = fopen(fname.c_str(), "r");
+            setbuf(f, NULL);
         }
 
         template <class Callable>
@@ -172,6 +174,7 @@ class file_writer {
         void open(const std::string &_fname) {
             fname = _fname;
             f = fopen(fname.c_str(), "w");
+            setbuf(f, NULL);
 
             if (!f) {
                 throw std::system_error(std::make_error_code(static_cast<std::errc>(errno)),
@@ -194,6 +197,7 @@ class file_writer {
         void reopen() {
             if (f) fclose(f);
             f = fopen(fname.c_str(), "w");
+            setbuf(f, NULL);
         }
 
         template <class Callable>
