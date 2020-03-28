@@ -471,6 +471,12 @@ class gyro_sensor : public sensor {
         // Calibration ???
         static constexpr char mode_gyro_cal[] = "GYRO-CAL";
 
+        // Tilt rotational speed
+        static constexpr char mode_tilt_rate[] = "TILT-RATE";
+
+        // Tilt angle
+        static constexpr char mode_tilt_ang[] = "TILT-ANG";
+
 
         // The number of degrees that the sensor has been rotated
         // since it was put into this mode.
@@ -489,6 +495,17 @@ class gyro_sensor : public sensor {
         std::tuple<int, int> rate_and_angle(bool do_set_mode = true) {
             if (do_set_mode) set_mode(mode_gyro_g_a);
             return std::make_tuple( value(0), value(1) );
+        }
+
+        int tilt_angle(bool do_set_mode = true) {
+            if (do_set_mode) set_mode(mode_tilt_ang);
+            return value(0);
+        }
+
+        // The rate at which the sensor is rotating, in degrees/second.
+        int tilt_rate(bool do_set_mode = true) {
+            if (do_set_mode) set_mode(mode_tilt_rate);
+            return value(0);
         }
 };
 
