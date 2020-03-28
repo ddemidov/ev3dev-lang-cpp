@@ -575,6 +575,8 @@ constexpr char gyro_sensor::mode_gyro_rate[];
 constexpr char gyro_sensor::mode_gyro_fas[];
 constexpr char gyro_sensor::mode_gyro_g_a[];
 constexpr char gyro_sensor::mode_gyro_cal[];
+constexpr char gyro_sensor::mode_tilt_rate[];
+constexpr char gyro_sensor::mode_tilt_ang[];
 
 gyro_sensor::gyro_sensor(address_type address)
     : sensor(address, { ev3_gyro })
