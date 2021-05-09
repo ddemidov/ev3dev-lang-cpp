@@ -68,6 +68,7 @@ vi CMakeLists.txt
 Just after the `project(...)` declaration, set the C/C++ compilers by adding the following lines:
 
 ```cmake
+set(CMAKE_C_COMPILER "arm-linux-gnueabi-gcc")
 set(CMAKE_CC_COMPILER "arm-linux-gnueabi-gcc")
 set(CMAKE_CXX_COMPILER "arm-linux-gnueabi-g++")
 ```
