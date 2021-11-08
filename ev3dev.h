@@ -517,19 +517,19 @@ class infrared_sensor : public sensor {
         infrared_sensor(address_type address = INPUT_AUTO);
 
         // Proximity
-        static constexpr char mode_ir_prox[] = "IR-PROX";
+        static char mode_ir_prox[];
 
         // IR Seeker
-        static constexpr char mode_ir_seek[] = "IR-SEEK";
+        static char mode_ir_seek[];
 
         // IR Remote Control
-        static constexpr char mode_ir_remote[] = "IR-REMOTE";
+        static char mode_ir_remote[];
 
         // IR Remote Control. State of the buttons is coded in binary
-        static constexpr char mode_ir_rem_a[] = "IR-REM-A";
+        static char mode_ir_rem_a[];
 
         // Calibration ???
-        static constexpr char mode_ir_cal[] = "IR-CAL";
+        static char mode_ir_cal[];
 
 
         // A measurement of the distance between the sensor and the remote,
@@ -548,10 +548,10 @@ class sound_sensor : public sensor {
         sound_sensor(address_type address = INPUT_AUTO);
 
         // Sound pressure level. Flat weighting
-        static constexpr char mode_db[] = "DB";
+        static char mode_db[];
 
         // Sound pressure level. A weighting
-        static constexpr char mode_dba[] = "DBA";
+        static char mode_dba[];
 
 
         // A measurement of the measured sound pressure level, as a
@@ -577,10 +577,10 @@ class light_sensor : public sensor {
         light_sensor(address_type address = INPUT_AUTO);
 
         // Reflected light. LED on
-        static constexpr char mode_reflect[] = "REFLECT";
+        static char mode_reflect[];
 
         // Ambient light. LED off
-        static constexpr char mode_ambient[] = "AMBIENT";
+        static char mode_ambient[];
 
 
         // A measurement of the reflected light intensity, as a percentage.
@@ -614,85 +614,85 @@ class motor : protected device {
         motor(address_type);
         motor(address_type, const motor_type&);
 
-        static constexpr char motor_large[]  = "lego-ev3-l-motor";
-        static constexpr char motor_medium[] = "lego-ev3-m-motor";
-        static constexpr char motor_nxt[] = "lego-nxt-motor";
+        static char motor_large[];
+        static char motor_medium[];
+        static char motor_nxt[];
 
         using device::connected;
         using device::device_index;
 
         // Run the motor until another command is sent.
-        static constexpr char command_run_forever[] = "run-forever";
+        static char command_run_forever[];
 
         // Run to an absolute position specified by `position_sp` and then
         // stop using the action specified in `stop_action`.
-        static constexpr char command_run_to_abs_pos[] = "run-to-abs-pos";
+        static char command_run_to_abs_pos[];
 
         // Run to a position relative to the current `position` value.
         // The new position will be current `position` + `position_sp`.
         // When the new position is reached, the motor will stop using
         // the action specified by `stop_action`.
-        static constexpr char command_run_to_rel_pos[] = "run-to-rel-pos";
+        static char command_run_to_rel_pos[];
 
         // Run the motor for the amount of time specified in `time_sp`
         // and then stop the motor using the action specified by `stop_action`.
-        static constexpr char command_run_timed[] = "run-timed";
+        static char command_run_timed[];
 
         // Run the motor at the duty cycle specified by `duty_cycle_sp`.
         // Unlike other run commands, changing `duty_cycle_sp` while running *will*
         // take effect immediately.
-        static constexpr char command_run_direct[] = "run-direct";
+        static char command_run_direct[];
 
         // Stop any of the run commands before they are complete using the
         // action specified by `stop_action`.
-        static constexpr char command_stop[] = "stop";
+        static char command_stop[];
 
         // Reset all of the motor parameter attributes to their default value.
         // This will also have the effect of stopping the motor.
-        static constexpr char command_reset[] = "reset";
+        static char command_reset[];
 
         // Sets the normal polarity of the rotary encoder.
-        static constexpr char encoder_polarity_normal[] = "normal";
+        static char encoder_polarity_normal[];
 
         // Sets the inversed polarity of the rotary encoder.
-        static constexpr char encoder_polarity_inversed[] = "inversed";
+        static char encoder_polarity_inversed[];
 
         // With `normal` polarity, a positive duty cycle will
         // cause the motor to rotate clockwise.
-        static constexpr char polarity_normal[] = "normal";
+        static char polarity_normal[];
 
         // With `inversed` polarity, a positive duty cycle will
         // cause the motor to rotate counter-clockwise.
-        static constexpr char polarity_inversed[] = "inversed";
+        static char polarity_inversed[];
 
         // Power is being sent to the motor.
-        static constexpr char state_running[] = "running";
+        static char state_running[];
 
         // The motor is ramping up or down and has not yet reached a constant output level.
-        static constexpr char state_ramping[] = "ramping";
+        static char state_ramping[];
 
         // The motor is not turning, but rather attempting to hold a fixed position.
-        static constexpr char state_holding[] = "holding";
+        static char state_holding[];
 
         // The motor is turning, but cannot reach its `speed_sp`.
-        static constexpr char state_overloaded[] = "overloaded";
+        static char state_overloaded[];
 
         // The motor is not turning when it should be.
-        static constexpr char state_stalled[] = "stalled";
+        static char state_stalled[];
 
         // Power will be removed from the motor and it will freely coast to a stop.
-        static constexpr char stop_action_coast[] = "coast";
+        static char stop_action_coast[];
 
         // Power will be removed from the motor and a passive electrical load will
         // be placed on the motor. This is usually done by shorting the motor terminals
         // together. This load will absorb the energy from the rotation of the motors and
         // cause the motor to stop more quickly than coasting.
-        static constexpr char stop_action_brake[] = "brake";
+        static char stop_action_brake[];
 
         // Does not remove power from the motor. Instead it actively try to hold the motor
         // at the current position. If an external force tries to turn the motor, the motor
         // will `push back` to maintain its position.
-        static constexpr char stop_action_hold[] = "hold";
+        static char stop_action_hold[];
 
         // Address: read-only
         // Returns the name of the port that this motor is connected to.
@@ -1007,37 +1007,37 @@ class dc_motor : protected device {
         using device::device_index;
 
         // Run the motor until another command is sent.
-        static constexpr char command_run_forever[] = "run-forever";
+        static char command_run_forever[];
 
         // Run the motor for the amount of time specified in `time_sp`
         // and then stop the motor using the action specified by `stop_action`.
-        static constexpr char command_run_timed[] = "run-timed";
+        static char command_run_timed[];
 
         // Run the motor at the duty cycle specified by `duty_cycle_sp`.
         // Unlike other run commands, changing `duty_cycle_sp` while running *will*
         // take effect immediately.
-        static constexpr char command_run_direct[] = "run-direct";
+        static char command_run_direct[];
 
         // Stop any of the run commands before they are complete using the
         // action specified by `stop_action`.
-        static constexpr char command_stop[] = "stop";
+        static char command_stop[];
 
         // With `normal` polarity, a positive duty cycle will
         // cause the motor to rotate clockwise.
-        static constexpr char polarity_normal[] = "normal";
+        static char polarity_normal[];
 
         // With `inversed` polarity, a positive duty cycle will
         // cause the motor to rotate counter-clockwise.
-        static constexpr char polarity_inversed[] = "inversed";
+        static char polarity_inversed[];
 
         // Power will be removed from the motor and it will freely coast to a stop.
-        static constexpr char stop_action_coast[] = "coast";
+        static char stop_action_coast[];
 
         // Power will be removed from the motor and a passive electrical load will
         // be placed on the motor. This is usually done by shorting the motor terminals
         // together. This load will absorb the energy from the rotation of the motors and
         // cause the motor to stop more quickly than coasting.
-        static constexpr char stop_action_brake[] = "brake";
+        static char stop_action_brake[];
 
         // Address: read-only
         // Returns the name of the port that this motor is connected to.
@@ -1167,18 +1167,18 @@ class servo_motor : protected device {
         using device::device_index;
 
         // Drive servo to the position set in the `position_sp` attribute.
-        static constexpr char command_run[] = "run";
+        static char command_run[];
 
         // Remove power from the motor.
-        static constexpr char command_float[] = "float";
+        static char command_float[];
 
         // With `normal` polarity, a positive duty cycle will
         // cause the motor to rotate clockwise.
-        static constexpr char polarity_normal[] = "normal";
+        static char polarity_normal[];
 
         // With `inversed` polarity, a positive duty cycle will
         // cause the motor to rotate counter-clockwise.
-        static constexpr char polarity_inversed[] = "inversed";
+        static char polarity_inversed[];
 
         // Address: read-only
         // Returns the name of the port that this motor is connected to.

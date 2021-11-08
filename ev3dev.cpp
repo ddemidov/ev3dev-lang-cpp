@@ -583,19 +583,19 @@ gyro_sensor::gyro_sensor(address_type address)
 { }
 
 //-----------------------------------------------------------------------------
-constexpr char infrared_sensor::mode_ir_prox[];
-constexpr char infrared_sensor::mode_ir_seek[];
-constexpr char infrared_sensor::mode_ir_remote[];
-constexpr char infrared_sensor::mode_ir_rem_a[];
-constexpr char infrared_sensor::mode_ir_cal[];
+char infrared_sensor::mode_ir_prox[] = "IR-PROX";
+char infrared_sensor::mode_ir_seek[] = "IR-SEEK";
+char infrared_sensor::mode_ir_remote[] = "IR-REMOTE";
+char infrared_sensor::mode_ir_rem_a[] = "IR-REM-A";
+char infrared_sensor::mode_ir_cal[] = "IR-CAL";
 
 infrared_sensor::infrared_sensor(address_type address)
     : sensor(address, { ev3_infrared })
 { }
 
 //-----------------------------------------------------------------------------
-constexpr char sound_sensor::mode_db[];
-constexpr char sound_sensor::mode_dba[];
+char sound_sensor::mode_db[] = "DB";
+char sound_sensor::mode_dba[] = "DBA";
 
 sound_sensor::sound_sensor(address_type address)
     : sensor(address, { nxt_sound, nxt_analog })
@@ -617,36 +617,36 @@ sound_sensor::sound_sensor(address_type address)
 }
 
 //-----------------------------------------------------------------------------
-constexpr char light_sensor::mode_reflect[];
-constexpr char light_sensor::mode_ambient[];
+char light_sensor::mode_reflect[] = "REFLECT";
+char light_sensor::mode_ambient[] = "AMBIENT";
 
 light_sensor::light_sensor(address_type address)
     : sensor(address, { nxt_light })
 { }
 
 //-----------------------------------------------------------------------------
-constexpr char motor::motor_large[];
-constexpr char motor::motor_medium[];
-constexpr char motor::motor_nxt[];
-constexpr char motor::command_run_forever[];
-constexpr char motor::command_run_to_abs_pos[];
-constexpr char motor::command_run_to_rel_pos[];
-constexpr char motor::command_run_timed[];
-constexpr char motor::command_run_direct[];
-constexpr char motor::command_stop[];
-constexpr char motor::command_reset[];
-constexpr char motor::encoder_polarity_normal[];
-constexpr char motor::encoder_polarity_inversed[];
-constexpr char motor::polarity_normal[];
-constexpr char motor::polarity_inversed[];
-constexpr char motor::state_running[];
-constexpr char motor::state_ramping[];
-constexpr char motor::state_holding[];
-constexpr char motor::state_overloaded[];
-constexpr char motor::state_stalled[];
-constexpr char motor::stop_action_coast[];
-constexpr char motor::stop_action_brake[];
-constexpr char motor::stop_action_hold[];
+char motor::motor_large[] = "lego-ev3-l-motor";
+char motor::motor_medium[] = "lego-ev3-m-motor";
+char motor::motor_nxt[] = "lego-nxt-motor";
+char motor::command_run_forever[] = "run-forever";
+char motor::command_run_to_abs_pos[] = "run-to-abs-pos";
+char motor::command_run_to_rel_pos[] = "run-to-rel-pos";
+char motor::command_run_timed[] = "run-timed";
+char motor::command_run_direct[] = "run-direct";
+char motor::command_stop[] = "stop";
+char motor::command_reset[] = "reset";
+char motor::encoder_polarity_normal[] = "normal";
+char motor::encoder_polarity_inversed[] = "inversed";
+char motor::polarity_normal[] = "normal";
+char motor::polarity_inversed[] = "inversed";
+char motor::state_running[] = "running";
+char motor::state_ramping[] = "ramping";
+char motor::state_holding[] = "holding";
+char motor::state_overloaded[] = "overloaded";
+char motor::state_stalled[] = "stalled";
+char motor::stop_action_coast[] = "coast";
+char motor::stop_action_brake[] = "brake";
+char motor::stop_action_hold[] = "hold";
 
 //-----------------------------------------------------------------------------
 motor::motor(address_type address) {
@@ -696,14 +696,14 @@ dc_motor::dc_motor(address_type address) {
     connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
 
-constexpr char dc_motor::command_run_forever[];
-constexpr char dc_motor::command_run_timed[];
-constexpr char dc_motor::command_run_direct[];
-constexpr char dc_motor::command_stop[];
-constexpr char dc_motor::polarity_normal[];
-constexpr char dc_motor::polarity_inversed[];
-constexpr char dc_motor::stop_action_coast[];
-constexpr char dc_motor::stop_action_brake[];
+char dc_motor::command_run_forever[] = "run-forever";
+char dc_motor::command_run_timed[] = "run-timed";
+char dc_motor::command_run_direct[] = "run-direct";
+char dc_motor::command_stop[] = "stop";
+char dc_motor::polarity_normal[] = "normal";
+char dc_motor::polarity_inversed[] = "inversed";
+char dc_motor::stop_action_coast[] = "coast";
+char dc_motor::stop_action_brake[] = "brake";
 
 //-----------------------------------------------------------------------------
 servo_motor::servo_motor(address_type address) {
@@ -713,10 +713,10 @@ servo_motor::servo_motor(address_type address) {
     connect(_strClassDir, _strPattern, {{ "address", { address }}});
 }
 
-constexpr char servo_motor::command_run[];
-constexpr char servo_motor::command_float[];
-constexpr char servo_motor::polarity_normal[];
-constexpr char servo_motor::polarity_inversed[];
+char servo_motor::command_run[] = "run";
+char servo_motor::command_float[] = "float";
+char servo_motor::polarity_normal[] = "normal";
+char servo_motor::polarity_inversed[] = "inversed";
 
 //-----------------------------------------------------------------------------
 led::led(std::string name) {
