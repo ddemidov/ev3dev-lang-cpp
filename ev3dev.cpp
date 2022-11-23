@@ -570,13 +570,13 @@ ultrasonic_sensor::ultrasonic_sensor(address_type address, const std::set<sensor
 { }
 
 //-----------------------------------------------------------------------------
-constexpr char gyro_sensor::mode_gyro_ang[];
-constexpr char gyro_sensor::mode_gyro_rate[];
-constexpr char gyro_sensor::mode_gyro_fas[];
-constexpr char gyro_sensor::mode_gyro_g_a[];
-constexpr char gyro_sensor::mode_gyro_cal[];
-constexpr char gyro_sensor::mode_tilt_rate[];
-constexpr char gyro_sensor::mode_tilt_ang[];
+char gyro_sensor::mode_gyro_ang[] = "GYRO-ANG";
+char gyro_sensor::mode_gyro_rate[] = "GYRO-RATE";
+char gyro_sensor::mode_gyro_fas[] = "GYRO-FAS";
+char gyro_sensor::mode_gyro_g_a[] = "GYRO-G&A";
+char gyro_sensor::mode_gyro_cal[] = "GYRO-CAL";
+char gyro_sensor::mode_tilt_rate[] = "TILT-RATE";
+char gyro_sensor::mode_tilt_ang[] = "TILT-ANG";
 
 gyro_sensor::gyro_sensor(address_type address)
     : sensor(address, { ev3_gyro })
