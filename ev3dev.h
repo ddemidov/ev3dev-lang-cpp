@@ -457,25 +457,25 @@ class gyro_sensor : public sensor {
         gyro_sensor(address_type address = INPUT_AUTO);
 
         // Angle
-        static constexpr char mode_gyro_ang[] = "GYRO-ANG";
+        static char mode_gyro_ang[];
 
         // Rotational speed
-        static constexpr char mode_gyro_rate[] = "GYRO-RATE";
+        static char mode_gyro_rate[];
 
         // Raw sensor value
-        static constexpr char mode_gyro_fas[] = "GYRO-FAS";
+        static char mode_gyro_fas[];
 
         // Angle and rotational speed
-        static constexpr char mode_gyro_g_a[] = "GYRO-G&A";
+        static char mode_gyro_g_a[];
 
         // Calibration ???
-        static constexpr char mode_gyro_cal[] = "GYRO-CAL";
+        static char mode_gyro_cal[];
 
         // Tilt rotational speed
-        static constexpr char mode_tilt_rate[] = "TILT-RATE";
+        static char mode_tilt_rate[];
 
         // Tilt angle
-        static constexpr char mode_tilt_ang[] = "TILT-ANG";
+        static char mode_tilt_ang[];
 
 
         // The number of degrees that the sensor has been rotated
